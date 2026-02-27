@@ -17,6 +17,7 @@ class RollViewSet(viewsets.ModelViewSet):
             Roll.objects
             .filter(user=self.request.user)
             .select_related("camera", "lens", "user")
+            .prefetch_related("photos") # si bcp de photos, ça peut être lourd, à tester
         )
     
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -32,5 +33,9 @@ class UrlPhotoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsRollOwner]
 
     def get_queryset(self):
-        return Roll.objects.filter(user=self.request.user)
+        return (
+            UrlPhoto.objects
+            .filter(roll__user=self.request.user)
+            .select_related("roll")
+        )
     
