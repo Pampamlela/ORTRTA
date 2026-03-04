@@ -237,3 +237,84 @@ class RollAPITestCase(APITestCase):
         response = self.client.post("/api/photos/", data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # Test du endpoint de stats 
+    def test_user_stats_endpoint(self):
+        # création de plusieurs pellicules pour l'utilisateurice connectée
+        Roll.objects.create(
+            user=self.user,
+            camera=self.camera,
+            film_name="Kodak Portra 400",
+            film_type="COLOR_NEGATIVE",
+            iso=400,
+            format="35MM-12",
+            date_start="2026-01-01",
+        )
+
+        Roll.objects.create(
+            user=self.user,
+            camera=self.camera,
+            film_name="Kodak Tri-X 100",
+            film_type="BLACK_AND_WHITE",
+            iso=100,
+            format="35MM-24",
+            date_start="2026-01-01",
+            date_end="2026-01-15"
+        )
+
+        Roll.objects.create(
+            user=self.user,
+            camera=self.camera,
+            film_name="Kodak Ektar 100",
+            film_type="COLOR_NEGATIVE",
+            iso=100,
+            format="35MM-36",
+            date_start="2026-01-01",
+            date_scan="2026-01-20"
+        )
+
+        # roll d'un autre utilisateurice pour vérifier qu'il n'est pas comptabilisé
+        other_user = User.objects.create_user(
+            username="otheruser",
+            email="otheruser@example.com",
+            password="otherpassword"
+        )
+
+        Roll.objects.create(
+            user=other_user,
+            camera=self.camera,
+            film_name="Kodak T-Max 400",
+            film_type="BLACK_AND_WHITE",
+            iso=400,
+            format="35MM-24",
+            date_start="2026-01-01",
+        )
+
+        response = self.client.get("/api/stats/")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.data
+
+        # vérifier le total
+        self.assertEqual(response.data["total_rolls"], 3)
+
+        # vérifier que "scanned" est bien ompté
+        self.assertEqual(response.data["scanned"], 1)
+
+        # vérifier moyenne ISO
+        self.assertEqual(response.data["average_iso"], 200)
+
+        # vérifier répartifiion par type de film
+        film_types = {item["film_type"]: item["count"] for item in data["by_film_type"]}
+
+        self.assertEqual(film_types["COLOR_NEGATIVE"], 2)
+        self.assertEqual(film_types["BLACK_AND_WHITE"], 1)
+
+    # test l'authentification est requise pour accéder aux stats
+    def test_stats_authentication_required(self):
+        self.client.credentials() #enlève le token
+
+        response = self.client.get("/api/stats/")
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -82,3 +82,33 @@ class UrlPhotoViewSet(viewsets.ModelViewSet):
             .select_related("roll")
         )
     
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Count, Avg
+from rest_framework.permissions import IsAuthenticated
+from .models import Roll, RollStatus
+
+class UserStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rolls = Roll.objects.filter(user=request.user)
+
+        total_rolls = rolls.count()
+
+        stats = {
+            "total_rolls": total_rolls,
+            "in_progress": rolls.filter(status=RollStatus.IN_PROGRESS).count(),
+            "finished": rolls.filter(status=RollStatus.FINISHED).count(),
+            "developed": rolls.filter(status=RollStatus.DEVELOPED).count(),
+            "scanned": rolls.filter(status=RollStatus.SCANNED).count(),
+            "average_iso": rolls.aggregate(Avg("iso"))["iso__avg"],
+            "by_film_type": list(
+                rolls.values("film_type")
+                .annotate(count=Count("id"))
+                .order_by("-count")
+            )
+        }
+
+        return Response(stats)
