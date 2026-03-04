@@ -90,6 +90,13 @@ class Roll(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["date_start"]),
+        ]
+
     def update_status(self):
         if self.date_scan:
             self.status = RollStatus.SCANNED

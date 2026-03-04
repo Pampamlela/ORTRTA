@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+FRONTEND_URL = "http://localhost:5173"  # URL du frontend pour les QR codes
 
 # Application definition
 

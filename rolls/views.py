@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
@@ -39,7 +40,7 @@ class RollViewSet(viewsets.ModelViewSet):
     def qr(self, request, pk=None):
         roll = self.get_object()
 
-        url = f"http://127.0.0.1:8000/rolls/{roll.slug}/"
+        url = f"{settings.FRONTEND_URL}/rolls/{roll.slug}/"
 
         qr = qrcode.make(url)
 
