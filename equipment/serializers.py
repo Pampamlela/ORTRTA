@@ -12,3 +12,13 @@ class LensSerializer(serializers.ModelSerializer):
         model = Lens
         fields = "__all__"
         read_only_fields = ["user"]
+
+    def validate_cameras(self, value):
+        user = self.context["request"].user
+
+        for camera in value:
+            if camera.user != user:
+                raise serializers.ValidationError(
+                    "Vous ne pouvez associer qu'une caméra qui vous appartient."
+                )
+        return value
