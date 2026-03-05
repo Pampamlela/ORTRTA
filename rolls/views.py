@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,6 +8,7 @@ from .models import Roll, UrlPhoto, RollStatus
 from .serializers import RollSerializer, UrlPhotoSerializer
 from.permissions import IsOwner, IsRollOwner
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import HttpResponse
 import qrcode
 from io import BytesIO
 from django.http import HttpResponse
@@ -37,18 +38,19 @@ class RollViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     # génération des QrCodes pour chaque roll
-    @action(detail=True, methods=["get"], permission_classes=[AllowAny])
-    def qr(self, request, *args, **kwargs):
-        roll = self.get_object()
+    @action(detail=True, methods=["get"], permission_classes=[])
+    def qr(self, request, slug=None):
+        
+        roll = get_object_or_404(Roll, slug=slug)
 
         url = f"{settings.FRONTEND_URL}/rolls/{roll.slug}/"
 
-        qr = qrcode.make(url)
+        img = qrcode.make(url)
 
-        buffer = BytesIO()
-        qr.save(buffer, format="PNG")
+        response = HttpResponse(content_type="image/png")
+        img.save(response,"PNG")
 
-        return HttpResponse(buffer.getvalue(), content_type="image/png")
+        return response
     
     def perform_update(self, serializer):
         roll = self.get_object()
