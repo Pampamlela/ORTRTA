@@ -1,25 +1,46 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
-import { onMounted } from 'vue';
 import { useCameraStore } from '@/stores/cameras';
+import { useLensStore } from '@/stores/lenses';
 
 const router = useRouter();
 const rollStore = useRollStore();
 const cameraStore = useCameraStore();
+const lensStore = useLensStore();
 
 onMounted(() => {
     cameraStore.fetchCameras();
+    lensStore.fetchLenses();
 })
 const form = ref({
     film_name: "",
     iso: 400,
     format: '35MM-12',
     camera: "",
+    lens: "",
     date_start: "",
     description: "",
     type: "COLOR_NEGATIVE"
+})
+
+const filteredLenses = computed(() => {
+    if (!form.value.camera) {
+        return []
+    }
+
+    return lensStore.lenses.filter(lens =>
+        lens.cameras.includes(form.value.camera)
+    )
+})
+
+const selectedCamera = computed(() => {
+    cameraStore.cameras.find(cam => cam.id === form.value.camera);
+})
+
+watch(() => form.value.camera, () => {
+    form.value.lens = "";
 })
 // const film_name = ref('');
 // const iso = ref(400);
@@ -92,7 +113,7 @@ const handleSubmit = async () => {
                 <option value="127">127</option>
             </select>
 
-            <label>ID appareil photo</label>
+            <label>Appareil photo</label>
             <select v-model="form.camera" required>
                 <option disabled value="">Sélectionnez un appareil photo</option>
 
@@ -104,6 +125,29 @@ const handleSubmit = async () => {
                     {{ cam.model }}
                 </option>
             </select>
+
+            <div v-if="!selectedCamera?.has_fixed_lens">
+                <label>Objectif</label>
+                <select v-model="form.lens" required>
+                    <option disabled value="">
+                        Sélectionnez un objectif
+                    </option>
+
+                    <option 
+                        v-for="lens in filteredLenses" 
+                        :key="lens.id" 
+                        :value="lens.id"
+                    >
+                        {{ lens.model }}
+                    </option>
+                </select>
+            </div>
+            
+            <div v-else>
+                <p>
+                    Objectif fixe : {{ selectedCamera.fixed_lens_model }}
+                </p>
+            </div>
 
             <label>Date de début</label>
             <input v-model="form.date_start" type="date" />

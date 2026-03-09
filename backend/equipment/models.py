@@ -9,6 +9,7 @@ class Camera(models.Model):
           related_name="cameras")
     model = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+    has_fixed_lens = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
