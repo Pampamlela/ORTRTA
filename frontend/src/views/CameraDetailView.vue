@@ -23,6 +23,9 @@ onMounted(async() => {
 
         <p v-else>Chargement de l'appareil photo...</p>
     </div>
+    <router-link to="/cameras/new">
+        Nouvel appareil photo
+    </router-link>
 </template>
 
 <style scoped>

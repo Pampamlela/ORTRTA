@@ -15,7 +15,7 @@ export const useCameraStore = defineStore("cameras", {
 
         async fetchCamera(id) {
             const response = await api.get(`cameras/${id}/`);
-            return response.data;
+            this.currentCamera = response.data;
         },
 
         async createCamera(data) {
