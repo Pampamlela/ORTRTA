@@ -7,9 +7,9 @@ import { onMounted } from 'vue';
 const router = useRouter();
 const cameraStore = useCameraStore();
 
-onMounted(() => {
-    cameraStore.fetchCameras();
-})
+// onMounted(() => {
+//     cameraStore.fetchCameras();
+// })
 const form = ref({
     model: "",
     description: "",
