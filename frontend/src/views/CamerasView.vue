@@ -20,7 +20,7 @@ onMounted(() => {
         </div>
 
         <ul v-else>
-            <li v-for="camera in cameraStore.cameras" :key="camera?.id">
+            <li v-for="camera in cameraStore.cameras" :key="camera.id">
                 <router-link :to="`/cameras/${camera.id}`">
                     <strong>{{ camera.model }}</strong>
                 </router-link>

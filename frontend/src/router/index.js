@@ -9,6 +9,9 @@ import RollCreateView from "@/views/RollCreateView.vue"
 import CamerasView from "@/views/CamerasView.vue"
 import CameraDetailView from "@/views/CameraDetailView.vue"
 import CameraCreateView from "@/views/CameraCreateView.vue"
+import LensesView from "@/views/LensesView.vue"
+import LensDetailView from "@/views/LensDetailView.vue"
+import LensCreateView from "@/views/LensCreateView.vue"
 
 const routes = [
   { path: "/login", component: LoginView },
@@ -18,7 +21,10 @@ const routes = [
   { path: "/rolls/:slug", component: RollDetailView, meta: { requiresAuth: true } },
   { path: "/cameras", component: CamerasView, meta: { requiresAuth: true } },
   { path: "/cameras/new", component: CameraCreateView, meta: { requiresAuth: true } },
-  { path: "/cameras/:id", component: CameraDetailView, meta: { requiresAuth: true } }
+  { path: "/cameras/:id", component: CameraDetailView, meta: { requiresAuth: true } },
+  { path: "/lenses", component: LensesView, meta: { requiresAuth: true } },
+  { path: "/lenses/new", component: LensCreateView, meta: { requiresAuth: true } },
+  { path: "/lenses/:id", component: LensDetailView, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({
