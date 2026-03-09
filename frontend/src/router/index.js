@@ -6,6 +6,9 @@ import DashboardView from "@/views/DashboardView.vue"
 import RollsView from "@/views/RollsView.vue"
 import RollDetailView from "@/views/RollDetailView.vue"
 import RollCreateView from "@/views/RollCreateView.vue"
+import CamerasView from "@/views/CamerasView.vue"
+import CameraDetailView from "@/views/CameraDetailView.vue"
+import CameraCreateView from "@/views/CameraCreateView.vue"
 
 const routes = [
   { path: "/login", component: LoginView },
@@ -13,6 +16,9 @@ const routes = [
   { path: "/rolls", component: RollsView, meta: { requiresAuth: true } },
   { path: "/rolls/new", component: RollCreateView, meta: { requiresAuth: true } },
   { path: "/rolls/:slug", component: RollDetailView, meta: { requiresAuth: true } },
+  { path: "/cameras", component: CamerasView, meta: { requiresAuth: true } },
+  { path: "/cameras/new", component: CameraCreateView, meta: { requiresAuth: true } },
+  { path: "/cameras/:id", component: CameraDetailView, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({
