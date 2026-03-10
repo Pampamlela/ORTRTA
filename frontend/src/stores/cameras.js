@@ -16,6 +16,7 @@ export const useCameraStore = defineStore("cameras", {
         async fetchCamera(id) {
             const response = await api.get(`cameras/${id}/`);
             this.currentCamera = response.data;
+            return response.data;
         },
 
         async createCamera(data) {
@@ -26,5 +27,22 @@ export const useCameraStore = defineStore("cameras", {
             
             return response.data;
         },
+
+        async updateCamera(id, data) {
+            const response = await api.put(`cameras/${id}/`, data);
+
+            // on recharge la liste des cameras pour inclure les modifications
+            await this.fetchCameras();
+            
+            return response.data;
+        },
+        
+        async deleteCamera(id) {
+            await api.delete(`cameras/${id}/`);
+            this.cameras = this.cameras.filter(camera => camera.id !== id);
+            
+            // on recharge la liste des cameras pour retirer la camera supprimée
+            await this.fetchCameras();
+        }
     }
 })

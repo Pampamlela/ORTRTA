@@ -30,6 +30,12 @@ onMounted(() => {
         <router-link to="/cameras/new">
             Nouvel appareil photo
         </router-link>
+        <router-link to="/lenses/new">
+            Nouvel objectif
+        </router-link>
+        <router-link to="/rolls/new">
+            Nouvelle pellicule
+        </router-link>
     </div>
 </template>
 

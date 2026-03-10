@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useRollStore } from '@/stores/rolls';
+import router from '@/router';
 
 const rollStore = useRollStore();
 
@@ -42,8 +43,14 @@ onMounted(() => {
         <router-link to="/cameras">
             Mes appareils photo
         </router-link>
+        <router-link to="/lenses">
+            Mes objectifs
+        </router-link>
         <router-link to="/cameras/new">
             Nouvel appareil photo
+        </router-link> 
+        <router-link to="/lenses/new">
+            Nouvel objectif
         </router-link>
         
     </div>
