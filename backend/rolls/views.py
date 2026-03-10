@@ -19,7 +19,8 @@ from rest_framework.decorators import action
 class RollViewSet(viewsets.ModelViewSet):
     serializer_class = RollSerializer
     permission_classes = [IsAuthenticated, IsOwner]
-
+    lookup_field = "slug"
+    
     def get_queryset(self):
         return (
             Roll.objects
@@ -32,7 +33,7 @@ class RollViewSet(viewsets.ModelViewSet):
     filterset_fields = ["status", "camera", "lens", "iso", "format"]
     search_fields = ["film_name", "description"]
     ordering_fields = ["date_start", "created_at", "updated_at"]
-    lookup_field = "slug"
+    
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

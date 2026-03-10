@@ -299,13 +299,13 @@ class RollAPITestCase(APITestCase):
         # vérifier le total
         self.assertEqual(response.data["total_rolls"], 3)
 
-        # vérifier que "scanned" est bien ompté
+        # vérifier que "scanned" est bien à 1 (seule la pellicule avec date_scan est comptabilisée comme scannée)
         self.assertEqual(response.data["scanned"], 1)
 
         # vérifier moyenne ISO
         self.assertEqual(response.data["average_iso"], 200)
 
-        # vérifier répartifiion par type de film
+        # vérifier répartition par type de film
         film_types = {item["film_type"]: item["count"] for item in data["by_film_type"]}
 
         self.assertEqual(film_types["COLOR_NEGATIVE"], 2)

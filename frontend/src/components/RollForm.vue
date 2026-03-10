@@ -1,89 +1,71 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useRollStore } from '@/stores/rolls';
+// import { useRouter } from 'vue-router';
+// import { useRollStore } from '@/stores/rolls';
 import { useCameraStore } from '@/stores/cameras';
 import { useLensStore } from '@/stores/lenses';
-import RollForm from '@/components/RollForm.vue';
 
-const router = useRouter();
-const rollStore = useRollStore();
+
+// const router = useRouter();
+// const rollStore = useRollStore();
 const cameraStore = useCameraStore();
 const lensStore = useLensStore();
+
+const props = defineProps({
+    form: Object,
+    submitLabel: String,
+    onSubmit: Function,
+    error: String
+})
+
+const { form } = props;
 
 onMounted(() => {
     cameraStore.fetchCameras();
     lensStore.fetchLenses();
 })
-const form = ref({
-    film_name: "",
-    iso: 400,
-    format: '35MM-12',
-    camera: "",
-    lens: "",
-    date_start: "",
-    description: "",
-    type: "COLOR_NEGATIVE"
-})
 
-// const filteredLenses = computed(() => {
-//     if (!form.value.camera) {
-//         return []
-//     }
-
-//     return lensStore.lenses.filter(lens =>
-//         lens.cameras.includes(form.value.camera)
-//     )
-// })
-
-// const selectedCamera = computed(() => {
-//     return cameraStore.cameras.find(cam => cam.id === form.value.camera);
-// })
-
-watch(() => form.value.camera, () => {
-    form.value.lens = "";
-})
-
-const error = ref(null);
-
-const handleSubmit = async () => {
-    try {
-        await rollStore.createRoll(form.value)
-
-        router.push("/rolls");
-    } catch (err) {
-        console.log(err.response.data)
-        error.value = "Erreur lors de la création de la pellicule";
+const filteredLenses = computed(() => {
+    if (!form.camera) {
+        return []
     }
-}
+
+    return lensStore.lenses.filter(lens =>
+        lens.cameras.includes(form.camera)
+    )
+})
+const selectedCamera = computed(() => {
+    return cameraStore.cameras.find(cam => cam.id === form.camera);
+})
+
+watch(() => form.camera, () => {
+
+    const camera = cameraStore.cameras.find(
+        cam => cam.id === form.camera
+    )
+    if (camera?.has_fixed_lens) {
+        form.lens = null;
+    }   
+})
+    
+
+
 </script>
 
 <template>
-    <div class="roll-create">
-        <h1>Nouvelle pellicule</h1>
-
-            <RollForm
-                :form="form"
-                :submitLabel="'Créer'"
-                :onSubmit="handleSubmit"
-                :error="error"
-            />
-    </div>
-</template>
-        <!-- <form @submit.prevent="handleSubmit">
-
-            <label>Nom de la pellicule</label>
+    <form @submit.prevent="onSubmit">
+        <label>Nom de la pellicule</label>
             <input v-model="form.film_name" type="text" required />
+
+            <label>Type</label>
+            <select v-model="form.film_type" required>
+                <option value="COLOR_NEGATIVE">Négatif couleur</option>
+                <option value="BLACK_AND_WHITE">Noir et blanc</option>
+                <option value="COLOR_SLIDE">Diapositive couleur</option>
+            </select>
 
             <label>ISO</label>
             <input v-model="form.iso" type="number" required />
-
-            <label>Type</label>
-            <select v-model="form.type" required>
-                <option value="COLOR_NEGATIVE">Négatif couleur</option>
-                <option value="BLACK_WHITE">Noir et blanc</option>
-                <option value="SLIDE">Diapositive couleur</option>
-            </select>
 
             <label>Format</label>
             <select v-model="form.format" required>
@@ -131,7 +113,7 @@ const handleSubmit = async () => {
 
             <div v-if="!selectedCamera?.has_fixed_lens">
                 <label>Objectif</label>
-                <select v-model="form.lens" required>
+                <select v-model="form.lens">
                     <option disabled value="">
                         Sélectionnez un objectif
                     </option>
@@ -148,19 +130,27 @@ const handleSubmit = async () => {
             
             <div v-else>
                 <p>
-                    Objectif fixe : {{ selectedCamera.fixed_lens_model }}
+                    Objectif fixe {{ selectedCamera.fixed_lens_model }}
                 </p>
             </div>
 
             <label>Date de début</label>
             <input v-model="form.date_start" type="date" />
 
+            <label>Date de fin</label>
+            <input v-model="form.date_end" type="date" />
+
+            <label>Date de développement</label>
+            <input v-model="form.date_development" type="date" />
+
+            <label>Date de scan</label>
+            <input v-model="form.date_scan" type="date" />
+
             <label>Description</label>
             <textarea v-model="form.description"></textarea>
 
-            <button type="submit">Créer</button>
+            <button type="submit">{{ props.submitLabel }}</button>
 
-            <p v-if="error" class="error">{{ error }}</p>
-
-        </form> -->
-
+            <p v-if="props.error" class="error">{{ props.error }}</p>
+    </form>
+</template>
