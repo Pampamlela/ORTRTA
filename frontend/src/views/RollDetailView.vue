@@ -96,6 +96,15 @@ const deleteRoll = async () => {
 
         <p v-else>Chargement...</p>
     </div>
+    <router-link to="/rolls">
+        Mes pellicules
+    </router-link>
+    <router-link to="/cameras">
+        Mes appareils photo
+    </router-link>
+    <router-link to="/lenses">
+        Mes objectifs
+    </router-link>
 </template>
 
 <style scoped>

@@ -1,16 +1,12 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
-import { useCameraStore } from '@/stores/cameras';
-import { useLensStore } from '@/stores/lenses';
 import RollForm from '@/components/RollForm.vue';
 
 const router = useRouter();
 const route = useRoute();
 const rollStore = useRollStore();
-const cameraStore = useCameraStore();
-const lensStore = useLensStore();
 
 const form = ref(null);
 const error = ref(null);

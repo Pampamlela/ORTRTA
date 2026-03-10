@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLensStore } from '@/stores/lenses';
+import router from '@/router';
 
 const route = useRoute()
 const lensStore = useLensStore();
@@ -9,6 +10,17 @@ const lensStore = useLensStore();
 onMounted(async() => {
     await lensStore.fetchLens(route.params.id);
 })
+
+const deleteLens = async () => {
+    if(!confirm("Êtes-vous sûr de vouloir supprimer cet objectif ?")) return
+
+    try {
+        await lensStore.deleteLens(route.params.id)
+        router.push("/lenses")
+    } catch (err) {
+        alert("Erreur lors de la suppression de l'objectif.")
+    }
+}
 </script>
 
 <template>
@@ -19,9 +31,18 @@ onMounted(async() => {
                 <strong> Description :</strong>{{ lensStore.currentLens.description }}
             </p>
             <p v-else>Aucune description disponible.</p>
+
+            <router-link :to="`/lenses/${lensStore.currentLens.id}/edit`">
+                Modifier
+            </router-link>
+            <button @click="deleteLens">
+                Supprimer
+            </button>
         </div>
 
         <p v-else>Chargement de l'objectif...</p>
+
+        
     </div>
     <router-link to="/lenses/new">
         Nouvel objectif

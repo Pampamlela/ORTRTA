@@ -2,16 +2,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
-import { onMounted } from 'vue';
+import EquipmentForm from '@/components/EquipmentForm.vue';
 
 const router = useRouter();
 const cameraStore = useCameraStore();
 
-// onMounted(() => {
-//     cameraStore.fetchCameras();
-// })
 const form = ref({
     model: "",
+    has_fixed_lens: false,
+    fixed_lens_model:"",
     description: "",
 })
 
@@ -32,22 +31,12 @@ const handleSubmit = async () => {
     <div class="camera-create">
         <h1>Nouvel appareil photo</h1>
 
-        <form @submit.prevent="handleSubmit">
-
-            <label>Modèle</label>
-            <input v-model="form.model" type="text" required />
-
-            <label>Objectif fixe</label>
-            <input v-model="form.has_fixed_lens" type="checkbox" />
-
-            <label>Description</label>
-            <textarea v-model="form.description"></textarea>
-
-            <button type="submit">Créer</button>
-
-            <p v-if="error" class="error">{{ error }}</p>
-            
-        </form>
-
+        <EquipmentForm 
+            :form="form" 
+            submitLabel="Créer"
+            :onSubmit="handleSubmit" 
+            :error="error"
+            type="camera"
+        />
     </div>
 </template>
