@@ -15,9 +15,15 @@ const deleteRoll = async () => {
 
     if(!confirm("Êtes-vous sûr de vouloir supprimer cette pellicule ? Cette action est irréversible.")) return 
     
-    await rollStore.deleteRoll(route.params.slug)
+    try {
+        await rollStore.deleteRoll(route.params.slug)
+        router.push("/rolls")
+    } catch (err) {
+        alert("Erreur lors de la suppression de la pellicule.")
+    }
+    
 
-    router.push("/rolls")
+    
 }
 </script>
 
