@@ -23,6 +23,7 @@ export const useRollStore = defineStore("rolls", {
         async fetchRoll(slug) {
             const response = await api.get(`rolls/${slug}/`);
             this.currentRoll = response.data;
+            return response.data;
         },
 
         async createRoll(data) {
@@ -32,6 +33,19 @@ export const useRollStore = defineStore("rolls", {
             await this.fetchRolls();
             
             return response.data;
-        }
+        },
+
+        async updateRoll(slug, data) {
+            const response = await api.put(`rolls/${slug}/`, data);
+            return response.data
+        },
+
+        async deleteRoll(slug) {
+            await api.delete(`rolls/${slug}/`);
+
+            // on recharge la liste des rolls pour retirer le roll supprimé
+            await this.fetchRolls();
+        },
+
     }
 })

@@ -37,6 +37,9 @@ const handleSubmit = async () => {
             <label>Modèle</label>
             <input v-model="form.model" type="text" required />
 
+            <label>Objectif fixe</label>
+            <input v-model="form.has_fixed_lens" type="checkbox" />
+
             <label>Description</label>
             <textarea v-model="form.description"></textarea>
 

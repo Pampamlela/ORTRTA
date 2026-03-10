@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
+import router from '@/router';
 
 const route = useRoute()
 const rollStore = useRollStore();
@@ -9,6 +10,15 @@ const rollStore = useRollStore();
 onMounted(async() => {
     await rollStore.fetchRoll(route.params.slug);
 })
+
+const deleteRoll = async () => {
+
+    if(!confirm("Êtes-vous sûr de vouloir supprimer cette pellicule ? Cette action est irréversible.")) return 
+    
+    await rollStore.deleteRoll(route.params.slug)
+
+    router.push("/rolls")
+}
 </script>
 
 <template>
@@ -69,6 +79,13 @@ onMounted(async() => {
                 partager
                 </a>
             </p>
+
+            <router-link :to="`/rolls/${rollStore.currentRoll.slug}/edit`">
+                Modifier
+            </router-link>
+            <button @click="deleteRoll">
+                Supprimer
+            </button>
         </div>
 
         <p v-else>Chargement...</p>
