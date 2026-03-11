@@ -38,6 +38,16 @@ const deleteCamera = async () => {
             </p>
             <p v-else>Aucune description disponible.</p>
 
+            <h2>Objectifs compatibles</h2>
+            <ul v-if="cameraStore.currentCamera.lenses?.length">
+                <li v-for="lens in cameraStore.currentCamera.lenses" :key="lens">
+                    <router-link :to="`/lenses/${lens.id}`">
+                        {{ lens.model }}
+                    </router-link>
+                </li>
+            </ul>
+            <p v-else>Aucun objectif compatible pour le moment.</p>
+
             <router-link :to="`/cameras/${cameraStore.currentCamera.id}/edit`">
                 Modifier
             </router-link>

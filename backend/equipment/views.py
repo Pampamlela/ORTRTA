@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Camera, Lens
-from .serializers import CameraSerializer, LensSerializer
+from .models import Camera, Lens, Mount
+from .serializers import CameraSerializer, LensSerializer, MountSerializer
 from .permissions import IsOwner
 # Create your views here.
 
@@ -25,3 +25,7 @@ class LensViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class MountViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Mount.objects.all()
+    serializer_class = MountSerializer

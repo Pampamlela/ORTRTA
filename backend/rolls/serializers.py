@@ -42,21 +42,28 @@ class RollSerializer(serializers.ModelSerializer):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
     
-    def validate(self, data):
+    def validate_camera(self, camera):
         user = self.context["request"].user
 
-        camera = data.get("camera")
-        lens = data.get("lens")
-
-        if camera and camera.user != user:
+        if camera.user != user:
             raise serializers.ValidationError(
-            "You cannot use a camera that is not yours."
-        )
+               "You cannot use a camera that is not yours."
+            )
+        return camera
+    
+    def validate_lens(self, lens):
+        user = self.context["request"].user
 
         if lens and lens.user != user:
             raise serializers.ValidationError(
-            "You cannot use a lens that is not yours."
-        )
+               "You cannot use a lens that is not yours."
+            )
+        return lens
+
+    def validate(self, data):
+
+        camera = data.get("camera")
+        lens = data.get("lens")
 
         date_start = data.get("date_start")
         date_end = data.get("date_end")
@@ -88,4 +95,10 @@ class RollSerializer(serializers.ModelSerializer):
                 "The scan date cannot be before the development date."
             )
 
+        # règles de compatibilité matériel
+        if camera and lens and camera.mount != lens.mount:
+            raise serializers.ValidationError(
+                "This lens is not compatible with this camera mount."
+            )
+        
         return data

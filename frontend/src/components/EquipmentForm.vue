@@ -1,4 +1,16 @@
 <script setup>
+import { onMounted } from 'vue';
+import { useMountStore } from '@/stores/mounts';
+import { useCameraStore } from '@/stores/cameras';
+
+const mountStore = useMountStore();
+const cameraStore = useCameraStore();
+
+onMounted(() => {
+    mountStore.fetchMounts();
+    cameraStore.fetchCameras();
+})
+
 const props = defineProps({
     form: Object,
     submitLabel: String,
@@ -19,10 +31,45 @@ const props = defineProps({
             <input v-model="form.has_fixed_lens" type="checkbox" />
             <label>Objectif fixe</label>
             
-            <!-- <div v-if="form.has_fixed_lens">
-                <label>Objectif intégré</label>
-                <input v-model="form.fixed_lens_model" placeholder="ex: 35mm f/2.8" />
-            </div> -->
+            <div v-if="type === 'camera' && !form.has_fixed_lens">
+                <label>Monture</label>
+                <select v-model="form.mount">
+                    <option disabled value="">Sélectionnez une monture</option>
+                    <option 
+                        v-for="mount in mountStore.mounts" 
+                        :key="mount.id" 
+                        :value="mount.id"
+                    >
+                        {{ mount.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!-- spécifique aux objectifs --->
+        <div v-if="type === 'lens'">
+            <label>Monture</label>
+            <select v-model="form.mount">
+                <option disabled value="">Sélectionnez une monture</option>
+                <option 
+                    v-for="mount in mountStore.mounts" 
+                    :key="mount.id" 
+                    :value="mount.id"
+                >
+                    {{ mount.name }}
+                </option>
+            </select>
+
+            <label>Compatible avec</label>
+            <select v-model="form.cameras_ids" multiple>
+                <option 
+                    v-for="camera in cameraStore.cameras" 
+                    :key="camera.id" 
+                    :value="camera.id"
+                >
+                    {{ camera.model }}
+                </option>
+            </select>
         </div>
 
         <label>Description</label>
@@ -34,4 +81,7 @@ const props = defineProps({
 
         <p v-if="error" class="error">{{ error }}</p>
     </form>
+    <pre>
+        {{ form }}
+    </pre>
 </template>
