@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rolls.views import RollViewSet, UrlPhotoViewSet, UserStatsView
-from equipment.views import CameraViewSet, LensViewSet
+from equipment.views import CameraViewSet, LensViewSet, MountViewSet
 from users.views import MeView, SignupView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -34,6 +34,7 @@ router.register(r"rolls", RollViewSet, basename="roll")
 router.register(r"photos", UrlPhotoViewSet, basename="photo")
 router.register(r"cameras", CameraViewSet, basename="camera")
 router.register(r"lenses", LensViewSet, basename="lens")
+router.register(r"mounts", MountViewSet, basename="mount")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,6 +43,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/signup/', SignupView.as_view(), name='signup'),
+    path('api/login/', TokenObtainPairView.as_view(), name='login'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),sign
     path('api/stats/', UserStatsView.as_view(), name='user-stats'),
 ]
 

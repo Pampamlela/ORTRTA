@@ -37,5 +37,4 @@ const handleSubmit = async () => {
         :onSubmit="handleSubmit" 
         :error="error"      
     />
-    <pre>{{ form }}</pre>
 </template>

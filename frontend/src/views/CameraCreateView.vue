@@ -12,6 +12,7 @@ const form = ref({
     has_fixed_lens: false,
     fixed_lens_model:"",
     description: "",
+    lenses_ids: [],
 })
 
 const error = ref(null);

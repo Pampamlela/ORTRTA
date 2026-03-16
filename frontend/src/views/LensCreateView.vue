@@ -10,6 +10,8 @@ const lensStore = useLensStore();
 const form = ref({
     model: '',
     description: '',
+    mount:'',
+    cameras_ids: []
 });
 
 const error = ref(null);

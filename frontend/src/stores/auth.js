@@ -9,19 +9,28 @@ export const useAuthStore = defineStore("auth", {
     }),
 
     actions: {
-        async login(username, password) {
-            const response = await api.post("token/", {
-                username,
-                password,
-            })
 
-            this.access = response.data.access
-            this.refresh = response.data.refresh
+        async register(data) {
+            const response = await api.post("register/", data)
 
-            localStorage.setItem("access_token", this.access)
-            localStorage.setItem("refresh_token", this.refresh)
+            this.user = response.data.user
+            this.accessToken = response.data.access
+            this.refreshToken = response.data.refresh
 
-            await this.fetchUser()
+            localStorage.setItem("access", this.accessToken)
+            localStorage.setItem("refresh", this.refreshToken)
+        },
+
+        async login(data) {
+            const response = await api.post("login/", data)
+
+            this.accessToken = response.data.access
+            this.refreshToken = response.data.refresh
+
+            localStorage.setItem("access", this.accessToken)
+            localStorage.setItem("refresh", this.refreshToken)
+
+            await this.fetchMe()
         },
 
         async fetchUser() {
@@ -31,11 +40,11 @@ export const useAuthStore = defineStore("auth", {
 
         logout() {
             this.user = null
-            this.access = null
-            this.refresh = null
+            this.accessToken = null
+            this.refreshToken = null
 
-            localStorage.removeItem("access_token")
-            localStorage.removeItem("refresh_token")
+            localStorage.removeItem("access")
+            localStorage.removeItem("refresh")
         },
     },
 

@@ -26,19 +26,7 @@ const form = ref({
     type: "COLOR_NEGATIVE"
 })
 
-// const filteredLenses = computed(() => {
-//     if (!form.value.camera) {
-//         return []
-//     }
 
-//     return lensStore.lenses.filter(lens =>
-//         lens.cameras.includes(form.value.camera)
-//     )
-// })
-
-// const selectedCamera = computed(() => {
-//     return cameraStore.cameras.find(cam => cam.id === form.value.camera);
-// })
 
 watch(() => form.value.camera, () => {
     form.value.lens = "";

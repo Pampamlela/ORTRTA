@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useRollStore } from '@/stores/rolls';
 import router from '@/router';
+import { useAuthStore } from '@/stores/auth';
 
 const rollStore = useRollStore();
 
@@ -20,17 +21,7 @@ onMounted(() => {
 
         <ul v-else>
             <li v-for="roll in rollStore.rolls" :key="roll?.slug">
-            <!-- <strong>{{  roll.film_name }}</strong>
-            <br>
 
-            Appareil photo : {{  roll.camera_name }} <br>
-            objectif : {{ roll.lens_name || "objectif fixe"}} <br>
-            ISO : {{ roll.iso }} <br>
-            statut : {{ roll.status }} <br>
-            date de début : {{ roll.start_date }} <br>
-            date de fin : {{ roll.end_date || "en cours" }} <br>
-            date de développement : {{ roll.development_date || "non développée" }} <br>
-            date de scan : {{ roll.scan_date || "non scannée" }} <br> -->
             <router-link :to="`/rolls/${roll.slug}`">
                 <strong>{{ roll.film_name }}</strong><br>
                 {{ roll.camera_name }} - ISO {{ roll.iso }} - {{ roll.status }}
@@ -52,6 +43,8 @@ onMounted(() => {
         <router-link to="/lenses/new">
             Nouvel objectif
         </router-link>
+
+        <button @click="authStore.logout()">Logout</button>
         
     </div>
 </template>

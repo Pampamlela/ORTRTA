@@ -26,14 +26,23 @@ onMounted(() => {
 })
 
 const filteredLenses = computed(() => {
-    if (!form.camera) {
-        return []
-    }
+    if (!form.camera) return []
 
-    return lensStore.lenses.filter(lens =>
-        lens.cameras.includes(form.camera)
-    )
+    const camera = cameraStore.cameras.find(
+        cam => cam.id === form.camera
+    );
+    
+    return lensStore.lenses.filter(lens => {
+        // objectif spécifique à certains appareils
+        if (lens.cameras?.length) {
+            return lens.cameras.includes(camera.id);
+        }
+
+        // objectif à monture interchangeable
+        return lens.mount === camera.mount;
+    })
 })
+
 const selectedCamera = computed(() => {
     return cameraStore.cameras.find(cam => cam.id === form.camera);
 })
@@ -44,7 +53,7 @@ watch(() => form.camera, () => {
         cam => cam.id === form.camera
     )
     if (camera?.has_fixed_lens) {
-        form.lens = null;
+        form.lens = "";
     }   
 })
     
@@ -111,28 +120,25 @@ watch(() => form.camera, () => {
                 </option>
             </select>
 
-            <div v-if="!selectedCamera?.has_fixed_lens">
-                <label>Objectif</label>
-                <select v-model="form.lens">
-                    <option disabled value="">
-                        Sélectionnez un objectif
-                    </option>
+            <label>Objectif</label>
+            <select v-model="form.lens"
+                :disabled="selectedCamera?.has_fixed_lens">
+                <option disabled value="">
+                    Sélectionnez un objectif
+                </option>
 
-                    <option 
-                        v-for="lens in filteredLenses" 
-                        :key="lens.id" 
-                        :value="lens.id"
-                    >
-                        {{ lens.model }}
-                    </option>
-                </select>
-            </div>
-            
-            <div v-else>
-                <p>
-                    Objectif fixe {{ selectedCamera.fixed_lens_model }}
-                </p>
-            </div>
+                <option 
+                    v-for="lens in filteredLenses" 
+                    :key="lens.id" 
+                    :value="lens.id"
+                >
+                    {{ lens.model }} {{ lens.mount_name }}
+                </option>
+            </select>
+
+            <p v-if="selectedCamera?.has_fixed_lens">
+                Objectif fixe {{ selectedCamera.fixed_lens_model }}
+            </p>
 
             <label>Date de début</label>
             <input v-model="form.date_start" type="date" />
