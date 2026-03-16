@@ -15,7 +15,9 @@ onMounted(async () => {
 
     const camera = await cameraStore.fetchCamera(route.params.id);
 
-    form.value = { ...camera };
+    form.value = { ...camera,
+        lenses_ids: camera.lenses.map(lens => lens.id) || []
+    };
 })
 
 const handleSubmit = async () => {

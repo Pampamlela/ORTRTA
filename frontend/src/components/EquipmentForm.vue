@@ -2,13 +2,16 @@
 import { onMounted } from 'vue';
 import { useMountStore } from '@/stores/mounts';
 import { useCameraStore } from '@/stores/cameras';
+import { useLensStore } from '@/stores/lenses';
 
 const mountStore = useMountStore();
 const cameraStore = useCameraStore();
+const lensStore = useLensStore();
 
 onMounted(() => {
     mountStore.fetchMounts();
     cameraStore.fetchCameras();
+    lensStore.fetchLenses();
 })
 
 const props = defineProps({
@@ -32,6 +35,17 @@ const props = defineProps({
             <label>Objectif fixe</label>
             
             <div v-if="type === 'camera' && !form.has_fixed_lens">
+                <label>Objectifs compatibles</label>
+                <select v-model="form.lenses_ids" multiple>
+                    <option 
+                        v-for="lens in lensStore.lenses" 
+                        :key="lens.id" 
+                        :value="lens.id"
+                    >
+                        {{ lens.model }}
+                    </option>
+                </select>
+
                 <label>Monture</label>
                 <select v-model="form.mount">
                     <option disabled value="">Sélectionnez une monture</option>

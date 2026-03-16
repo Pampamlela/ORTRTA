@@ -4,6 +4,14 @@ from .models import Camera, Lens, Mount
 class CameraSerializer(serializers.ModelSerializer):
 
     lenses = serializers.SerializerMethodField()
+
+    lenses_ids = serializers.PrimaryKeyRelatedField(
+        queryset=Lens.objects.all(),
+        many=True,
+        write_only=True,
+        required=False
+    )
+
     mount_name = serializers.ReadOnlyField(source="mount.name")
 
     class Meta:
@@ -16,6 +24,24 @@ class CameraSerializer(serializers.ModelSerializer):
             {"id": lens.id, "model": lens.model}
             for lens in obj.lenses.all()
         ]
+    
+    def create(self, validated_data):
+        lenses = validated_data.pop("lenses_ids", [])
+        camera = super().create(validated_data)
+
+        if lenses:
+            camera.lenses.set(lenses)
+
+        return camera
+    
+    def update(self, instance, validated_data):
+        lenses = validated_data.pop("lenses_ids", None)
+        camera = super().update(instance, validated_data)
+
+        if lenses is not None:
+            camera.lenses.set(lenses)
+
+        return camera
 
 class LensSerializer(serializers.ModelSerializer):
 
