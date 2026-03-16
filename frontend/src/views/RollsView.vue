@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useRollStore } from '@/stores/rolls';
 import router from '@/router';
+import { useAuthStore } from '@/stores/auth';
 
 const rollStore = useRollStore();
 
@@ -42,6 +43,8 @@ onMounted(() => {
         <router-link to="/lenses/new">
             Nouvel objectif
         </router-link>
+
+        <button @click="authStore.logout()">Logout</button>
         
     </div>
 </template>

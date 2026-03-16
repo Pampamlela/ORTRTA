@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
 
 import LoginView from "@/views/LoginView.vue"
+import RegisterView from "@/views/RegisterView.vue"
 import DashboardView from "@/views/DashboardView.vue"
 import RollsView from "@/views/RollsView.vue"
 import RollDetailView from "@/views/RollDetailView.vue"
@@ -18,7 +19,8 @@ import LensEditView from "@/views/LensEditView.vue"
 
 
 const routes = [
-  { path: "/login", component: LoginView },
+  { path: "/login", component: LoginView, meta: { guestOnly: true } },
+  { path: "/register", component: RegisterView },
   { path: "/", component: DashboardView, meta: { requiresAuth: true } },
   { path: "/rolls", component: RollsView, meta: { requiresAuth: true } },
   { path: "/rolls/new", component: RollCreateView, meta: { requiresAuth: true } },
@@ -39,11 +41,20 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
-  const auth = useAuthStore()
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
 
-  if (to.meta.requiresAuth && !auth.access) {
-    return "/login"
+  if (to.meta.requiresAuth && !authStore.accessToken) {
+    next("/login")
+
+  } 
+
+  else if (to.meta.guestOnly && authStore.accessToken) {
+    next("/rolls")
+  } 
+
+  else {
+    next()
   }
 })
 
