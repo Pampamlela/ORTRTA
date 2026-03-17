@@ -8,6 +8,8 @@ from .serializers import UserSerializer
 from rest_framework import generics
 from .serializers import SignupSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenSerializer
 
 # Create your views here.
 
@@ -57,3 +59,6 @@ class ChangePasswordView(APIView):
         user.save()
 
         return Response({'message': 'Mot de passe mis à jour.'})
+    
+class CustomLoginView(TokenObtainPairView):
+    serializer_class = CustomTokenSerializer
