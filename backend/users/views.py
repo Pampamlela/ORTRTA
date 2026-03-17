@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.password_validation import validate_password
+from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -15,6 +17,10 @@ class MeView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+    
+    def delete(self, request):
+        request.user.delete()
+        return Response({"message": "Utilisateur supprimé."}, status=204)
 
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
@@ -35,3 +41,19 @@ class SignupView(generics.CreateAPIView):
             "access": str(refresh.access_token),
         }) 
 
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        new_password = request.data.get('password')
+
+        try:
+            validate_password(new_password)
+        except Exception as e:
+            raise ValidationError({'password': list(e)})
+        
+        user.set_password(new_password)
+        user.save()
+
+        return Response({'message': 'Mot de passe mis à jour.'})
