@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("auth", {
             localStorage.setItem("access", this.accessToken)
             localStorage.setItem("refresh", this.refreshToken)
 
-            await this.fetchMe()
+            await this.fetchUser()
         },
 
         async fetchUser() {
