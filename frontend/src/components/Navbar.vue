@@ -1,9 +1,9 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
-const router = useRoute();
+const router = useRouter();
 
 const handleLogout = () => {
     authStore.logout();
@@ -27,8 +27,6 @@ const handleLogout = () => {
                 <router-link to="/login">Connexion</router-link>
                 <router-link to="/register">Inscription</router-link>
             </template>
-
-            <button @click="handleLogout">Déconnexion</button>
 
         </div>
     </nav>
