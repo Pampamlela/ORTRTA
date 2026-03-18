@@ -17,6 +17,7 @@ from rest_framework.decorators import action
 # Create your views here.
 
 class RollViewSet(viewsets.ModelViewSet):
+    
     serializer_class = RollSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     lookup_field = "slug"
@@ -42,7 +43,7 @@ class RollViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"], permission_classes=[])
     def qr(self, request, slug=None):
         
-        roll = get_object_or_404(Roll, slug=slug)
+        roll = get_object_or_404(self.get_queryset(), slug=slug)
 
         url = f"{settings.FRONTEND_URL}/rolls/{roll.slug}/"
 

@@ -33,6 +33,11 @@ jobs:
                 cd backend
                 python manage.py migrate
 
+            - name: Run backend tests
+              run: |
+                cd backend
+                python manage.py test
+
     frontend:
         runs-on: ubuntu-latest
 

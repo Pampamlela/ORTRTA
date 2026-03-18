@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .serializers import UserSerializer
-from rest_framework import generics
+from rest_framework import generics, status
 from .serializers import SignupSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -41,7 +41,7 @@ class SignupView(generics.CreateAPIView):
             "user": UserSerializer(user).data,
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-        }) 
+        }, status=status.HTTP_201_CREATED) 
 
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
