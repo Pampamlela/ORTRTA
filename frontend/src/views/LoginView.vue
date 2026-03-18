@@ -7,7 +7,7 @@ const authStore = useAuthStore()
 const router = useRouter()
 
 const form = ref({
-    username: '',
+    email: '',
     password: '',
 })
 const error = ref(null)
@@ -30,8 +30,8 @@ const handleLogin = async () => {
 
         <form @submit.prevent="handleLogin">
             <div>
-                <label>Username</label>
-                <input v-model="form.username" placeholder="Surnom" required />
+                <label>Email</label>
+                <input v-model="form.email" placeholder="Email" required />
             </div>
 
             <div>

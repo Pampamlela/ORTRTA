@@ -16,12 +16,14 @@ import LensesView from "@/views/LensesView.vue"
 import LensDetailView from "@/views/LensDetailView.vue"
 import LensCreateView from "@/views/LensCreateView.vue"
 import LensEditView from "@/views/LensEditView.vue"
+import ProfileView from "@/views/ProfileView.vue"
 
 
 const routes = [
   { path: "/login", component: LoginView, meta: { guestOnly: true } },
   { path: "/register", component: RegisterView },
   { path: "/", component: DashboardView, meta: { requiresAuth: true } },
+  { path: "/profile", component: ProfileView, meta: { requiresAuth: true } },
   { path: "/rolls", component: RollsView, meta: { requiresAuth: true } },
   { path: "/rolls/new", component: RollCreateView, meta: { requiresAuth: true } },
   { path: "/rolls/:slug", component: RollDetailView, meta: { requiresAuth: true } },

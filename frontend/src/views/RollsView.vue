@@ -3,12 +3,18 @@ import { onMounted } from 'vue';
 import { useRollStore } from '@/stores/rolls';
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
-
+import api from '@/api/axios';
 const rollStore = useRollStore();
+const authStore = useAuthStore();
 
 onMounted(() => {
   rollStore.fetchRolls();
-});                 
+});    
+
+const logoutUser = () => {
+    authStore.logout();
+    window.location.href = "/login";
+}
 </script>
 
 <template>
@@ -44,7 +50,7 @@ onMounted(() => {
             Nouvel objectif
         </router-link>
 
-        <button @click="authStore.logout()">Logout</button>
+        <button @click="logoutUser" style="margin-top: 20px;">Se déconnecter</button>
         
     </div>
 </template>

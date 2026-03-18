@@ -4,8 +4,8 @@ import api from "@/api/axios"
 export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: null,
-        access: localStorage.getItem("access_token") || null,
-        refresh: localStorage.getItem("refresh_token") || null,
+        accessToken: localStorage.getItem("access") || null,
+        refreshToken: localStorage.getItem("refresh") || null,
     }),
 
     actions: {

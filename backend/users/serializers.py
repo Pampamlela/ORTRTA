@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,3 +31,6 @@ class SignupSerializer(serializers.ModelSerializer):
             password=validated_data["password"]
         )
         return user
+    
+class CustomTokenSerializer(TokenObtainPairSerializer):
+    username_field = "email"

@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import (
 )
 from rolls.views import RollViewSet, UrlPhotoViewSet, UserStatsView
 from equipment.views import CameraViewSet, LensViewSet, MountViewSet
-from users.views import MeView, SignupView
+from users.views import ChangePasswordView, CustomLoginView, MeView, SignupView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -40,11 +40,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/me/', MeView.as_view(), name='me'),
+    path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', SignupView.as_view(), name='register'),
-    path('api/login/', TokenObtainPairView.as_view(), name='login'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/login/', CustomLoginView.as_view(), name='login'),
     path('api/stats/', UserStatsView.as_view(), name='user-stats'),
 ]
 
