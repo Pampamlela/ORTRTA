@@ -27,7 +27,7 @@ class RollAPITestCase(APITestCase):
         response = self.client.post(
             reverse("token_obtain_pair"),
             {
-                "username": "testuser", 
+                "email": "testuser@example.com", 
                 "password": "testpassword"
             },
         )

@@ -45,8 +45,8 @@ class CameraSerializer(serializers.ModelSerializer):
 
 class LensSerializer(serializers.ModelSerializer):
 
-    cameras = serializers.SerializerMethodField()
-    cameras_ids = serializers.PrimaryKeyRelatedField(
+    cameras_detail = serializers.SerializerMethodField()
+    cameras = serializers.PrimaryKeyRelatedField(
         queryset=Camera.objects.all(),
         many=True,
         write_only=True,
@@ -59,24 +59,25 @@ class LensSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["user"]
 
-    def get_cameras(self, obj):
+    def get_cameras_detail(self, obj):
         return [
             {"id": camera.id, "model": camera.model}
             for camera in obj.cameras.all()
         ]
 
-    def validate_cameras_ids(self, value):
+    def validate(self, data):
         user = self.context["request"].user
+        cameras = data.get("cameras", [])
 
-        for camera in value:
+        for camera in cameras:
             if camera.user != user:
                 raise serializers.ValidationError(
                     "Vous ne pouvez associer qu'une caméra qui vous appartient."
                 )
-        return value
+        return data
     
     def create(self, validated_data):
-        cameras = validated_data.pop("cameras_ids", [])
+        cameras = validated_data.pop("cameras", [])
         lens = super().create(validated_data)
 
         if cameras:
@@ -84,7 +85,7 @@ class LensSerializer(serializers.ModelSerializer):
         return lens
     
     def update(self, instance, validated_data):
-        cameras = validated_data.pop("cameras_ids", None)
+        cameras = validated_data.pop("cameras", None)
         lens = super().update(instance, validated_data)
 
         if cameras is not None:
