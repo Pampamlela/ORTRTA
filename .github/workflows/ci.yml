@@ -1,0 +1,59 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+jobs:
+    backend:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.12'
+
+            - name: Install backend dependencies
+              run: |
+                cd backend
+                pip install -r requirements.txt
+
+            - name: Django check
+              run: |
+                cd backend
+                python manage.py check
+
+            - name: Run migrations
+              run: |
+                cd backend
+                python manage.py migrate
+
+    frontend:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Node
+              uses: actions/setup-node@v3
+              with:
+                node-version: '22.13.1'
+
+            - name: Install frontend dependencies
+              run: |
+                cd frontend
+                npm install
+
+            - name: Build frontend
+              run: |
+                cd frontend
+                npm run build
+
+            
+            
