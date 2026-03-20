@@ -4,13 +4,16 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+
+from equipment.serializers import CameraSerializer, LensSerializer
+from rolls.serializers import RollSerializer, UrlPhotoSerializer
 from .serializers import UserSerializer
 from rest_framework import generics, status
 from .serializers import SignupSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenSerializer
-from rolls.models import Roll
+from rolls.models import Roll, UrlPhoto
 from equipment.models import Camera, Lens
 
 # Create your views here.
@@ -74,16 +77,19 @@ class ExportUserDataView(APIView):
         cameras = Camera.objects.filter(user=user)
         lenses = Lens.objects.filter(user=user)
         rolls = Roll.objects.filter(user=user)
+        photos = UrlPhoto.objects.filter(roll__user=user)
 
         data = {
             "user": {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
+                "date_joined": user.date_joined,
             },
-            "cameras": list(cameras),
-            "lenses": list(lenses),
-            "rolls": list(rolls),
+            "cameras": CameraSerializer(cameras, many=True).data,
+            "lenses": LensSerializer(lenses, many=True).data,
+            "rolls": RollSerializer(rolls, many=True).data,
+            "photos": UrlPhotoSerializer(photos, many=True).data,
         }
 
         return Response(data)

@@ -95,6 +95,32 @@ const logoutUser = () => {
     authStore.logout();
     window.location.href = "/login";
 }
+
+const exportData = async () => {
+    try {
+        const response = await api.get('me/export/',
+            { headers : {
+                Authorization: `Bearer ${authStore.accessToken}`,
+            },
+            }
+        );
+
+        const dataStr = JSON.stringify(response.data, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'my_data.json';
+        link.click();
+        window.URL.revokeObjectURL(url);
+
+        // Gérer la réponse, par exemple en sauvegardant les données dans un fichier
+        console.log("Données exportées :", response.data);
+    } catch (err) {
+        console.error("Erreur lors de l'export des données :", err);
+    }
+    return {exportData};
+}
 </script>
 
 <template>
@@ -145,6 +171,8 @@ const logoutUser = () => {
         <p v-if="deleteError" class="error" style="color: red;">
             {{ deleteError }}
         </p>
+
+        <button @click="exportData">Exporter mes données</button>
 
         <button @click="logoutUser" style="margin-top: 20px;">Se déconnecter</button>
     </div>
