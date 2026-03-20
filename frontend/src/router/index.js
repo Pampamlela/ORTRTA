@@ -17,11 +17,13 @@ import LensDetailView from "@/views/LensDetailView.vue"
 import LensCreateView from "@/views/LensCreateView.vue"
 import LensEditView from "@/views/LensEditView.vue"
 import ProfileView from "@/views/ProfileView.vue"
+import RGPDView from "@/views/RGPDView.vue"
 
 
 const routes = [
   { path: "/login", component: LoginView, meta: { guestOnly: true } },
   { path: "/register", component: RegisterView },
+  { path: "/rgpd", component: RGPDView },
   { path: "/", component: DashboardView, meta: { requiresAuth: true } },
   { path: "/profile", component: ProfileView, meta: { requiresAuth: true } },
   { path: "/rolls", component: RollsView, meta: { requiresAuth: true } },

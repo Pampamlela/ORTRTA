@@ -162,3 +162,8 @@ SIMPLE_JWT = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# en production, il faudra configurer un vrai backend de stockage (ex: AWS S3) et activer les options de sécurité suivantes :
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True

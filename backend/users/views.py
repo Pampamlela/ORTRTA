@@ -10,6 +10,8 @@ from .serializers import SignupSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenSerializer
+from rolls.models import Roll
+from equipment.models import Camera, Lens
 
 # Create your views here.
 
@@ -62,3 +64,26 @@ class ChangePasswordView(APIView):
     
 class CustomLoginView(TokenObtainPairView):
     serializer_class = CustomTokenSerializer
+
+class ExportUserDataView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        cameras = Camera.objects.filter(user=user)
+        lenses = Lens.objects.filter(user=user)
+        rolls = Roll.objects.filter(user=user)
+
+        data = {
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            },
+            "cameras": list(cameras),
+            "lenses": list(lenses),
+            "rolls": list(rolls),
+        }
+
+        return Response(data)
