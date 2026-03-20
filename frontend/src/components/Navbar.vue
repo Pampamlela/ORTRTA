@@ -28,6 +28,8 @@ const handleLogout = () => {
                 <router-link to="/register">Inscription</router-link>
             </template>
 
+            <router-link to="/rgpd">Confidentialité</router-link>
+
         </div>
     </nav>
 </template>

@@ -88,3 +88,12 @@ class UserAPITestCase(APITestCase):
         response = self.client.delete(f"/api/me/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.filter(id=self.user.id).exists(), False)
+
+    # test export des données de l'utilisateur
+    def test_export_user_data(self):
+        response = self.client.get(f"/api/me/export/")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("user", response.data)
+        self.assertIn("rolls", response.data)
+       

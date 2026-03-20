@@ -36,7 +36,8 @@ const handleSubmit = async () => {
             <input v-model="form.password2" type="password" placeholder="Confirmer le mot de passe" required />
             <button type="submit">S'inscrire</button>
         </form>
-
+        <p>Vos données sont utilisées uniquement pour gérer votre compte, vos pellicules et votre matériel.</p>
+        <p>En créant un compte, vous acceptez notre <router-link to="/rgpd">politique de confidentialité</router-link>.</p>
         <p v-if="error" class="error">{{ error }}</p>
     </div>
 </template>
