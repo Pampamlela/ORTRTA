@@ -1,0 +1,18 @@
+
+services:
+  backend:
+    build: ./backend
+    container_name: ortrta_backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+# db:
+#   image: postgres:15
+#   environment:
+#     POSTGRES_DB: ortrta
+#     POSTGRES_USER: user
+#     POSTGRES_PASSWORD: password

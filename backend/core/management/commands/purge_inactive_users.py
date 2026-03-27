@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         limit_date = timezone.now() - timedelta(days=365*2)
 
-        users = User.objects.filter(last_login__lt=limit_date)
+        users = User.objects.filter(last_login__lt=limit_date) | User.objects.filter(last_login__isnull=True, date_joined__lt=limit_date)
 
         count = users.count()
         users.delete()
