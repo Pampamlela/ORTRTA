@@ -79,12 +79,12 @@ const deleteRoll = async () => {
                 :src="`http://127.0.0.1:8000/api/rolls/${rollStore.currentRoll.slug}/qr/`"
                 alt="QR Code pour partager la pellicule"
             />
-            <p>
+            <!-- <p>
                 Lien public :
                 <a :href="`http://127.0.0.1:8000/r/${rollStore.currentRoll.slug}`">
                 partager
                 </a>
-            </p>
+            </p> -->
 
             <router-link :to="`/rolls/${rollStore.currentRoll.slug}/edit`">
                 Modifier

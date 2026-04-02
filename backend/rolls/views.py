@@ -40,10 +40,12 @@ class RollViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     # génération des QrCodes pour chaque roll
-    @action(detail=True, methods=["get"], permission_classes=[])
+    @action(detail=True, methods=["get"], permission_classes=[AllowAny])
     def qr(self, request, slug=None):
         
-        roll = get_object_or_404(self.get_queryset(), slug=slug)
+        # roll = get_object_or_404(self.get_queryset(), slug=slug)
+
+        roll = Roll.objects.get(slug=slug)
 
         url = f"{settings.FRONTEND_URL}/rolls/{roll.slug}/"
 
@@ -52,6 +54,7 @@ class RollViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type="image/png")
         img.save(response,"PNG")
 
+        print(type(roll))
         return response
     
     def perform_update(self, serializer):
