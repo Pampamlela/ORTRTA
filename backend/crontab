@@ -1,0 +1,8 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# backup tous les jours à 3h
+0 3 * * * root /app/scripts/backup_db.sh >> /var/log/cron.log 2>&1
+
+# purge tous les dimanches à 4h
+0 4 * * 0 root python /app/manage.py purge_inactive_users >> /var/log/cron.log 2>&1

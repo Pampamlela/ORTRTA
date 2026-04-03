@@ -22,3 +22,21 @@ services:
       POSTGRES_PASSWORD: ortrta_password
     ports:
       - "5432:5432"
+
+  cron:
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: ortrta
+      POSTGRES_USER: ortrta_user
+      POSTGRES_PASSWORD: ortrta_password
+    command: cron -f
+    volumes:
+      - ./backend:/app
+      - ./backups:/backups
+    depends_on:
+      - db
+    restart: always
