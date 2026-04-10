@@ -54,3 +54,7 @@ a {
 .font-body {
   font-family: "Source Sans 3", sans-serif;
 }
+
+.input {
+  @apply w-full p-3 rounded-lg bg-white border border-gray-200;
+}

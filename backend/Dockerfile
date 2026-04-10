@@ -5,8 +5,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade pip==26.0
+
+COPY requirements.txt requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends cron postgresql-client \
 	&& rm -rf /var/lib/apt/lists/*
