@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Roll, UrlPhoto
+from .models import PhotoProvider, Roll, UrlPhoto
 from equipment.models import Camera, Lens
 
 class UrlPhotoSerializer(serializers.ModelSerializer):
@@ -10,19 +10,27 @@ class UrlPhotoSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("created_at", "updated_at")
 
-    def validate(self, data):
+    def validate_roll(self, roll):
         user = self.context["request"].user
-        roll = data.get("roll")
-
         if roll.user != user:
             raise serializers.ValidationError(
                 "You cannot add a photo to a roll that is not yours."
             )
+        return roll
+
+    # def validate(self, data):
+    #     user = self.context["request"].user
+    #     roll = data.get("roll")
+
+    #     if roll.user != user:
+    #         raise serializers.ValidationError(
+    #             "You cannot add a photo to a roll that is not yours."
+    #         )
         
-        return data
+    #     return data
 
 class RollSerializer(serializers.ModelSerializer):
-    photos = UrlPhotoSerializer(many=True, read_only=True)
+    photos = UrlPhotoSerializer(many=True, required=False)
     user = serializers.ReadOnlyField(source="user.id")
     camera_name = serializers.ReadOnlyField(source="camera.model")
     lens_name = serializers.ReadOnlyField(source="lens.model")
@@ -102,3 +110,25 @@ class RollSerializer(serializers.ModelSerializer):
             )
         
         return data
+    
+    def validate_provider(self, value):
+        if value not in dict(PhotoProvider.choices):
+            raise serializers.ValidationError("Invalid provider.")
+        return value
+    
+    def update(self, instance, validated_data):
+        photos_data = validated_data.pop("photos", [])
+
+        instance = super().update(instance, validated_data)
+
+        # supprimer anciens liens
+        instance.photos.all().delete()
+
+        # créer les nouveaux liens
+        for photo_data in photos_data:
+            if photo_data.get("url"): # ignore les champs vides
+                UrlPhoto.objects.create(
+                    roll=instance,
+                    **photo_data
+                )
+        return instance

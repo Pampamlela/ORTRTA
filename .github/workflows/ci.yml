@@ -9,6 +9,29 @@ jobs:
     backend:
         runs-on: ubuntu-latest
 
+        services:
+          db:
+            image: postgres:16
+            env:
+              POSTGRES_DB: ortrta
+              POSTGRES_USER: ortrta_user
+              POSTGRES_PASSWORD: ortrta_password
+            ports:
+              - 5432:5432
+            options: >-
+              --health-cmd "pg_isready -U ortrta_user -d ortrta"
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+        
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_NAME: ortrta
+          DB_USER: ortrta_user
+          DB_PASSWORD: ortrta_password
+
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
@@ -28,15 +51,37 @@ jobs:
                 cd backend
                 python manage.py check
 
+            - name: Wait for Postgres
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y postgresql-client
+                until pg_isready -h 127.0.0.1 -p 5432 -U ortrta_user; do
+                  sleep 1
+                done
+              env:
+                PGPASSWORD: ortrta_password
+
             - name: Run migrations
               run: |
                 cd backend
                 python manage.py migrate
+              env:
+                DB_HOST: 127.0.0.1
+                DB_PORT: 5432
+                DB_NAME: ortrta
+                DB_USER: ortrta_user
+                DB_PASSWORD: ortrta_password
 
             - name: Run backend tests
               run: |
                 cd backend
                 python manage.py test
+              env:
+                DB_HOST: 127.0.0.1
+                DB_PORT: 5432
+                DB_NAME: ortrta
+                DB_USER: ortrta_user
+                DB_PASSWORD: ortrta_password
 
     frontend:
         runs-on: ubuntu-latest

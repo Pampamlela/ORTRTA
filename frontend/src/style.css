@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@600&family=Source+Sans+3&display=swap');
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f7f3eb;
+  color: #1f2937;
+}
+
+a {
+  color: inherit;
+}
+
+/* Custom design tokens used across views */
+.bg-paper {
+  background-color: #F3EEE6;
+}
+
+.text-film {
+  color: #3A2C1E;
+}
+
+.text-grain {
+  color: #7A746E;
+}
+
+.bg-amber {
+  background-color: #D7A44B;
+}
+
+.text-amber {
+  color: #D7A44B;
+}
+
+.bg-danger {
+  background-color: #8B2E2E;
+}
+
+.font-title {
+  font-family: "Playfair Display", serif;
+}
+
+.font-ui {
+  font-family: "Montserrat", sans-serif;
+}
+
+.font-body {
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.input {
+  @apply w-full p-3 rounded-lg bg-white border border-gray-200;
+}

@@ -1,14 +1,41 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
 import router from '@/router';
+import api from '@/api/axios';
 
 const route = useRoute()
 const rollStore = useRollStore();
+const qrCodeUrl = ref(null)
+const providerLabels = {
+    FLICKR: "Flickr",
+    GOOGLE_PHOTOS: "Google Photos",
+    GOOGLE_DRIVE: "Google Drive",
+    SITE: "Site personnel",
+    OTHER: "Autre"
+}
+
+const revokeQrCodeUrl = () => {
+    if (qrCodeUrl.value) {
+        URL.revokeObjectURL(qrCodeUrl.value)
+        qrCodeUrl.value = null
+    }
+}
+
+const fetchQrCode = async (slug) => {
+    revokeQrCodeUrl()
+    const response = await api.get(`rolls/${slug}/qr/`, { responseType: 'blob' })
+    qrCodeUrl.value = URL.createObjectURL(response.data)
+}
 
 onMounted(async() => {
     await rollStore.fetchRoll(route.params.slug);
+    await fetchQrCode(route.params.slug)
+})
+
+onBeforeUnmount(() => {
+    revokeQrCodeUrl()
 })
 
 const deleteRoll = async () => {
@@ -28,7 +55,179 @@ const deleteRoll = async () => {
 </script>
 
 <template>
-    <div class="roll-detail">
+    <div class="bg-paper min-h-screen text-film font-body px-4 py-6">
+
+        <!-- HEADER -->
+        <h1 class="font-title text-2xl mb-6">
+            {{ rollStore.currentRoll?.film_name }}
+        </h1>
+
+        <div v-if="rollStore.currentRoll" class="space-y-4">
+
+            <!-- INFOS -->
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+                <p><span class="font-ui">Appareil :</span> {{ rollStore.currentRoll.camera_name }}</p>
+                <p><span class="font-ui">Objectif :</span> {{ rollStore.currentRoll.lens_name || "objectif fixe" }}</p>
+                <p><span class="font-ui">ISO :</span> {{ rollStore.currentRoll.iso }}</p>
+                <p><span class="font-ui">Format :</span> {{ rollStore.currentRoll.format }}</p>
+                <p><span class="font-ui">Statut :</span> {{ rollStore.currentRoll.status }}</p>
+            </div>
+
+            <!-- DATES -->
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-2 text-sm text-grain">
+                <p>Début : {{ rollStore.currentRoll.date_start }}</p>
+                <p v-if="rollStore.currentRoll.date_end">Fin : {{ rollStore.currentRoll.date_end }}</p>
+                <p v-if="rollStore.currentRoll.date_development">Développement : {{ rollStore.currentRoll.date_development }}</p>
+                <p v-if="rollStore.currentRoll.date_scan">Scan : {{ rollStore.currentRoll.date_scan }}</p>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div v-if="rollStore.currentRoll.description"
+                class="bg-white p-4 rounded-xl shadow-sm text-sm">
+                {{ rollStore.currentRoll.description }}
+            </div>
+
+            <!-- GALERIES -->
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <h2 class="font-ui mb-2">Galeries</h2>
+
+                <ul v-if="rollStore.currentRoll.photos.length" class="space-y-1">
+                <li v-for="photo in rollStore.currentRoll.photos" :key="photo.id">
+                    <a :href="photo.url" target="_blank" class="text-amber underline">
+                    {{ providerLabels[photo.provider] || photo.provider }}
+                    </a>
+                </li>
+                </ul>
+
+                <p v-else class="text-grain text-sm">Aucune galerie</p>
+            </div>
+
+                    <!-- QR CODE -->
+            <div class="text-center">
+                <h2 class="font-ui mb-2">
+                    QR Code
+                </h2>
+                <img
+                    class="mx-auto w-40"
+                    :src="qrCodeUrl"
+                    alt="QR Code pour partager la pellicule"
+                />
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="flex gap-4 mt-6">
+
+                <router-link
+                :to="`/rolls/${rollStore.currentRoll.slug}/edit`"
+                class="flex-1 text-center py-3 rounded-xl bg-amber text-film font-ui"
+                >
+                Modifier
+                </router-link>
+
+                <button
+                @click="deleteRoll"
+                class="flex-1 py-3 rounded-xl bg-danger text-white font-ui"
+                >
+                Supprimer
+                </button>
+
+            </div>
+
+        </div>
+
+        <p v-else>Chargement...</p>
+    </div>
+</template>
+    <!-- <div class="bg-paper min-h-screen text-film font-body px-4 py-6">
+        <div v-if="rollStore.currentRoll" class="space-y-6">
+
+             <!-- HEADER 
+             <div class="bg-white shadow rounded-2xl p-6">
+                <h1 class="text-2xl font-bold mb-2">
+                    {{ rollStore.currentRoll.film_name }}
+                </h1>
+                <p class="text-gray-500">
+                    {{ rollStore.currentRoll.format }} - ISO {{ rollStore.currentRoll.iso }}
+                </p>
+            </div>
+
+            <!-- INFOS 
+             <div class="bg-white shadow rounded-2xl p-6 space-y-2">
+                <p><span class="font-semibold">Appareil :</span> {{ rollStore.currentRoll.camera_name }}</p>
+                <p><span class="font-semibold">Objectif :</span> {{ rollStore.currentRoll.lens_name || "objectif fixe" }}</p>
+                <p><span class="font-semibold">Statut :</span> {{ rollStore.currentRoll.status }}</p>
+
+                <div class="pt-2 border-t mt-2">
+                    <p><span class="font-semibold">Date de début :</span> {{ rollStore.currentRoll.date_start }}</p>
+                    <p v-if="rollStore.currentRoll.date_end">
+                        <span class="font-semibold">Date de fin :</span> {{ rollStore.currentRoll.date_end }}
+                    </p>
+                    <p v-if="rollStore.currentRoll.date_development">
+                        <span class="font-semibold">Date de développement :</span> {{ rollStore.currentRoll.date_development }}
+                    </p>
+                    <p v-if="rollStore.currentRoll.date_scan">
+                        <span class="font-semibold">Date de scan :</span> {{ rollStore.currentRoll.date_scan }}
+                    </p>
+                </div>
+
+                <p v-if="rollStore.currentRoll.description" class="pt-2 border-t mt-2">
+                    <span class="font-semibold">Description :</span> {{ rollStore.currentRoll.description }}
+                </p>
+             </div>
+
+            <!-- GALERIES 
+            <div class="bg-white shadow rounded-2xl p-6">
+                <h2 class="text-lg font-semibold mb-3">Galeries</h2>
+
+                <ul v-if="rollStore.currentRoll.photos.length" class="space-y-2">
+                    <li v-for="photo in rollStore.currentRoll.photos" :key="photo.id">
+                        <a
+                            :href="photo.url"
+                            target="_blank"
+                            class="text-blue-600 hover:underline"
+                        >
+                            {{ providerLabels[photo.provider] }}
+                        </a>
+                    </li>
+                </ul>
+                <p v-else class="text-gray-500">Aucune galerie ajoutée.</p>
+            </div>
+
+            <!-- QR CODE 
+            <div class="bg-white shadow rounded-2xl p-6 text-center">
+                <h2 class="text-lg font-semibold mb-4">QR Code</h2>
+
+                <img 
+                    class="mx-auto w-40"
+                    :src="qrCodeUrl"
+                    alt="QR Code"
+                />
+
+                <p class="text-sm text-gray-500 mt-3">
+                    Scannez ce QR code pour accéder à la pellicule.
+                </p>
+            </div>
+
+            <!-- ACTIONS 
+            <div class="flex gap-3">
+                <router-link
+                    :to="`/rolls/${rollStore.currentRoll.slug}/edit`"
+                    class="px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+                >
+                    Modifier
+                </router-link>
+                <button
+                    @click="deleteRoll"
+                    class="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600"
+                >
+                    Supprimer
+                </button>
+            </div> 
+        </div>
+        <p v-else class="text-center text-gray-500"> Chargement de la pellicule...</p>
+        
+    </div> --> 
+    <!-- <div class="roll-detail">
         <div v-if="rollStore.currentRoll">
             <h1> {{ rollStore.currentRoll.film_name }}</h1>
 
@@ -79,7 +278,7 @@ const deleteRoll = async () => {
                 :src="`http://127.0.0.1:8000/api/rolls/${rollStore.currentRoll.slug}/qr/`"
                 alt="QR Code pour partager la pellicule"
             />
-            <p>
+             <p>
                 Lien public :
                 <a :href="`http://127.0.0.1:8000/r/${rollStore.currentRoll.slug}`">
                 partager
@@ -104,8 +303,8 @@ const deleteRoll = async () => {
     </router-link>
     <router-link to="/lenses">
         Mes objectifs
-    </router-link>
-</template>
+    </router-link> -->
+<!-- </template> -->
 
 <style scoped>
 .roll-detail {

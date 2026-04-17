@@ -18,6 +18,28 @@ const props = defineProps({
     error: String
 })
 
+const providerOptions = [
+    { value: "FLICKR", label: "Flickr" },
+    { value: "GOOGLE_PHOTOS", label: "Google Photos" },
+    { value: "GOOGLE_DRIVE", label: "Google Drive" },
+    { value: "SITE", label: "Site personnel" },
+    { value: "OTHER", label: "Autre" }
+]
+
+const detectProvider = (rawUrl = "") => {
+    if (!rawUrl) return "OTHER";
+
+    try {
+        const host = new URL(rawUrl.trim()).hostname.toLowerCase();
+
+        if (host.includes("flickr.com")) return "FLICKR";
+        if (host.includes("photos.google.com")) return "GOOGLE_PHOTOS";
+        if (host.includes("drive.google.com")) return "GOOGLE_DRIVE";
+        return "SITE";
+    } catch {
+        return "OTHER";
+    }
+}
 const { form } = props;
 
 onMounted(() => {
@@ -56,28 +78,59 @@ watch(() => form.camera, () => {
         form.lens = "";
     }   
 })
+
+const addPhoto = () => {
+    form.photos.push({ 
+        url: "",
+        provider: "OTHER" 
+    });
+}
+
+const removePhoto = (index) => {
+    form.photos.splice(index, 1);
+}
     
 
 
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit">
-        <label>Nom de la pellicule</label>
-            <input v-model="form.film_name" type="text" required />
+    <form @submit.prevent="onSubmit" class="space-y-4 md:space-y-5">
 
-            <label>Type</label>
-            <select v-model="form.film_type" required>
+        <!-- NOM -->
+        <div>
+        <label class="text-sm text-grain">Nom de la pellicule</label>
+            <input v-model="form.film_name"
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
+                    required/>
+        </div>
+
+        <!-- TYPE -->
+        <div>
+            <label class="text-sm text-grain">Type</label>
+            <select v-model="form.film_type"
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200"
+                    required>
                 <option value="COLOR_NEGATIVE">Négatif couleur</option>
                 <option value="BLACK_AND_WHITE">Noir et blanc</option>
                 <option value="COLOR_SLIDE">Diapositive couleur</option>
             </select>
+        </div>
 
-            <label>ISO</label>
-            <input v-model="form.iso" type="number" required />
+        <!-- ISO -->
+        <div>
+            <label class="text-sm text-grain">ISO</label>
+            <input v-model="form.iso" type="number" 
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200"
+                    required />
+        </div>
 
-            <label>Format</label>
-            <select v-model="form.format" required>
+        <!-- FORMAT -->
+        <div>
+            <label class="text-sm text-grain">Format</label>
+            <select v-model="form.format" 
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200"
+                    required>
                 <option value="35MM-12">35mm-12</option>
                 <option value="35MM-24">35mm-24</option>
                 <option value="35MM-36">35mm-36</option>
@@ -106,9 +159,14 @@ watch(() => form.camera, () => {
                 <option value="126">126</option>
                 <option value="127">127</option>
             </select>
+        </div>
 
-            <label>Appareil photo</label>
-            <select v-model="form.camera" required>
+        <!-- CAMERA-->
+        <div>
+            <label class="text-sm text-grain">Appareil photo</label>
+            <select v-model="form.camera" 
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200"
+                    required>
                 <option disabled value="">Sélectionnez un appareil photo</option>
 
                 <option 
@@ -119,10 +177,14 @@ watch(() => form.camera, () => {
                     {{ cam.model }}
                 </option>
             </select>
+        </div>
 
-            <label>Objectif</label>
+        <!-- LENS -->
+        <div>
+            <label class="text-sm text-grain">Objectif</label>
             <select v-model="form.lens"
-                :disabled="selectedCamera?.has_fixed_lens">
+                :disabled="selectedCamera?.has_fixed_lens"
+                class="w-full p-3 rounded-lg bg-white border border-gray-200 disabled:bg-gray-100">
                 <option disabled value="">
                     Sélectionnez un objectif
                 </option>
@@ -136,27 +198,104 @@ watch(() => form.camera, () => {
                 </option>
             </select>
 
-            <p v-if="selectedCamera?.has_fixed_lens">
+            <p v-if="selectedCamera?.has_fixed_lens"
+                class="text-xs text-grain mt-1">
                 Objectif fixe {{ selectedCamera.fixed_lens_model }}
             </p>
+        </div>
 
-            <label>Date de début</label>
+        <!-- DATES -->
+        <div class="grid grid-cols-1 gap-3">
+            <label class="text-sm text-grain">Date de début</label>
             <input v-model="form.date_start" type="date" />
 
-            <label>Date de fin</label>
+            <label class="text-sm text-grain">Date de fin</label>
             <input v-model="form.date_end" type="date" />
 
-            <label>Date de développement</label>
+            <label class="text-sm text-grain">Date de développement</label>
             <input v-model="form.date_development" type="date" />
 
-            <label>Date de scan</label>
+            <label class="text-sm text-grain">Date de scan</label>
             <input v-model="form.date_scan" type="date" />
+        </div>
 
-            <label>Description</label>
-            <textarea v-model="form.description"></textarea>
+        <!-- DESCRIPTION -->
+        <div>
+            <label class="text-sm text-grain">Description</label>
+            <textarea v-model="form.description"
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200 min-h-[100px]">
+            </textarea>
+        </div>
 
-            <button type="submit">{{ props.submitLabel }}</button>
+         <!-- GALERIES -->
+        <div>
+            <label class="text-sm text-grain">Galeries</label>
 
-            <p v-if="props.error" class="error">{{ props.error }}</p>
+            <div class="flex flex-col gap-2 md:flex-row md:items-center"> <!--"space-y-2 mt-2" -->
+
+                <div
+                    v-for="(photo, index) in form.photos"
+                    :key="index"
+                    class= "flex flex-col gap-2 md:flex-row md:items-center"
+                >
+                    <input
+                        v-model="photo.url"
+                        type="url"
+                        placeholder="https://..."
+                        class="flex-1 p-3 rounded-lg bg-white border border-gray-200"
+                        @blur="!photo.provider || photo.provider === 'OTHER' ? photo.provider = detectProvider(photo.url) : null" -->
+                        /> <!--si user n'a rien choisi-> auto detect, si c'est encore OTHER -> au detect, sinon -> choix de user-->
+
+                    <select
+                        v-model="photo.provider"
+                        class="p-3 rounded-lg bg-white border border-gray-200"
+                    >
+                        <option
+                            v-for="option in providerOptions"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ option.label }}
+                        </option>
+                    </select>
+
+                    <button
+                        type="button"
+                        @click="removePhoto(index)"
+                        class="px-3 py-2 rounded-lg bg-danger text-white"
+                        >
+                        ✕
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                @click="addPhoto"
+                class="mt-3 text-sm text-amber"
+                >
+                + Ajouter un lien
+            </button>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        <div class="flex gap-3 pt-4">
+
+            <button type="submit"
+                class="flex-1 py-3 rounded-xl bg-amber text-film font-ui">
+                {{ props.submitLabel }}
+            </button>
+
+            <button type="button"
+                class="flex-1 py-3 rounded-xl bg-danger text-white">
+                Supprimer
+            </button>
+        </div>
+
+        <p v-if="props.error" class="error">{{ props.error }}</p>
+
     </form>
 </template>
