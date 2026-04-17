@@ -18,6 +18,28 @@ const props = defineProps({
     error: String
 })
 
+const providerOptions = [
+    { value: "FLICKR", label: "Flickr" },
+    { value: "GOOGLE_PHOTOS", label: "Google Photos" },
+    { value: "GOOGLE_DRIVE", label: "Google Drive" },
+    { value: "SITE", label: "Site personnel" },
+    { value: "OTHER", label: "Autre" }
+]
+
+const detectProvider = (rawUrl = "") => {
+    if (!rawUrl) return "OTHER";
+
+    try {
+        const host = new URL(rawUrl.trim()).hostname.toLowerCase();
+
+        if (host.includes("flickr.com")) return "FLICKR";
+        if (host.includes("photos.google.com")) return "GOOGLE_PHOTOS";
+        if (host.includes("drive.google.com")) return "GOOGLE_DRIVE";
+        return "SITE";
+    } catch {
+        return "OTHER";
+    }
+}
 const { form } = props;
 
 onMounted(() => {
@@ -56,6 +78,17 @@ watch(() => form.camera, () => {
         form.lens = "";
     }   
 })
+
+const addPhoto = () => {
+    form.photos.push({ 
+        url: "",
+        provider: "OTHER" 
+    });
+}
+
+const removePhoto = (index) => {
+    form.photos.splice(index, 1);
+}
     
 
 
@@ -197,10 +230,53 @@ watch(() => form.camera, () => {
          <!-- GALERIES -->
         <div>
             <label class="text-sm text-grain">Galeries</label>
-            <textarea v-model="form.photos"
-                    class="w-full p-3 rounded-lg bg-white border border-gray-200 min-h-[100px]"
-                    placeholder="Ajouter les URLs des galeries">
-            </textarea>
+
+            <div class="flex flex-col gap-2 md:flex-row md:items-center"> <!--"space-y-2 mt-2" -->
+
+                <div
+                    v-for="(photo, index) in form.photos"
+                    :key="index"
+                    class= "flex flex-col gap-2 md:flex-row md:items-center"
+                >
+                    <input
+                        v-model="photo.url"
+                        type="url"
+                        placeholder="https://..."
+                        class="flex-1 p-3 rounded-lg bg-white border border-gray-200"
+                        @blur="!photo.provider || photo.provider === 'OTHER' ? photo.provider = detectProvider(photo.url) : null" -->
+                        /> <!--si user n'a rien choisi-> auto detect, si c'est encore OTHER -> au detect, sinon -> choix de user-->
+
+                    <select
+                        v-model="photo.provider"
+                        class="p-3 rounded-lg bg-white border border-gray-200"
+                    >
+                        <option
+                            v-for="option in providerOptions"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ option.label }}
+                        </option>
+                    </select>
+
+                    <button
+                        type="button"
+                        @click="removePhoto(index)"
+                        class="px-3 py-2 rounded-lg bg-danger text-white"
+                        >
+                        ✕
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                @click="addPhoto"
+                class="mt-3 text-sm text-amber"
+                >
+                + Ajouter un lien
+            </button>
 
         </div>
 

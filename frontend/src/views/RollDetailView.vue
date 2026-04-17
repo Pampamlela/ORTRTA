@@ -8,11 +8,13 @@ import api from '@/api/axios';
 const route = useRoute()
 const rollStore = useRollStore();
 const qrCodeUrl = ref(null)
-// const providerLabels = {
-//     flickr: 'Flickr',
-//     instagram: 'Instagram',
-//     five_hundred_px: '500px',
-// }
+const providerLabels = {
+    FLICKR: "Flickr",
+    GOOGLE_PHOTOS: "Google Photos",
+    GOOGLE_DRIVE: "Google Drive",
+    SITE: "Site personnel",
+    OTHER: "Autre"
+}
 
 const revokeQrCodeUrl = () => {
     if (qrCodeUrl.value) {
@@ -92,7 +94,7 @@ const deleteRoll = async () => {
                 <ul v-if="rollStore.currentRoll.photos.length" class="space-y-1">
                 <li v-for="photo in rollStore.currentRoll.photos" :key="photo.id">
                     <a :href="photo.url" target="_blank" class="text-amber underline">
-                    {{ providerLabels[photo.provider] }}
+                    {{ providerLabels[photo.provider] || photo.provider }}
                     </a>
                 </li>
                 </ul>

@@ -32,7 +32,14 @@ onMounted(async () => {
     const roll = await rollStore.fetchRoll(route.params.slug);
 
     form.value = { ...roll };
+    form.value.photos = roll.photos?.length
+        ? roll.photos.map(photo => ({
+            url: photo.url,
+            provider: photo.provider || "OTHER",
+        }))
+        : [{ url: "", provider: "OTHER" }];
     await fetchQrCode(route.params.slug)
+
 })
 
 const handleSubmit = async () => {
