@@ -34,6 +34,9 @@ class RollSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.id")
     camera_name = serializers.ReadOnlyField(source="camera.model")
     lens_name = serializers.ReadOnlyField(source="lens.model")
+
+    film_type_label = serializers.CharField(source="get_film_type_display", read_only=True)
+    status_label = serializers.CharField(source="get_status_display", read_only=True)
     
     class Meta:
         model = Roll

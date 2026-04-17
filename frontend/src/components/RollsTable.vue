@@ -11,7 +11,7 @@ const rows = [
     { key : "camera_name", label : "Appareil photo" },
     { key : "photos", label : "Galeries" },
     { key : "film_name", label : "Film" },
-    { key : "film_type", label : "Type"},
+    { key : "film_type_label", label : "Type"},
     { key : "iso", label : "ISO" },
     { key : "format", label : "Format" },
     { key : "description", label : "Description" },
@@ -19,7 +19,7 @@ const rows = [
     { key : "date_end", label : "Fin" },
     { key : "date_development", label : "Développement" },
     { key : "date_scan", label : "Scan" },
-    { key : "status", label : "Statut" },
+    { key : "status_label", label : "Statut" },
 ]
 
 const formatValue = (roll, key) => {

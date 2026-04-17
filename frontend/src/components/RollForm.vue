@@ -243,8 +243,9 @@ const removePhoto = (index) => {
                         type="url"
                         placeholder="https://..."
                         class="flex-1 p-3 rounded-lg bg-white border border-gray-200"
-                        @blur="!photo.provider || photo.provider === 'OTHER' ? photo.provider = detectProvider(photo.url) : null" -->
-                        /> <!--si user n'a rien choisi-> auto detect, si c'est encore OTHER -> au detect, sinon -> choix de user-->
+                        @blur="!photo.provider || photo.provider === 'OTHER' ? photo.provider = detectProvider(photo.url) : null"
+                        /> 
+                        <!--si user n'a rien choisi-> auto detect, si c'est encore OTHER -> au detect, sinon -> choix de user-->
 
                     <select
                         v-model="photo.provider"
