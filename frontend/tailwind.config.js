@@ -18,6 +18,9 @@ export default {
                 ui: ["Montserrat", "sans-serif"],
                 body: ["Source Sans 3", "sans-serif"],
             },
+            td: {
+                verticalAlign: "top",
+            },
         },
     },
 }
