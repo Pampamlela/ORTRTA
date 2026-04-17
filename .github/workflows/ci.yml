@@ -9,6 +9,22 @@ jobs:
     backend:
         runs-on: ubuntu-latest
 
+        services:
+          db:
+            image: postgres:16
+            env:
+              POSTGTRES_DB: ortrta
+              POSTGRES_USER: ortrta_user
+              POSTGRES_PASSWORD: ortrta_password
+            ports:
+              - 5432:5432
+            options: >-
+              --health_cmd "pg_isready -U ortrta_user -d ortrta"
+              --health_interval 10s
+              --health_timeout 5s
+              --health_retries 5
+
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
