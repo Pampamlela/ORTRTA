@@ -65,11 +65,23 @@ jobs:
               run: |
                 cd backend
                 python manage.py migrate
+              env:
+                DB_HOST: 127.0.0.1
+                DB_PORT: 5432
+                DB_NAME: ortrta
+                DB_USER: ortrta_user
+                DB_PASSWORD: ortrta_password
 
             - name: Run backend tests
               run: |
                 cd backend
                 python manage.py test
+              env:
+                DB_HOST: 127.0.0.1
+                DB_PORT: 5432
+                DB_NAME: ortrta
+                DB_USER: ortrta_user
+                DB_PASSWORD: ortrta_password
 
     frontend:
         runs-on: ubuntu-latest
