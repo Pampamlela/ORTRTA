@@ -23,6 +23,13 @@ jobs:
               --health-interval 10s
               --health-timeout 5s
               --health-retries 5
+        
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_NAME: ortrta
+          DB_USER: ortrta_user
+          DB_PASSWORD: ortrta_password
 
 
         steps:
@@ -43,6 +50,16 @@ jobs:
               run: |
                 cd backend
                 python manage.py check
+
+            - name: Wait for Postgres
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y postgresql-client
+                until pg-isready -h 127.0.0.1 -p 5432 -U ortrta-user; do
+                  sleep 1
+                done
+              env:
+                PGPASSWORD: ortrta_password
 
             - name: Run migrations
               run: |
