@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLensStore } from '@/stores/lenses';
 import EquipmentForm from '@/components/EquipmentForm.vue';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const lensStore = useLensStore();
@@ -28,9 +29,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="lens-create">
-        <h1>Nouvel objectif</h1>
-
+    <PageContainer title="Nouvel objectif">
         <EquipmentForm 
             :form="form" 
             submitLabel="Créer"
@@ -38,5 +37,5 @@ const handleSubmit = async () => {
             :error="error"
             type="lens"
         />
-    </div>
+    </PageContainer>
 </template>

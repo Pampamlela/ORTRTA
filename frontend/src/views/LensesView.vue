@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLensStore } from '@/stores/lenses';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const lensStore = useLensStore();
@@ -12,12 +13,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="lenses">
-        <h1>Mes objectifs</h1>
+    <PageContainer title="Mes objectifs">
+        
+            <h1>Mes objectifs</h1>
 
-        <div v-if="lensStore.lenses.length === 0">
-            Aucun objectif pour le moment.  
-        </div>
+            <div v-if="lensStore.lenses.length === 0">
+                Aucun objectif pour le moment.  
+            </div>
 
         <ul v-else>
             <li v-for="lens in lensStore.lenses" :key="lens?.id">
@@ -36,7 +38,7 @@ onMounted(() => {
             Nouvelle pellicule
         </router-link>
 
-    </div>
+    </PageContainer>
 </template>
 
 <style scoped>

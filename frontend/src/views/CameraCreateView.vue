@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
 import EquipmentForm from '@/components/EquipmentForm.vue';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const cameraStore = useCameraStore();
@@ -29,9 +30,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="camera-create">
-        <h1>Nouvel appareil photo</h1>
-
+    <PageContainer title="Nouvel appareil photo">
         <EquipmentForm 
             :form="form" 
             submitLabel="Créer"
@@ -39,5 +38,5 @@ const handleSubmit = async () => {
             :error="error"
             type="camera"
         />
-    </div>
+    </PageContainer>
 </template>

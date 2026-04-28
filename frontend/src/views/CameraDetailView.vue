@@ -3,6 +3,7 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
 import router from '@/router';
+import PageContainer from '@/components/PageContainer.vue';
 
 const route = useRoute()
 const cameraStore = useCameraStore();
@@ -24,7 +25,7 @@ const deleteCamera = async () => {
 </script>
 
 <template>
-    <div class="camera-detail">
+    <PageContainer title="Détails de l'appareil photo">
         <div v-if="cameraStore.currentCamera">
 
             <h1>{{ cameraStore.currentCamera.model }}</h1>
@@ -59,20 +60,22 @@ const deleteCamera = async () => {
         </div>
 
         <p v-else>Chargement de l'appareil photo...</p>
-    </div>
     
-    <router-link to="/cameras/new">
-        Nouvel appareil photo
-    </router-link>
-    <router-link to="/rolls">
-        Mes pellicules
-    </router-link>
-    <router-link to="/lenses">
-        Mes objectifs
-    </router-link> 
-    <router-link to="/cameras">
-        Mes appareils photo
-    </router-link>
+    
+        <router-link to="/cameras/new">
+            Nouvel appareil photo
+        </router-link>
+        <router-link to="/rolls">
+            Mes pellicules
+        </router-link>
+        <router-link to="/lenses">
+            Mes objectifs
+        </router-link> 
+        <router-link to="/cameras">
+            Mes appareils photo
+        </router-link>
+
+    </PageContainer>
 
 </template>
 

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const cameraStore = useCameraStore();
@@ -12,9 +13,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="cameras">
-        <h1>Mes appareils photo</h1>
-
+    <PageContainer title="Mes appareils photo">
         <div v-if="cameraStore.cameras.length === 0">
             Aucun appareil photo pour le moment.
         </div>
@@ -36,7 +35,8 @@ onMounted(() => {
         <router-link to="/rolls/new">
             Nouvelle pellicule
         </router-link>
-    </div>
+    
+    </PageContainer>
 </template>
 
 <style scoped>

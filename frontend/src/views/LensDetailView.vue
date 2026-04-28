@@ -3,6 +3,7 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLensStore } from '@/stores/lenses';
 import router from '@/router';
+import PageContainer from '@/components/PageContainer.vue';
 
 const route = useRoute()
 const lensStore = useLensStore();
@@ -24,11 +25,12 @@ const deleteLens = async () => {
 </script>
 
 <template>
-    <div class="lens-detail">
-        <div v-if="lensStore.currentLens">
-            <h1>{{ lensStore.currentLens.model }}</h1>
-            <p v-if="lensStore.currentLens.description">
-                <strong> Description :</strong>{{ lensStore.currentLens.description }}
+    <PageContainer title="Détails de l'objectif">
+        
+            <div v-if="lensStore.currentLens">
+                <h1>{{ lensStore.currentLens.model }}</h1>
+                <p v-if="lensStore.currentLens.description">
+                    <strong> Description :</strong>{{ lensStore.currentLens.description }}
             </p>
             <p v-else>Aucune description disponible.</p>
 
@@ -48,18 +50,20 @@ const deleteLens = async () => {
             <button @click="deleteLens">
                 Supprimer
             </button>
-        </div>
+            </div>
+        
 
-        <p v-else>Chargement de l'objectif...</p>
+            <p v-else>Chargement de l'objectif...</p>
 
         
-    </div>
-    <router-link to="/lenses/new">
-        Nouvel objectif
-    </router-link>
-    <router-link to="/cameras/new">
-        Nouvel appareil photo
-    </router-link>
+    
+        <router-link to="/lenses/new">
+            Nouvel objectif
+        </router-link>
+        <router-link to="/cameras/new">
+            Nouvel appareil photo
+        </router-link>
+    </PageContainer>
 </template>
 
 <style scoped>
