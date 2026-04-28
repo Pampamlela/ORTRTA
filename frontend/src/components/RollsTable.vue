@@ -8,12 +8,12 @@ const props = defineProps({
 const router = useRouter();
 
 const rows = [
-    { key : "camera_name", label : "Appareil photo" },
-    { key : "photos", label : "Galeries" },
     { key : "film_name", label : "Film" },
+    { key : "camera_name", label : "Appareil photo" },
     { key : "film_type_label", label : "Type"},
     { key : "iso", label : "ISO" },
     { key : "format", label : "Format" },
+    { key : "photos", label : "Galeries" },
     { key : "description", label : "Description" },
     { key : "date_start" , label : "Début" },
     { key : "date_end", label : "Fin" },

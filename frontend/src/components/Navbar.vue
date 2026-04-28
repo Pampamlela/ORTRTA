@@ -12,7 +12,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-    <nav class="bg-paper border-b border-gray-200">
+    <nav>
         <div class="maw-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
             <!-- Logo -->
@@ -35,15 +35,15 @@ const handleLogout = () => {
             <!-- Navigation Links -->
             <div class="flex items-center gap-6 text-sm font-ui text-film">
                 <template v-if="authStore.user">
-                    <router-link to="/rolls" class="hover:text-amber">
+                    <router-link to="/rolls" class="hover:text-amber" active-class="text-amber font-semibold">
                         Films
                     </router-link>
 
-                    <router-link to="/cameras" class="hover:text-amber">
+                    <router-link to="/cameras" class="hover:text-amber" active-class="text-amber font-semibold">
                         Appareils   
                     </router-link>
 
-                    <router-link to="/profile" class="hover:text-amber">
+                    <router-link to="/profile" class="hover:text-amber" active-class="text-amber font-semibold">
                         Profil   
                     </router-link>
 
