@@ -64,6 +64,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vue dev server
+    "http://127.0.0.1:5173",  # Vue dev server (127.0.0.1)
 ]
 
 ROOT_URLCONF = 'config.urls'

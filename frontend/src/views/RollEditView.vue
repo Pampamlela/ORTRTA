@@ -42,13 +42,27 @@ onMounted(async () => {
 
 })
 
+const normalizeFormData = (data) => {
+    const normalized = {
+        ...data,
+        date_end: data.date_end || null,
+        date_development: data.date_development || null,
+        date_scan: data.date_scan || null,
+        photos: data.photos?.filter(p => p.url) || [] // remove empty photo URLs
+    }
+    console.log('Sending normalized data:', normalized);
+    return normalized
+}
+
 const handleSubmit = async () => {
     try {
-        await rollStore.updateRoll(route.params.slug, form.value);
+        const normalizedData = normalizeFormData(form.value);
+        await rollStore.updateRoll(route.params.slug, normalizedData);
 
         router.push(`/rolls/${route.params.slug}`);
     } catch (err) {
-        error.value = "Erreur lors de la mise à jour de la pellicule."
+        console.error('Update error:', err.response?.data || err);
+        error.value = err.response?.data?.detail || "Erreur lors de la mise à jour de la pellicule."
     }
 }
 </script>

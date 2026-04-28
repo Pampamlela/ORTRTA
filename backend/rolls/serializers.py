@@ -3,14 +3,16 @@ from .models import PhotoProvider, Roll, UrlPhoto
 from equipment.models import Camera, Lens
 
 class UrlPhotoSerializer(serializers.ModelSerializer):
-    roll = serializers.PrimaryKeyRelatedField(queryset=Roll.objects.all())
+    roll = serializers.PrimaryKeyRelatedField(queryset=Roll.objects.all(), required=False)
 
     class Meta:
         model = UrlPhoto
-        fields = "__all__"
+        fields = ("id", "roll", "url", "provider", "description", "created_at", "updated_at")
         read_only_fields = ("created_at", "updated_at")
 
     def validate_roll(self, roll):
+        if not roll:
+            return roll
         user = self.context["request"].user
         if roll.user != user:
             raise serializers.ValidationError(
@@ -34,6 +36,9 @@ class RollSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.id")
     camera_name = serializers.ReadOnlyField(source="camera.model")
     lens_name = serializers.ReadOnlyField(source="lens.model")
+
+    film_type_label = serializers.CharField(source="get_film_type_display", read_only=True)
+    status_label = serializers.CharField(source="get_status_display", read_only=True)
     
     class Meta:
         model = Roll
