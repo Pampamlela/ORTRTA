@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
 import RollForm from '@/components/RollForm.vue';
 import api from '@/api/axios';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -42,6 +43,10 @@ onMounted(async () => {
 
 })
 
+onUnmounted(() => {
+    revokeQrCodeUrl()
+})
+
 const normalizeFormData = (data) => {
     const normalized = {
         ...data,
@@ -68,21 +73,17 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-paper px-4 py-6">
-        <div class="max-w-lg mx-auto "> <!--bg-white p-6 rounded-2xl shadow-sm pour faire ressortir le formulaire sur les grands écrans-->
-            
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="font-title text-2xl">Modifier la pellicule</h1>
-                
+    <PageContainer title="Modifier la pellicule">
+        <div class="max-w-lg mx-auto">
+            <div class="flex items-center justify-end mb-6">
                 <button
                     @click="showQR = !showQR"
                     class="bg-amber text-film px-4 py-2 rounded-xl text-sm font-ui shadow-sm"
-                    >
+                >
                     Voir QR Code
                 </button>
             </div>
 
-            <!-- QR Code -->
             <div v-if="showQR" class="mb-6 text-center bg-white p-4 rounded-xl shadow-sm">
                 <img
                     v-if="qrCodeUrl"
@@ -92,15 +93,14 @@ const handleSubmit = async () => {
                 />
                 <p v-else class="text-sm text-grain">Chargement du QR code...</p>
             </div>
-            <RollForm 
-                v-if="form"
-                :form="form" 
-                submitLabel="Modifier"
-                :onSubmit="handleSubmit" 
-                :error="error"      
-            />
-            
-        </div>
 
-    </div>
+            <RollForm
+                v-if="form"
+                :form="form"
+                submitLabel="Modifier"
+                :onSubmit="handleSubmit"
+                :error="error"
+            />
+        </div>
+    </PageContainer>
 </template>
