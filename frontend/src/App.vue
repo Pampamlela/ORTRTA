@@ -2,6 +2,7 @@
 import { useAuthStore } from './stores/auth'
 import { onMounted } from 'vue';
 import Navbar from './components/Navbar.vue';
+import Footer from './components/Footer.vue';
 
 const authStore = useAuthStore()
 
@@ -13,9 +14,14 @@ onMounted(() => {
 </script>
 
 <template>
+    <div class="min-h-screen flex flex-col bg-paper">
+        <Navbar />
 
-  <Navbar />
+        <main class="flex-1">
+            <router-view />
+        </main>
 
-  <router-view />
-  
+        <Footer />
+
+    </div>
 </template>
