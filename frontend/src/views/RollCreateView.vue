@@ -17,13 +17,17 @@ onMounted(() => {
 })
 const form = ref({
     film_name: "",
+    film_type: "COLOR_NEGATIVE",
     iso: 400,
     format: '35MM-12',
     camera: "",
     lens: "",
     date_start: "",
+    date_end: "",
+    date_development: "",
+    date_scan: "",
     description: "",
-    type: "COLOR_NEGATIVE"
+    photos: [{ url: "", provider: "OTHER" }]
 })
 
 
@@ -34,9 +38,20 @@ watch(() => form.value.camera, () => {
 
 const error = ref(null);
 
+const normalizeFormData = (data) => {
+    return {
+        ...data,
+        date_end: data.date_end || null,
+        date_development: data.date_development || null,
+        date_scan: data.date_scan || null,
+        photos: data.photos?.filter(p => p.url) || [] // remove empty photo URLs
+    }
+}
+
 const handleSubmit = async () => {
     try {
-        await rollStore.createRoll(form.value)
+        const normalizedData = normalizeFormData(form.value);
+        await rollStore.createRoll(normalizedData)
 
         router.push("/rolls");
     } catch (err) {
