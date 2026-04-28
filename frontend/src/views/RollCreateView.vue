@@ -5,6 +5,7 @@ import { useRollStore } from '@/stores/rolls';
 import { useCameraStore } from '@/stores/cameras';
 import { useLensStore } from '@/stores/lenses';
 import RollForm from '@/components/RollForm.vue';
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const rollStore = useRollStore();
@@ -62,8 +63,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="roll-create">
-        <h1>Nouvelle pellicule</h1>
+    <PageContainer title="Créer une nouvelle pellicule">
+        <div class="roll-create">
+            <h1>Nouvelle pellicule</h1>
 
             <RollForm
                 :form="form"
@@ -71,6 +73,7 @@ const handleSubmit = async () => {
                 :onSubmit="handleSubmit"
                 :error="error"
             />
-    </div>
+        </div>
+    </PageContainer>
 </template>
        

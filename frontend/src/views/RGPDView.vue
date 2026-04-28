@@ -1,8 +1,13 @@
+<script setup>
+import PageContainer from '@/components/PageContainer.vue';
+</script>
+
 <template>
-    <div class="rgpd">
-        <h1>Politique de confidentialité</h1>
-        <section>
-            <h2>1. Introduction</h2>
+    <PageContainer title="Politique de confidentialité">
+        
+            <h1>Politique de confidentialité</h1>
+            <section>
+                <h2>1. Introduction</h2>
 
             <p>La présente politique de confidentialité décrit la manière dont les données personnelles sont collectées, utilisées et protégées dans le cadre de l’utilisation de l’application.
 
@@ -121,5 +126,5 @@
             Pamela Robinet Duverger<br>
         </section>
         Dernière mise à jour : Mars 2026
-    </div>
+    </PageContainer>
 </template>

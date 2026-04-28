@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -26,8 +27,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="register-container">
-        <h1>Créer un compte</h1>
+    <PageContainer title="Inscription">
+        
+            <h1>Créer un compte</h1>
 
         <form @submit.prevent="handleSubmit">
             <input v-model="form.username" placeholder="Surnom" required />
@@ -39,5 +41,5 @@ const handleSubmit = async () => {
         <p>Vos données sont utilisées uniquement pour gérer votre compte, vos pellicules et votre matériel.</p>
         <p>En créant un compte, vous acceptez notre <router-link to="/rgpd">politique de confidentialité</router-link>.</p>
         <p v-if="error" class="error">{{ error }}</p>
-    </div>
+    </PageContainer>
 </template>

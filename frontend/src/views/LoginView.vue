@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import PageContainer from '@/components/PageContainer.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -25,8 +26,9 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="login-container">
-        <h1>Connexion</h1>
+    <PageContainer title="Connexion">
+        
+            <h1>Connexion</h1>
 
         <form @submit.prevent="handleLogin">
             <div>
@@ -43,7 +45,7 @@ const handleLogin = async () => {
 
             <p v-if="error" class="error">{{ error }}</p>
         </form>
-    </div>
+    </PageContainer>
 </template>
 
 <style scoped>

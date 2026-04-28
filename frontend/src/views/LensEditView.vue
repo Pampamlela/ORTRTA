@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'; 
 import { useLensStore } from '@/stores/lenses';
 import EquipmentForm from '@/components/EquipmentForm.vue';
+import PageContainer from '@/components/PageContainer.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -29,16 +30,18 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="update-lens">
-        <h1>Modifier l'objectif</h1>
+    <PageContainer title="Modifier l'objectif">
+        <div class="update-lens">
+            <h1>Modifier l'objectif</h1>
 
-        <EquipmentForm 
-            v-if="form"
-            :form="form" 
-            submitLabel="Modifier"
-            :onSubmit="handleSubmit" 
-            :error="error"
-            type="lens"
-        />
-    </div>
+            <EquipmentForm 
+                v-if="form"
+                :form="form" 
+                submitLabel="Modifier"
+                :onSubmit="handleSubmit" 
+                :error="error"
+                type="lens"
+            />
+        </div>
+    </PageContainer>
 </template>

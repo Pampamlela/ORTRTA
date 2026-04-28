@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import api from '@/api/axios';
+import PageContainer from '@/components/PageContainer.vue';
 
 const authStore = useAuthStore();
 
@@ -124,8 +125,9 @@ const exportData = async () => {
 </script>
 
 <template>
-    <div class="profile">
-        <h1>Profil</h1>
+    <PageContainer title="Profil">
+        
+            <h1>Profil</h1>
 
         <div v-if="loading">Chargement...</div>
 
@@ -175,5 +177,5 @@ const exportData = async () => {
         <button @click="exportData">Exporter mes données</button>
 
         <button @click="logoutUser" style="margin-top: 20px;">Se déconnecter</button>
-    </div>
+    </PageContainer>
 </template>

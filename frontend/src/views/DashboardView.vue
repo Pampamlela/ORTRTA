@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import { useRollStore } from "@/stores/rolls";
 import { useAuthStore } from "@/stores/auth";
+import PageContainer from '@/components/PageContainer.vue';
 
 const rollStore = useRollStore();
 const authStore = useAuthStore();
@@ -12,7 +13,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="dashboard">
+  <PageContainer title="Dashboard">
     <h1>Dashboard</h1>
     
     <p v-if="authStore.user">
@@ -31,5 +32,5 @@ onMounted(() => {
 
     <router-link to="/rolls">Voir mes pellicules</router-link>
     
-  </div>
+  </PageContainer>
 </template>
