@@ -16,6 +16,11 @@ const form = ref({
 
 const error = ref(null)
 
+const logoutUser = () => {
+    authStore.logout();
+    window.location.href = "/login";
+}
+
 const handleSubmit = async () => {
     try {
         await authStore.register(form.value)
@@ -41,5 +46,6 @@ const handleSubmit = async () => {
         <p>Vos données sont utilisées uniquement pour gérer votre compte, vos pellicules et votre matériel.</p>
         <p>En créant un compte, vous acceptez notre <router-link to="/rgpd">politique de confidentialité</router-link>.</p>
         <p v-if="error" class="error">{{ error }}</p>
+        <!-- <button @click="logoutUser" style="margin-top: 20px;">Se déconnecter</button> -->
     </PageContainer>
 </template>
