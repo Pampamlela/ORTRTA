@@ -2,7 +2,8 @@
 import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import api from '@/api/axios';
-import PageContainer from '@/components/PageContainer.vue';
+import BaseButton from '@/components/BaseButton.vue';
+// import PageContainer from '@/components/PageContainer.vue';
 
 const authStore = useAuthStore();
 
@@ -125,57 +126,109 @@ const exportData = async () => {
 </script>
 
 <template>
-    <PageContainer title="Profil">
-        
-            <h1>Profil</h1>
-
-        <div v-if="loading">Chargement...</div>
-
-        <div v-else>
-            <p>Surnom: {{ authStore.user?.username }}</p>
-            <p>Email: {{ authStore.user?.email }}</p>
+    
+    <div class="px-4 py-6 max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-2 md:gap-12 items-center"> 
+        <!-- Colonne gauche : logo -->  
+        <div class="hidden md:flex justify-center items-center">
+            <img
+            src="@/assets/logo/logo2.png" 
+            alt="One Roll" 
+            class="h-auto w-auto"
+            />
         </div>
-        
-        <h2>Modifier le mot de passe</h2>
 
-        <form @submit.prevent="handleChangePassword">
-            <input 
-                v-model="password" 
-                type="password" 
-                placeholder="Nouveau mot de passe" 
+        <!-- Mobile : logo au dessus du titre -->
+        <div class="flex md:hidden">
+            <img
+            src="@/assets/logo/logo2.png" 
+            alt="One Roll" 
+            class="h-48 w-auto mx-auto mb-4"
             />
-            <input 
-                v-model="confirmPassword" 
-                type="password" 
-                placeholder="Confirmer le mot de passe" 
-            />
+        </div>
 
-            <button :disabled="submitting">
-                {{ submitting ? "Modifiction..." : "Changer le mot de passe" }} 
-            </button>
-        </form>
+        <!-- Colonne droite : contenu -->
+        <div>
+            <h1 class="font-title text-2xl md:text-3xl mb-6 text-film">Profil</h1>
 
-        <p v-if="error" class="error" style="color: red;">
-            {{ error }}
-        </p>
-        <p v-if="success" class="success" style="color: green;">
-            {{ success }}
-        </p>
+            <div v-if="loading">Chargement...</div>
 
-        <h2>Supprimer le compte</h2>
-        <button 
-            @click="handleDeleteAccount"
-            :disabled="deleting"
-        >
-            {{ deleting ? "Suppression..." : "Supprimer mon compte" }}
-        </button>
+            <div v-else class="space-y-4">
+                <!-- Infos en lecture seule -->
+                <div>
+                    <label class="text-sm text-grain">Surnom</label>
+                        <input :value="authStore.user?.username" type="text" disabled
+                                class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" />
+                </div>
+                <div>
+                    <label class="text-sm text-grain">Email</label>
+                        <input :value="authStore.user?.email" 
+                                type="email" 
+                                disabled 
+                                class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
+                        />
+                </div>
 
-        <p v-if="deleteError" class="error" style="color: red;">
-            {{ deleteError }}
-        </p>
+                <!-- Formulaire mot de passe + actions -->
+                <form @submit.prevent="handleChangePassword" class="space-y-4">
+                    <div>
+                        <label class="text-sm text-grain">Nouveau mot de passe</label>
+                        <input 
+                            v-model="password" 
+                            type="password" 
+                            placeholder="Nouveau mot de passe"
+                            class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
+                        />
+                    </div>
+                    <div>
+                        <label class="text-sm text-grain">Confirmer le mot de passe</label>
+                        <input 
+                            v-model="confirmPassword" 
+                            type="password" 
+                            placeholder="Confirmer le mot de passe" 
+                            class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
+                        />
+                    </div>
 
-        <button @click="exportData">Exporter mes données</button>
+                    <p v-if="error" class="error" style="color: red;">
+                    {{ error }}
+                    </p>
+                    <p v-if="success" class="success" style="color: green;">
+                        {{ success }}
+                    </p>
 
-        <button @click="logoutUser" style="margin-top: 20px;">Se déconnecter</button>
-    </PageContainer>
+                    <div class="flex gap-3">
+                        <BaseButton block type="submit" :disabled="submitting">
+                            {{ submitting ? "Modification..." : "Sauvegarder" }}
+                        </BaseButton>
+                        <BaseButton 
+                            block
+                            variant="danger"
+                            type="button"
+                            @click="handleDeleteAccount"
+                            :disabled="deleting"
+                        >
+                            {{ deleting ? "Suppression..." : "Supprimer mon compte" }}
+                        </BaseButton>
+                    </div>
+                </form>
+
+
+                <p v-if="deleteError" class="error" style="color: red;">
+                    {{ deleteError }}
+                </p>
+
+                <!-- actions secondaires -->
+                <div class="flex gap-3 pt-2">
+                    <BaseButton variant="outline" type="button" @click="exportData">
+                        Exporter mes données
+                    </BaseButton>
+                    <!-- <BaseButton variant="outline" type="button" @click="logoutUser">
+                        Se déconnecter
+                    </BaseButton> -->
+                </div>
+          
+            </div>
+           
+        </div> 
+    </div>
 </template>

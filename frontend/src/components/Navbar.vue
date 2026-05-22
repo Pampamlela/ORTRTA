@@ -1,10 +1,12 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import BaseButton from '@/components/BaseButton.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const handleLogout = () => {
     authStore.logout();
@@ -17,21 +19,24 @@ const handleLogout = () => {
         <div class="maw-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
             <!-- Logo -->
-            <router-link to="/rolls" class="flex items-ceter gap-3">
-                <img 
-                    src="@/assets/logo/logo2.png" 
-                    alt="One Roll" 
-                    class="h-24 w-auto"
-                />
-                
-            </router-link>
+            <template v-if="route.name !=='profile'">
+                <router-link to="/rolls" class="flex items-center gap-3">
+                    <img 
+                        src="@/assets/logo/logo2.png" 
+                        alt="One Roll" 
+                        class="h-24 w-auto"
+                    />
+                    
+                </router-link>
+            </template> 
+            <div v-else></div>
 
             <!-- Navigation Links -->
             <div class="flex flex-col items-end gap-6 text-sm font-ui text-film">
                 <template v-if="authStore.user">
 
                     <!-- ligne 1 : les liens -->
-                    <div class="flex items_center gap-6">
+                    <div class="flex items-center gap-6">
                         <router-link to="/rolls" class="hover:text-amber" active-class="text-amber font-semibold">
                             Films
                         </router-link>
