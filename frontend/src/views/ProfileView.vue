@@ -138,11 +138,11 @@ const exportData = async () => {
         </div>
 
         <!-- Mobile : logo au dessus du titre -->
-        <div class="flex md:hidden">
+        <div class="flex justify-center md:hidden mb-4">
             <img
             src="@/assets/logo/logo2.png" 
             alt="One Roll" 
-            class="h-48 w-auto mx-auto mb-4"
+            class="h-48 w-auto mx-auto"
             />
         </div>
 
@@ -155,12 +155,12 @@ const exportData = async () => {
             <div v-else class="space-y-4">
                 <!-- Infos en lecture seule -->
                 <div>
-                    <label class="text-sm text-grain">Surnom</label>
+                    <!-- <label class="text-sm text-grain">Surnom</label> -->
                         <input :value="authStore.user?.username" type="text" disabled
                                 class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" />
                 </div>
                 <div>
-                    <label class="text-sm text-grain">Email</label>
+                    <!-- <label class="text-sm text-grain">Email</label> -->
                         <input :value="authStore.user?.email" 
                                 type="email" 
                                 disabled 
@@ -171,7 +171,7 @@ const exportData = async () => {
                 <!-- Formulaire mot de passe + actions -->
                 <form @submit.prevent="handleChangePassword" class="space-y-4">
                     <div>
-                        <label class="text-sm text-grain">Nouveau mot de passe</label>
+                        <!-- <label class="text-sm text-grain">Nouveau mot de passe</label> -->
                         <input 
                             v-model="password" 
                             type="password" 
@@ -180,7 +180,7 @@ const exportData = async () => {
                         />
                     </div>
                     <div>
-                        <label class="text-sm text-grain">Confirmer le mot de passe</label>
+                        <!-- <label class="text-sm text-grain">Confirmer le mot de passe</label> -->
                         <input 
                             v-model="confirmPassword" 
                             type="password" 
@@ -211,7 +211,6 @@ const exportData = async () => {
                         </BaseButton>
                     </div>
                 </form>
-
 
                 <p v-if="deleteError" class="error" style="color: red;">
                     {{ deleteError }}
