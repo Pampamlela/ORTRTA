@@ -1,6 +1,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import BaseButton from '@/components/BaseButton.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -22,37 +23,45 @@ const handleLogout = () => {
                     alt="One Roll" 
                     class="h-24 w-auto"
                 />
-                <!-- <div class="hidden sm:block">
-                    <p class="font-title text-sm text-film leading-tight">
-                        ONE ROLL
-                    </p>
-                    <p class="text-[10px] text-grain">
-                        TO RUL THEM ALL
-                    </p>
-                </div> -->
+                
             </router-link>
 
             <!-- Navigation Links -->
-            <div class="flex items-center gap-6 text-sm font-ui text-film">
+            <div class="flex flex-col items-end gap-6 text-sm font-ui text-film">
                 <template v-if="authStore.user">
-                    <router-link to="/rolls" class="hover:text-amber" active-class="text-amber font-semibold">
-                        Films
-                    </router-link>
 
-                    <router-link to="/cameras" class="hover:text-amber" active-class="text-amber font-semibold">
-                        Appareils   
-                    </router-link>
+                    <!-- ligne 1 : les liens -->
+                    <div class="flex items_center gap-6">
+                        <router-link to="/rolls" class="hover:text-amber" active-class="text-amber font-semibold">
+                            Films
+                        </router-link>
 
-                    <router-link to="/profile" class="hover:text-amber" active-class="text-amber font-semibold">
-                        Profil   
-                    </router-link>
+                        <router-link to="/cameras" class="hover:text-amber" active-class="text-amber font-semibold">
+                            Appareils   
+                        </router-link>
 
-                    <button
-                        @click="handleLogout"
-                        class="hover:text-danger"
-                    >
-                        Déconnexion
-                    </button>
+                        <router-link to="/profile" class="hover:text-amber" active-class="text-amber font-semibold">
+                            Profil   
+                        </router-link>
+
+                        <button
+                            @click="handleLogout"
+                            class="hover:text-danger"
+                        >
+                            Déconnexion
+                        </button>
+                    </div>
+
+                    <!-- ligne 2 : les boutons -->
+                    <div class="flex gap-3">
+                        <BaseButton to="/rolls/new">
+                            + Pellicule
+                        </BaseButton>
+
+                        <BaseButton to="/cameras/new">
+                            + Appareil
+                        </BaseButton>
+                    </div>
                 </template>
 
                 <template v-else>

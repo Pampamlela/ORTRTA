@@ -4,6 +4,7 @@ import { ref, onMounted, computed, watch } from 'vue';
 // import { useRollStore } from '@/stores/rolls';
 import { useCameraStore } from '@/stores/cameras';
 import { useLensStore } from '@/stores/lenses';
+import BaseButton from '@/components/BaseButton.vue';
 
 
 // const router = useRouter();
@@ -260,13 +261,16 @@ const removePhoto = (index) => {
                         </option>
                     </select>
 
-                    <button
+                    <!-- <button
                         type="button"
                         @click="removePhoto(index)"
                         class="px-3 py-2 rounded-lg bg-danger text-white"
                         >
                         ✕
-                    </button>
+                    </button> -->
+                    <BaseButton variant="danger" @click="removePhoto(index)">
+                        ✕
+                    </BaseButton>
                 </div>
 
             </div>
@@ -285,15 +289,22 @@ const removePhoto = (index) => {
         <!-- ACTIONS -->
         <div class="flex gap-3 pt-4">
 
-            <button type="submit"
+            <!-- <button type="submit"
                 class="flex-1 py-3 rounded-xl bg-amber text-film font-ui">
                 {{ props.submitLabel }}
-            </button>
+            </button> -->
+            
+            <BaseButton block type="submit">
+                {{ props.submitLabel }}
+            </BaseButton>
 
-            <button type="button"
+            <!-- <button type="button"
                 class="flex-1 py-3 rounded-xl bg-danger text-white">
                 Supprimer
-            </button>
+            </button> -->
+            <BaseButton block variant="danger">
+                Supprimer
+            </BaseButton>
         </div>
 
         <p v-if="props.error" class="error">{{ props.error }}</p>

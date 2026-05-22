@@ -121,7 +121,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
             <h2>12. Responsable du traitement</h2>
 
-            Le responsable du traitement des données est :<br>
+            La responsable du traitement des données est :<br>
 
             Pamela Robinet Duverger<br>
         </section>
