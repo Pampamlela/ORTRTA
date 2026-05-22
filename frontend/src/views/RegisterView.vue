@@ -3,7 +3,6 @@ import { ref } from "vue"
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 import BaseButton from '@/components/BaseButton.vue';
-// import PageContainer from '@/components/PageContainer.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -94,7 +93,7 @@ const handleSubmit = async () => {
                 </div>
                 <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 
-                <BaseButton type="submit">
+                <BaseButton block type="submit">
                     Valider
                 </BaseButton>
             </form>

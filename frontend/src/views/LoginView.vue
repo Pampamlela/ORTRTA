@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import PageContainer from '@/components/PageContainer.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -26,48 +26,56 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <PageContainer title="Connexion">
+    <div class="px-4 py-6 max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-2 md:gap-12 items-center">
+        <!-- Colonne gauche : logo -->
+        <div class="hidden md:flex justify-center items-center">
+            <img
+            src="@/assets/logo/logo2.png" 
+            alt="One Roll"
+            class="h-auto w-auto"
+            />
+        </div>
+
+        <!-- Mobile : logo au-dessus du formulaire -->
+        <div class="flex justify-center md:hidden mb-4">
+            <img
+            src="@/assets/logo/logo2.png" 
+            alt="One Roll"
+            class="h-48 w-auto"
+            />
+        </div>
         
-            <h1>Connexion</h1>
+        <!-- Colonne droite : contenu -->
+        <div>
+            <h1 class="font-title text-2xl md:text-3xl mb-6 text-film">Connexion</h1>
 
-        <form @submit.prevent="handleLogin">
-            <div>
-                <label>Email</label>
-                <input v-model="form.email" placeholder="Email" required />
-            </div>
+            <form @submit.prevent="handleLogin" class="space-y-4">
+                <div>
+                    <!-- <label>Email</label> -->
+                    <input v-model="form.email" 
+                            placeholder="Email" 
+                            required 
+                            class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
+                    />
+                </div>
 
-            <div>
-                <label>Password</label>
-                <input v-model="form.password" type="password" placeholder="Mot de passe" required />
-            </div>
+                <div>
+                    <!-- <label>Password</label> -->
+                    <input v-model="form.password" 
+                            type="password" 
+                            placeholder="Mot de passe" 
+                            required 
+                            class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
+                    />
+                </div>
+                <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 
-            <button type="submit">Se connecter</button>
+                <BaseButton block type="submit">
+                    Se connecter
+                </BaseButton>
 
-            <p v-if="error" class="error">{{ error }}</p>
-        </form>
-    </PageContainer>
+                
+            </form>
+        </div>
+    </div>
 </template>
-
-<style scoped>
-.login-container {
-    max-width: 400px;
-    margin: 100px auto;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.error {
-    color: red;
-    margin-top: 10px;
-}
-</style>
