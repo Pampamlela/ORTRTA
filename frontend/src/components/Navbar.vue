@@ -27,7 +27,7 @@ const handleLogout = () => {
             </router-link>
 
             <!-- Navigation Links -->
-            <div class="flex flex-col items-center gap-6 text-sm font-ui text-film">
+            <div class="flex flex-col items-end gap-6 text-sm font-ui text-film">
                 <template v-if="authStore.user">
 
                     <!-- ligne 1 : les liens -->

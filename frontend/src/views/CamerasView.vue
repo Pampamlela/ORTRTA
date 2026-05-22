@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
 import PageContainer from '@/components/PageContainer.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 const router = useRouter();
 const cameraStore = useCameraStore();
@@ -26,15 +27,9 @@ onMounted(() => {
                 
             </li>
         </ul>
-        <router-link to="/cameras/new">
-            Nouvel appareil photo
-        </router-link>
-        <router-link to="/lenses/new">
-            Nouvel objectif
-        </router-link>
-        <router-link to="/rolls/new">
-            Nouvelle pellicule
-        </router-link>
+        <BaseButton to="/lenses/new">
+            + Objectif
+        </BaseButton>
     
     </PageContainer>
 </template>
