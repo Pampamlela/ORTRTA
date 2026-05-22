@@ -70,13 +70,15 @@ const handleLogout = () => {
                 </template>
 
                 <template v-else>
-                    <router-link to="/login" class="hover:text-amber">
-                        Connexion
-                    </router-link>
+                    <div class="flex items-center gap-6">
+                        <router-link to="/login" class="hover:text-amber">
+                            Connexion
+                        </router-link>
 
-                    <router-link to="/register" class="hover:text-amber">
-                        Inscription   
-                    </router-link>
+                        <router-link to="/register" class="hover:text-amber">
+                            Inscription   
+                        </router-link>
+                    </div>
                 </template>
 
             </div>
