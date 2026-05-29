@@ -9,6 +9,7 @@ from .permissions import IsOwner
 class CameraViewSet(viewsets.ModelViewSet):
     serializer_class = CameraSerializer
     permission_classes = [IsAuthenticated, IsOwner]
+    pagination_class = None
 
     def get_queryset(self):
         return Camera.objects.filter(user=self.request.user)
@@ -19,7 +20,8 @@ class CameraViewSet(viewsets.ModelViewSet):
 class LensViewSet(viewsets.ModelViewSet):
     serializer_class = LensSerializer
     permission_classes = [IsAuthenticated, IsOwner]
-
+    pagination_class = None
+    
     def get_queryset(self):
         return Lens.objects.filter(user=self.request.user)
     
