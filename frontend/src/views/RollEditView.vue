@@ -64,7 +64,7 @@ const handleSubmit = async () => {
         const normalizedData = normalizeFormData(form.value);
         await rollStore.updateRoll(route.params.slug, normalizedData);
 
-        router.push(`/rolls/${route.params.slug}`);
+        router.push('/rolls/'); // on ne retourne plus à la page détail après modification route.params.slug
     } catch (err) {
         console.error('Update error:', err.response?.data || err);
         error.value = err.response?.data?.detail || "Erreur lors de la mise à jour de la pellicule."

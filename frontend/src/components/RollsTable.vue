@@ -37,7 +37,7 @@ const formatValue = (roll, key) => {
 };
 
 const goToRoll = (slug) => {
-    router.push(`/rolls/${slug}`);
+    router.push(`/rolls/${slug}/edit`); //on ne passe plus par la page détail
 };
 </script>
 
