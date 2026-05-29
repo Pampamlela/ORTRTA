@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import BaseButton from '@/components/BaseButton.vue';
 
+
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
@@ -65,6 +66,10 @@ const handleLogout = () => {
 
                         <BaseButton to="/cameras/new">
                             + Appareil
+                        </BaseButton>
+
+                        <BaseButton to="/lenses/new">
+                            + Objectif
                         </BaseButton>
                     </div>
                 </template>

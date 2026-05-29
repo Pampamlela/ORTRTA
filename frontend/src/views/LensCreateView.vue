@@ -21,7 +21,7 @@ const handleSubmit = async () => {
     try {
         await lensStore.createLens(form.value)
 
-        router.push("/lenses");
+        router.push("/cameras");
     } catch (err) {
         error.value = "Erreur lors de la création de l'objectif";
     }
