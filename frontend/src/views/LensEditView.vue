@@ -22,7 +22,7 @@ onMounted(async () => {
 const handleSubmit = async () => {
     try {
         await lensStore.updateLens(route.params.id, form.value);
-        router.push(`/lenses/${route.params.id}`);
+        router.push('/cameras'); // avant `/lenses/${route.params.id}`
     } catch (err) {
         error.value = "Erreur lors de la mise à jour de l'objectif.";
     }

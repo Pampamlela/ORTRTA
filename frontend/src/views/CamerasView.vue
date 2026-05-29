@@ -34,7 +34,7 @@ onMounted(() => {
                     <ul v-else class="space-y-2">
                         <li v-for="camera in cameraStore.cameras" :key="camera.id">
                             <router-link
-                                :to="`/cameras/${camera.id}`"
+                                :to="`/cameras/${camera.id}/edit`"
                                 class="hover:text-amber"
                             >
                                 {{ camera.model }}
@@ -60,7 +60,7 @@ onMounted(() => {
                     <ul v-else class="space-y-2">
                         <li v-for="lens in lensStore.lenses" :key="lens.id">
                             <router-link
-                                :to="`/lenses/${lens.id}`"
+                                :to="`/lenses/${lens.id}/edit`"
                                 class="hover:text-amber"
                             >
                                 {{ lens.model }}
@@ -70,21 +70,5 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <!-- <div v-if="cameraStore.cameras.length === 0">
-            Aucun appareil photo pour le moment.
-        </div>
-
-        <ul v-else>
-            <li v-for="camera in cameraStore.cameras" :key="camera.id">
-                <router-link :to="`/cameras/${camera.id}`">
-                    <strong>{{ camera.model }}</strong>
-                </router-link>
-                
-            </li>
-        </ul>
-        <BaseButton to="/lenses/new">
-            + Objectif
-        </BaseButton>
-     -->
     </PageContainer>
 </template>
