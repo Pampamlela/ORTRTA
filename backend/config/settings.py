@@ -179,6 +179,49 @@ SIMPLE_JWT = {
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, # garde les loggers par défaut de Django (ex: logger "django" pour les logs système, "django.request" pour les erreurs HTTP)
+
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {name} - {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': { # crée un fichier de log avec rotation pour éviter qu'il ne devienne trop gros
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs/ortrta.log',
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB max / fichier
+            'backupCount': 3,  # garde les 3 derniers fichiers de log
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'ortrta': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': { #logs internes de Django (requêtes, erreurs système)
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': { # erreurs HTTP 500, 400...
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
+            'propagate': False, # empêche le msg de remonter au logger parent et d'être loggé une 2e fois
+        },
+    },
+}
+
 # en production, il faudra configurer un vrai backend de stockage (ex: AWS S3) et activer les options de sécurité suivantes :
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
