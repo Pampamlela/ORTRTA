@@ -15,8 +15,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenSerializer
 from rolls.models import Roll, UrlPhoto
 from equipment.models import Camera, Lens
+import logging
 
-# Create your views here.
+logger = logging.getLogger('ortrta')
 
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
@@ -26,8 +27,10 @@ class MeView(APIView):
         return Response(serializer.data)
     
     def delete(self, request):
+        username = request.user.username
         request.user.delete()
-        return Response({"message": "Utilisateur supprimé."}, status=204)
+        logger.warning("Utilisateurice supprimée : %s", username)
+        return Response({"message": "Utilisateurice supprimée."}, status=204)
 
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
@@ -41,6 +44,8 @@ class SignupView(generics.CreateAPIView):
         user = serializer.save()
 
         refresh = RefreshToken.for_user(user)
+
+        logger.info("Nouvelle inscription : %s", user.username)
 
         return Response({
             "user": UserSerializer(user).data,
@@ -58,15 +63,29 @@ class ChangePasswordView(APIView):
         try:
             validate_password(new_password)
         except Exception as e:
+            logger.warning("Échec de la validation du mot de passe pour %s : %s", user.username, e)
             raise ValidationError({'password': list(e)})
         
         user.set_password(new_password)
         user.save()
 
+        logger.info("Mot de passe mis à jour pour %s", user.username)
+
         return Response({'message': 'Mot de passe mis à jour.'})
+    
     
 class CustomLoginView(TokenObtainPairView):
     serializer_class = CustomTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            logger.info("Connexion réussie pour %s", request.data.get('username'))
+            return response
+        except Exception as e:
+            logger.warning("Échec de connexion pour %s : %s", request.data.get('username'), e)
+            raise 
+
 
 class ExportUserDataView(APIView):
     permission_classes = [IsAuthenticated]
@@ -92,4 +111,7 @@ class ExportUserDataView(APIView):
             "photos": UrlPhotoSerializer(photos, many=True).data,
         }
 
+        logger.info("Données exportées pour %s - %d caméras, %d lentilles, %d pellicules, %d photos",
+            user.username, cameras.count(), lenses.count(), rolls.count(), photos.count()
+        )
         return Response(data)
