@@ -165,7 +165,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": 
         "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10, # 10 rolls per page
+    "PAGE_SIZE": 6, # 6 rolls per page
 }
 
 SIMPLE_JWT = {
