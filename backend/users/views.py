@@ -73,8 +73,19 @@ class ChangePasswordView(APIView):
 
         return Response({'message': 'Mot de passe mis à jour.'})
     
+    
 class CustomLoginView(TokenObtainPairView):
     serializer_class = CustomTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            logger.info("Connexion réussie pour %s", request.data.get('username'))
+            return response
+        except Exception as e:
+            logger.warning("Échec de connexion pour %s : %s", request.data.get('username'), e)
+            raise 
+
 
 class ExportUserDataView(APIView):
     permission_classes = [IsAuthenticated]
