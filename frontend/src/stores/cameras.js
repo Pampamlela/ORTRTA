@@ -10,7 +10,7 @@ export const useCameraStore = defineStore("cameras", {
     actions: {
         async fetchCameras() {
             const response = await api.get("cameras/");
-            this.cameras = response.data.results;
+            this.cameras = response.data; // pas de pagination, on prend directement les données
         },
 
         async fetchCamera(id) {

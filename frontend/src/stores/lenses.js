@@ -10,7 +10,7 @@ export const useLensStore = defineStore("lenses", {
     actions: {
         async fetchLenses() {
             const response = await api.get("lenses/");
-            this.lenses = response.data.results;
+            this.lenses = response.data; // pas de pagination, on prend directement les données
         },
 
         async fetchLens(id) {

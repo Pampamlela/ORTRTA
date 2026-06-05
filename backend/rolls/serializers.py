@@ -52,8 +52,17 @@ class RollSerializer(serializers.ModelSerializer):
         )
     
     def create(self, validated_data):
+        photos_data = validated_data.pop("photos", [])
         validated_data["user"] = self.context["request"].user
-        return super().create(validated_data)
+        instance = super().create(validated_data)
+        
+        for photo_data in photos_data:
+            if photo_data.get("url"): # ignore les champs vides
+                UrlPhoto.objects.create(
+                    roll=instance,
+                    **photo_data
+                )
+        return instance
     
     def validate_camera(self, camera):
         user = self.context["request"].user
