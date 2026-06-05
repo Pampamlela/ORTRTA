@@ -19,6 +19,12 @@ class CameraViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
         logger.info("Nouvelle caméra '%s' créée par %s", serializer.instance.name, self.request.user)
 
+    def perform_update(self, serializer):
+        camera = self.get_object()
+        serializer.save()
+        logger.info("Mise à jour de la caméra '%s' par %s - ID : %s", camera.name, self.request.user, camera.id)
+
+
 class LensViewSet(viewsets.ModelViewSet):
     serializer_class = LensSerializer
     permission_classes = [IsAuthenticated, IsOwner]
@@ -30,6 +36,12 @@ class LensViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         logger.info("Nouvelle lentille '%s' créée par %s", serializer.instance.name, self.request.user)
+
+    def perform_update(self, serializer):
+        lens = self.get_object()
+        serializer.save()
+        logger.info("Mise à jour de la lentille '%s' par %s - ID : %s", lens.name, self.request.user, lens.id)
+
 
 class MountViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Mount.objects.all()

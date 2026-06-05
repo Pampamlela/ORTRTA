@@ -21,7 +21,6 @@ logger = logging.getLogger('ortrta')
 
 
 class RollViewSet(viewsets.ModelViewSet):
-    
     serializer_class = RollSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     lookup_field = "slug"
@@ -98,7 +97,6 @@ class UrlPhotoViewSet(viewsets.ModelViewSet):
             .select_related("roll")
         )
     
-
 
 class UserStatsView(APIView):
     permission_classes = [IsAuthenticated]
