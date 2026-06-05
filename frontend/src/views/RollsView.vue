@@ -23,15 +23,27 @@ const logoutUser = () => {
 
 <template>
     <PageContainer title="Pellicules">
-        <!-- <div class="flex gap-3">
-            <BaseButton to="/rolls/new">
-                + Pellicule
+        <RollsTable :rolls="rollStore.rolls" />
+
+        <!-- Pagination -->
+         <div class="flex justify-between items-center mt-6">
+            <BaseButton
+                :disabled="!rollStore.previous"
+                @click="rollStore.fetchRolls(rollStore.previous)"
+            >
+                ← Page précédente
             </BaseButton>
 
-            <BaseButton to="/cameras/new">
-                + Appareil
+            <span class="text-sm text-grain">
+                {{ rollStore.rolls.length }} / {{ rollStore.count }} pellicules
+            </span>
+
+            <BaseButton
+                :disabled="!rollStore.next"
+                @click="rollStore.fetchRolls(rollStore.next)"
+            >
+                Page suivante →
             </BaseButton>
-        </div> -->
-        <RollsTable :rolls="rollStore.rolls" />
+         </div>
     </PageContainer>
 </template>

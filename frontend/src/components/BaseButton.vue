@@ -12,6 +12,10 @@ const props = defineProps({
     block: {
         type: Boolean,
         default: false,
+    },
+    disabled : {
+        type: Boolean,
+        default: false,
     }
 })
 
@@ -26,37 +30,40 @@ const variants = {
     "bg-danger text-white hover:opacity-90",
 
     outline:
-    "border border-amber text-amber hover:bg-amber houver:text-film",
+    "border border-amber text-amber hover:bg-amber hover:text-film",
 
     ghost:
-    "text-film hover:bg-gray-100"
+    "text-film hover:bg-gray-100",
+
 }
 </script>
 
 <template>
     <!-- Router Link -->
     <router-link
-    v-if="to"
-    :to="to"
-    :class="[
-        baseClasses,
-        variants[variant],
-        block ? 'w-full' : ''
-    ]"
-    >
+        v-if="to && !disabled"
+        :to="to"
+        :class="[
+            baseClasses,
+            variants[variant],
+            block ? 'w-full' : ''
+        ]"
+        >
         <slot />
     </router-link>
 
     <!-- Button -->
     <button
-    v-else
-    :type="type"
-    :class="[
-      baseClasses,
-      variants[variant],
-      block ? 'w-full' : ''
-    ]"
-    >
+        v-else
+        :type="type"
+        :disabled="disabled"
+        :class="[
+            baseClasses,
+            variants[variant],
+            block ? 'w-full' : '',
+            disabled ? 'opacity-50 cursor-not-allowed' : ''
+        ]"
+        >
         <slot />
      </button>
 </template>

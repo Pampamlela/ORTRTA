@@ -6,6 +6,9 @@ export const useRollStore = defineStore("rolls", {
         stats: null,
         rolls: [],
         currentRoll: null,
+        count: 0, // nombre total de rolls (pour la pagination)
+        next: null, // URL de la page suivante (pour la pagination)
+        previous: null, // URL de la page précédente (pour la pagination)
     }),
 
     actions: {
@@ -15,9 +18,13 @@ export const useRollStore = defineStore("rolls", {
             this.stats = response.data;
         },
 
-        async fetchRolls() {
-            const response = await api.get("rolls/");
+        async fetchRolls(url = null) {
+            const endpoint = url || "rolls/";
+            const response = await api.get(endpoint);
             this.rolls = response.data.results;
+            this.count = response.data.count;
+            this.next = response.data.next;
+            this.previous = response.data.previous;
         },
 
         async fetchRoll(slug) {
