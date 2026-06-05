@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Camera, Lens, Mount
 from .serializers import CameraSerializer, LensSerializer, MountSerializer
 from .permissions import IsOwner
-# Create your views here.
+import logging
+logger = logging.getLogger('ortrta')
 
 class CameraViewSet(viewsets.ModelViewSet):
     serializer_class = CameraSerializer
@@ -16,6 +17,7 @@ class CameraViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        logger.info("Nouvelle caméra '%s' créée par %s", serializer.instance.name, self.request.user)
 
 class LensViewSet(viewsets.ModelViewSet):
     serializer_class = LensSerializer
@@ -27,6 +29,7 @@ class LensViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        logger.info("Nouvelle lentille '%s' créée par %s", serializer.instance.name, self.request.user)
 
 class MountViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Mount.objects.all()

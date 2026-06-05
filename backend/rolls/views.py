@@ -11,10 +11,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import HttpResponse
 import qrcode
 from io import BytesIO
-from django.http import HttpResponse
-from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Count, Avg
+from rest_framework.permissions import IsAuthenticated
+import logging
 
-# Create your views here.
+logger = logging.getLogger('ortrta')
+
 
 class RollViewSet(viewsets.ModelViewSet):
     
@@ -38,6 +42,7 @@ class RollViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        logger.info("Nouvelle pellicule '%s' créée par %s", serializer.instance.film_name, self.request.user)
 
     # génération des QrCodes pour chaque roll
     @action(detail=True, methods=["get"], permission_classes=[IsAuthenticated, IsOwner])
@@ -52,7 +57,7 @@ class RollViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type="image/png")
         img.save(response,"PNG")
 
-        print(type(roll))
+        logger.debug("QrCode généré pour le pellicule : %s", roll.slug)
         return response
     
     def perform_update(self, serializer):
@@ -65,15 +70,20 @@ class RollViewSet(viewsets.ModelViewSet):
 
             # si un champ interdit est modifié
             if not incoming_fields.issubset(allowed_fields):
+                logger.warning("Modification interdite sur le pellicule scannée : %s - Champs modifiés : %s", roll.slug, incoming_fields)
                 raise ValidationError(
                     "Cette pellicule est scannée."
                     "Seul les champs 'date_scan' et 'description' peuvent être modifiés."
                 )
+    
         serializer.save()
+        logger.info("Mise à jour du pellicule '%s' par %s - ID : %s", roll.slug, self.request.user, roll.id)
 
     def perform_destroy(self, instance):
         if instance.status == RollStatus.SCANNED:
-            raise ValidationError("Cette pellicule est scannée et ne peut plus être supprimée.")
+            logger.warning("Suppression interdite sur le pellicule scannée : %s - Utilisateur : %s", instance.slug, self.request.user)
+            raise ValidationError("Cette pellicule est scannée et ne peut plus être supprimée.") 
+        logger.warning("Pellicule supprimée : %s - Utilisateur : %s", instance.slug, self.request.user)
         instance.delete()
         
 
@@ -89,11 +99,6 @@ class UrlPhotoViewSet(viewsets.ModelViewSet):
         )
     
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.db.models import Count, Avg
-from rest_framework.permissions import IsAuthenticated
-from .models import Roll, RollStatus
 
 class UserStatsView(APIView):
     permission_classes = [IsAuthenticated]
