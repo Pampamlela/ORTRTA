@@ -21,6 +21,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rolls.views import RollViewSet, UrlPhotoViewSet, UserStatsView
 from equipment.views import CameraViewSet, LensViewSet, MountViewSet
 from users.views import ChangePasswordView, CustomLoginView, ExportUserDataView, MeView, SignupView
@@ -47,6 +48,9 @@ urlpatterns = [
     path('api/register/', SignupView.as_view(), name='register'),
     path('api/login/', CustomLoginView.as_view(), name='login'),
     path('api/stats/', UserStatsView.as_view(), name='user-stats'),
+    path('api/schema', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

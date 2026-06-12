@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "django_filters",
+    "drf_spectacular",
     "corsheaders",
     "users",
     "equipment",
@@ -166,6 +167,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": 
         "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 6, # 6 rolls per page
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "One Roll To Rule Them All API",
+    "DESCRIPTION": "API de gestion de pellicules photo, appareils et objectifs",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 SIMPLE_JWT = {
