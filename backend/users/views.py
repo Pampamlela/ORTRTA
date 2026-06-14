@@ -26,7 +26,7 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-        tags=["Utilisateur"],
+        tags=["Utilisateur·ice"],
         summary="Récupérer son profil",
         description="Retourne les informations du compte de l'utilisateur·ice connecté·e.",
         responses={
@@ -40,7 +40,7 @@ class MeView(APIView):
         return Response(serializer.data)
     
     @extend_schema(
-        tags=["Utilisateur"],
+        tags=["Utilisateur·ice"],
         summary="Supprimer son compte",
         description="Supprime définitivement le compte de l'utilisateur·ice connecté·e.",
         responses={
@@ -105,7 +105,7 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-        tags=["Utilisateur"],
+        tags=["Utilisateur·ice"],
         summary="Changer son mot de passe",
         description="Permet à l'utilisateur·ice connecté·e de changer son mot de passe. Le nouveau mot de passe doit respecter les règles de validation définies dans Django.",
         request={
@@ -151,10 +151,10 @@ class CustomLoginView(TokenObtainPairView):
     @extend_schema(
         tags=["Authentification"],
         summary="Se connecter",
-        description="Permet à un.e utilisateur·ice de se connecter en fournissant son nom d'utilisateur et son mot de passe. Retourne un token JWT en cas de succès.",
+        description="Permet à un.e utilisateur·ice de se connecter en fournissant son nom d'utilisateur·ice et son mot de passe. Retourne un token JWT en cas de succès.",
         responses={
             200: OpenApiResponse(description="Connexion réussie, tokens retournés."),
-            401: OpenApiResponse(description="Nom d'utilisateur ou mot de passe incorrect."),
+            401: OpenApiResponse(description="Nom d'utilisateur·ice ou mot de passe incorrect."),
         }
     )
 
@@ -172,7 +172,7 @@ class ExportUserDataView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-        tags=["Utilisateur"],
+        tags=["Utilisateur·ice"],
         summary="Exporter ses données",
         description="Permet à l'utilisateur·ice connecté·e d'exporter toutes les données associées à son compte (appareils, objectifs, pellicules) au format JSON. Utile pour la portabilité des données (RGPD).",
         responses={
