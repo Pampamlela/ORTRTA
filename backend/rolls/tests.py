@@ -10,7 +10,7 @@ User = get_user_model()
 
 class RollAPITestCase(APITestCase):
 
-    # création d'un utilisateurice, d'une caméra et obtention du token JWT pour les tests
+    # création d'un·e utilisateur·ice, d'une caméra et obtention du token JWT pour les tests
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
@@ -60,8 +60,8 @@ class RollAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    # test d'accès à une pellicule d'un autre utilisateur
-    def test_cannot_access_othe_user_roll(self):
+    # test d'accès à une pellicule d'un·e autre utilisateur·ice
+    def test_cannot_access_other_user_roll(self):
         other_user = User.objects.create_user(
             username="otheruser",
             email="otheruser@example.com",
@@ -138,7 +138,7 @@ class RollAPITestCase(APITestCase):
         self.assertTrue(len(response.content) > 0)
         self.assertTrue(response.content.startswith(b"\x89PNG"))
 
-    # test impossibilité de supprimer la pellicule d'un autre utilisateurice
+    # test impossibilité de supprimer la pellicule d'un·e autre utilisateur·ice
     def test_cannot_delete_other_user_roll(self):
         other_user = User.objects.create_user(
             username="otheruser",
@@ -160,7 +160,7 @@ class RollAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # test impossibilité de modifier une pellicule d'un autre utilisateurice
+    # test impossibilité de modifier une pellicule d'un·e autre utilisateur·ice
     def test_cannot_patch_other_user_roll(self):
         other_user = User.objects.create_user(
             username="otheruser",
@@ -185,7 +185,7 @@ class RollAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # test impossibilité d'accéder au QR code d'une pellicule d'un autre utilisateurice
+    # test impossibilité d'accéder au QR code d'une pellicule d'un·e autre utilisateur·ice
     def test_cannot_access_other_user_qr(self):
         other_user = User.objects.create_user(
             username="otheruser",
@@ -208,7 +208,7 @@ class RollAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-    # test impossibilité d'ajouter UrlPhoto sur pellicule d'un autre utilisateurice
+    # test impossibilité d'ajouter UrlPhoto sur pellicule d'un·e autre utilisateur·ice
     def test_cannot_add_photo_to_other_user_roll(self):
         from rolls.models import UrlPhoto
 
@@ -240,7 +240,7 @@ class RollAPITestCase(APITestCase):
 
     # Test du endpoint de stats 
     def test_user_stats_endpoint(self):
-        # création de plusieurs pellicules pour l'utilisateurice connectée
+        # création de plusieurs pellicules pour l'utilisateur·ice connecté·e
         Roll.objects.create(
             user=self.user,
             camera=self.camera,
@@ -273,7 +273,7 @@ class RollAPITestCase(APITestCase):
             date_scan="2026-01-20"
         )
 
-        # roll d'un autre utilisateurice pour vérifier qu'il n'est pas comptabilisé
+        # roll d'un autre utilisateur·ice pour vérifier qu'il n'est pas comptabilisé
         other_user = User.objects.create_user(
             username="otheruser",
             email="otheruser@example.com",

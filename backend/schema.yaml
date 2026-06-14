@@ -1,0 +1,1617 @@
+openapi: 3.0.3
+info:
+  title: One Roll To Rule Them All API
+  version: 1.0.0
+  description: API de gestion de pellicules photo, appareils et objectifs
+paths:
+  /api/cameras/:
+    get:
+      operationId: cameras_list
+      description: Retourne la liste des appareils photo appartenant à l'utilisateur·ice
+        connecté·e.
+      summary: Lister ses appareils photo
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Camera'
+          description: ''
+    post:
+      operationId: cameras_create
+      description: Crée un nouvel appareil photo pour l'utilisateur·ice connecté·e.
+      summary: Ajouter un appareil photo
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Camera'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Camera'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Camera'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Camera'
+          description: ''
+  /api/cameras/{id}/:
+    get:
+      operationId: cameras_retrieve
+      summary: Détail d'un appareil photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Camera'
+          description: ''
+        '404':
+          description: Appareil introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    put:
+      operationId: cameras_update
+      summary: Modifier un appareil photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Camera'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Camera'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Camera'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Camera'
+          description: ''
+    patch:
+      operationId: cameras_partial_update
+      summary: Modifier partiellement un appareil photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCamera'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCamera'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCamera'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Camera'
+          description: ''
+    delete:
+      operationId: cameras_destroy
+      summary: Supprimer un appareil photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Appareil supprimé avec succès.
+        '404':
+          description: Appareil introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+  /api/change-password/:
+    put:
+      operationId: change_password_update
+      description: Permet à l'utilisateur·ice connecté·e de changer son mot de passe.
+        Le nouveau mot de passe doit respecter les règles de validation définies dans
+        Django.
+      summary: Changer son mot de passe
+      tags:
+      - Utilisateur·ice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: NouveauMotDePasse123!
+              required:
+              - password
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Mot de passe mis à jour avec succès.
+        '400':
+          description: Mot de passe invalide (ne respecte pas les règles de validation).
+        '401':
+          description: Non authentifié·e
+  /api/lenses/:
+    get:
+      operationId: lenses_list
+      description: Retourne la liste des objectifs appartenant à l'utilisateur·ice
+        connecté·e.
+      summary: Lister ses objectifs
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lens'
+          description: ''
+    post:
+      operationId: lenses_create
+      description: Crée un nouvel objectif pour l'utilisateur·ice connecté·e.
+      summary: Ajouter un objectif
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lens'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lens'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lens'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+          description: ''
+  /api/lenses/{id}/:
+    get:
+      operationId: lenses_retrieve
+      summary: Détail d'un objectif
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+          description: ''
+        '404':
+          description: Objectif introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    put:
+      operationId: lenses_update
+      summary: Modifier un objectif
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lens'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lens'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lens'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+          description: ''
+    patch:
+      operationId: lenses_partial_update
+      summary: Modifier partiellement un objectif
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLens'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLens'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLens'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+          description: ''
+    delete:
+      operationId: lenses_destroy
+      summary: Supprimer un objectif
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Objectif supprimé avec succès.
+        '404':
+          description: Objectif introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+  /api/login/:
+    post:
+      operationId: login_create
+      description: Permet à un.e utilisateur·ice de se connecter en fournissant son
+        nom d'utilisateur·ice et son mot de passe. Retourne un token JWT en cas de
+        succès.
+      summary: Se connecter
+      tags:
+      - Authentification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomToken'
+        required: true
+      responses:
+        '200':
+          description: Connexion réussie, tokens retournés.
+        '401':
+          description: Nom d'utilisateur·ice ou mot de passe incorrect.
+  /api/me/:
+    get:
+      operationId: me_retrieve
+      description: Retourne les informations du compte de l'utilisateur·ice connecté·e.
+      summary: Récupérer son profil
+      tags:
+      - Utilisateur·ice
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '401':
+          description: Non authentifié·e
+    delete:
+      operationId: me_destroy
+      description: Supprime définitivement le compte de l'utilisateur·ice connecté·e.
+      summary: Supprimer son compte
+      tags:
+      - Utilisateur·ice
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Compte supprimé avec succès
+        '401':
+          description: Non authentifié·e
+  /api/me/export/:
+    get:
+      operationId: me_export_retrieve
+      description: Permet à l'utilisateur·ice connecté·e d'exporter toutes les données
+        associées à son compte (appareils, objectifs, pellicules) au format JSON.
+        Utile pour la portabilité des données (RGPD).
+      summary: Exporter ses données
+      tags:
+      - Utilisateur·ice
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Export des données utilisateur·ice.
+        '401':
+          description: Non authentifié·e.
+  /api/mounts/:
+    get:
+      operationId: mounts_list
+      description: Retourne la liste des montures (mounts) disponibles dans le système.
+        Lecture seule, commun à tous·tes les utilisateur·ices.
+      summary: Lister les montures disponibles
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMountList'
+          description: ''
+  /api/mounts/{id}/:
+    get:
+      operationId: mounts_retrieve
+      summary: Détail d'une monture
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mount.
+        required: true
+      tags:
+      - Equipement
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mount'
+          description: ''
+        '404':
+          description: Monture introuvable.
+  /api/photos/:
+    get:
+      operationId: photos_list
+      description: Retourne la liste des stockages (liens URL) des photos appartenant
+        à l'utilisateur·ice connecté·e.
+      summary: Lister les stockages des photos
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Photos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUrlPhotoList'
+          description: ''
+    post:
+      operationId: photos_create
+      description: Crée un nouveau stockage (lien URL) pour une photo appartenant
+        à une pellicule de l'utilisateur·ice connecté·e.
+      summary: Ajouter un stockage de photo
+      tags:
+      - Photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlPhoto'
+          description: ''
+  /api/photos/{id}/:
+    get:
+      operationId: photos_retrieve
+      summary: Détail d'un stockage de photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Photos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlPhoto'
+          description: ''
+        '404':
+          description: Stockage de photo introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    put:
+      operationId: photos_update
+      summary: Modifier un stockage de photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UrlPhoto'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlPhoto'
+          description: ''
+    patch:
+      operationId: photos_partial_update
+      summary: Modifier partiellement un stockage de photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUrlPhoto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUrlPhoto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUrlPhoto'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlPhoto'
+          description: ''
+    delete:
+      operationId: photos_destroy
+      summary: Supprimer un stockage de photo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Photos
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Stockage de photo supprimé avec succès.
+        '404':
+          description: Stockage de photo introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+  /api/register/:
+    post:
+      operationId: register_create
+      tags:
+      - register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signup'
+          description: ''
+  /api/rolls/:
+    get:
+      operationId: rolls_list
+      description: Retourne la liste paginée des pellicules de l'utilisateur·ice connecté·e.Supporte
+        le filtrage par statut, apparil, objectif, ISO et format, la recherche sur
+        le nom du film et la description, et le tri.
+      summary: Lister ses pellicules
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Pellicules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRollList'
+          description: ''
+    post:
+      operationId: rolls_create
+      description: Crée une nouvelle pellicule pour l'utilisateur·ice connecté·e.
+      summary: Créer une pellicule
+      tags:
+      - Pellicules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roll'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Roll'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Roll'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roll'
+          description: ''
+  /api/rolls/{slug}/:
+    get:
+      operationId: rolls_retrieve
+      summary: Détails d'une pellicule
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Pellicules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roll'
+          description: ''
+        '404':
+          description: Pellicule non trouvée ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    put:
+      operationId: rolls_update
+      description: Met à jour une pellicule. Si la pellicule est au statut 'scannée,
+        seuls les champs 'date_scan' et 'description' peuvent être modifiés.
+      summary: Modifier une pellicule
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Pellicules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roll'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Roll'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Roll'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roll'
+          description: ''
+        '400':
+          description: Modification interdite sur une pellicule scannée. Seuls les
+            champs 'date_scan' et 'description' peuvent être modifiés.
+        '404':
+          description: Pellicule non trouvée ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    patch:
+      operationId: rolls_partial_update
+      description: Met à jour partiellement une pellicule. Si la pellicule est au
+        statut 'scannée, seuls les champs 'date_scan' et 'description' peuvent être
+        modifiés.
+      summary: Modifier partiellement une pellicule
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Pellicules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRoll'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRoll'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRoll'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roll'
+          description: ''
+        '400':
+          description: Modification interdite sur une pellicule scannée. Seuls les
+            champs 'date_scan' et 'description' peuvent être modifiés.
+        '404':
+          description: Pellicule non trouvée ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+    delete:
+      operationId: rolls_destroy
+      description: Supprime une pellicule. Si la pellicule est au statut 'scannée',
+        la suppression est interdite.
+      summary: Supprimer une pellicule
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Pellicules
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Pellicule supprimée avec succès.
+        '400':
+          description: Suppression interdite sur une pellicule scannée.
+        '404':
+          description: Pellicule non trouvée ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+  /api/rolls/{slug}/qr/:
+    get:
+      operationId: rolls_qr_retrieve
+      description: Retourne une image PNG contenant un QR code qui point vers la page
+        de la pellicule sur le frontend. Accessible uniquement par le propriétaire
+        de la pellicule.
+      summary: Générer un QR code pour une pellicule
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Pellicules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: Image PNG du QR code.
+        '404':
+          description: Pellicule introuvable ou n'appartenant pas à l'utilisateur·ice
+            connecté·e.
+  /api/stats/:
+    get:
+      operationId: stats_retrieve
+      description: Retourne des statistiques sur les pellicules de l'utilisateur·ice
+        connecté·e, y compris le nombre total de pellicules, le nombre par statut,
+        la moyenne des ISO et le nombre par type de film.
+      summary: Statistiques de l'utilisateur·ice
+      tags:
+      - Statistiques
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Statistiques calculées avec succès.
+        '401':
+          description: Utilisateur non authentifié.
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Camera:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        lenses:
+          type: string
+          readOnly: true
+        lenses_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        mount_name:
+          type: string
+          readOnly: true
+        model:
+          type: string
+          maxLength: 100
+        has_fixed_lens:
+          type: boolean
+        fixed_lens_model:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        mount:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - id
+      - lenses
+      - model
+      - mount_name
+      - updated_at
+      - user
+    CustomToken:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    FilmTypeEnum:
+      enum:
+      - COLOR_NEGATIVE
+      - BLACK_AND_WHITE
+      - COLOR_SLIDE
+      type: string
+      description: |-
+        * `COLOR_NEGATIVE` - Négatif couleur
+        * `BLACK_AND_WHITE` - Noir et blanc
+        * `COLOR_SLIDE` - Diapositive couleur
+    FormatEnum:
+      enum:
+      - 35MM-12
+      - 35MM-24
+      - 35MM-36
+      - 120-04 (6x17)
+      - 120-06 (6x12)
+      - 120-08 (6x9)
+      - 120-09 (6x8)
+      - 120-10 (6x7)
+      - 120-12 (6x6)
+      - 120-16 (645)
+      - 220-08 (6x17)
+      - 220-12 (6x12)
+      - 220-16 (6x9)
+      - 220-18 (6x8)
+      - 220-20 (6x7)
+      - 220-24 (6x6)
+      - 220-32 (645)
+      - LARGE-4x5
+      - LARGE-5x7
+      - LARGE-8x10
+      - '110'
+      - '126'
+      - '127'
+      type: string
+      description: |-
+        * `35MM-12` - 35mm-12
+        * `35MM-24` - 35mm-24
+        * `35MM-36` - 35mm-36
+        * `120-04 (6x17)` - 120-04 (6x17)
+        * `120-06 (6x12)` - 120-06 (6x12)
+        * `120-08 (6x9)` - 120-08 (6x9)
+        * `120-09 (6x8)` - 120-09 (6x8)
+        * `120-10 (6x7)` - 120-10 (6x7)
+        * `120-12 (6x6)` - 120-12 (6x6)
+        * `120-16 (645)` - 120-16 (645)
+        * `220-08 (6x17)` - 220-08 (6x17)
+        * `220-12 (6x12)` - 220-12 (6x12)
+        * `220-16 (6x9)` - 220-16 (6x9)
+        * `220-18 (6x8)` - 220-18 (6x8)
+        * `220-20 (6x7)` - 220-20 (6x7)
+        * `220-24 (6x6)` - 220-24 (6x6)
+        * `220-32 (645)` - 220-32 (645)
+        * `LARGE-4x5` - Grand format 4x5
+        * `LARGE-5x7` - Grand format 5x7
+        * `LARGE-8x10` - Grand format 8x10
+        * `110` - 110
+        * `126` - 126
+        * `127` - 127
+    Lens:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        cameras_detail:
+          type: string
+          readOnly: true
+        cameras:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        mount_name:
+          type: string
+          readOnly: true
+        model:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        mount:
+          type: integer
+          nullable: true
+      required:
+      - cameras_detail
+      - created_at
+      - id
+      - model
+      - mount_name
+      - updated_at
+      - user
+    Mount:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    PaginatedMountList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mount'
+    PaginatedRollList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Roll'
+    PaginatedUrlPhotoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UrlPhoto'
+    PatchedCamera:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        lenses:
+          type: string
+          readOnly: true
+        lenses_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        mount_name:
+          type: string
+          readOnly: true
+        model:
+          type: string
+          maxLength: 100
+        has_fixed_lens:
+          type: boolean
+        fixed_lens_model:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        mount:
+          type: integer
+          nullable: true
+    PatchedLens:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        cameras_detail:
+          type: string
+          readOnly: true
+        cameras:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        mount_name:
+          type: string
+          readOnly: true
+        model:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        mount:
+          type: integer
+          nullable: true
+    PatchedRoll:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/UrlPhoto'
+        user:
+          type: integer
+          readOnly: true
+        camera_name:
+          type: string
+          readOnly: true
+        lens_name:
+          type: string
+          readOnly: true
+        film_type_label:
+          type: string
+          readOnly: true
+        status_label:
+          type: string
+          readOnly: true
+        film_name:
+          type: string
+          maxLength: 100
+        film_type:
+          $ref: '#/components/schemas/FilmTypeEnum'
+        iso:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        format:
+          $ref: '#/components/schemas/FormatEnum'
+        description:
+          type: string
+        date_start:
+          type: string
+          format: date
+        date_end:
+          type: string
+          format: date
+          nullable: true
+        date_development:
+          type: string
+          format: date
+          nullable: true
+        date_scan:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        camera:
+          type: integer
+        lens:
+          type: integer
+          nullable: true
+    PatchedUrlPhoto:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll:
+          type: integer
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+        provider:
+          $ref: '#/components/schemas/ProviderEnum'
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    ProviderEnum:
+      enum:
+      - FLICKR
+      - GOOGLE_PHOTOS
+      - GOOGLE_DRIVE
+      - SITE
+      - OTHER
+      type: string
+      description: |-
+        * `FLICKR` - Flickr
+        * `GOOGLE_PHOTOS` - Google Photos
+        * `GOOGLE_DRIVE` - Google Drive
+        * `SITE` - Site personnel
+        * `OTHER` - Autre
+    Roll:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/UrlPhoto'
+        user:
+          type: integer
+          readOnly: true
+        camera_name:
+          type: string
+          readOnly: true
+        lens_name:
+          type: string
+          readOnly: true
+        film_type_label:
+          type: string
+          readOnly: true
+        status_label:
+          type: string
+          readOnly: true
+        film_name:
+          type: string
+          maxLength: 100
+        film_type:
+          $ref: '#/components/schemas/FilmTypeEnum'
+        iso:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        format:
+          $ref: '#/components/schemas/FormatEnum'
+        description:
+          type: string
+        date_start:
+          type: string
+          format: date
+        date_end:
+          type: string
+          format: date
+          nullable: true
+        date_development:
+          type: string
+          format: date
+          nullable: true
+        date_scan:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        camera:
+          type: integer
+        lens:
+          type: integer
+          nullable: true
+      required:
+      - camera
+      - camera_name
+      - created_at
+      - date_start
+      - film_name
+      - film_type_label
+      - id
+      - iso
+      - lens_name
+      - slug
+      - status
+      - status_label
+      - updated_at
+      - user
+    Signup:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      - username
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    UrlPhoto:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll:
+          type: integer
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+        provider:
+          $ref: '#/components/schemas/ProviderEnum'
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - updated_at
+      - url
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - email
+      - id
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

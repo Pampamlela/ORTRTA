@@ -22,7 +22,7 @@ import PageContainer from '@/components/PageContainer.vue';
                 <h3>Données de compte</h3>
                     <ul>
                         <li>Adresse email</li>
-                        <li>Nom d’utilisateur (username)</li>
+                        <li>Nom d’utilisateur·ice (username)</li>
                         <li>Mot de passe (stocké de manière sécurisée et chiffrée)</li>
                     </ul>
 
@@ -38,7 +38,7 @@ import PageContainer from '@/components/PageContainer.vue';
                     
                 Les données sont collectées uniquement pour les finalités suivantes :
                     <ul>
-                        <li>Création et gestion de votre compte utilisateur</li>
+                        <li>Création et gestion de votre compte utilisateur·ice</li>
                         <li>Authentification et sécurité</li>
                         <li>Gestion et suivi de vos pellicules photographiques</li>
                         <li>Organisation de votre matériel photo</li>
@@ -51,7 +51,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
                 <strong>Les données sont accessibles uniquement :</strong><br>
                     <ul>
-                        <li>Par vous-même, via votre compte utilisateur</li>
+                        <li>Par vous-même, via votre compte utilisateur·ice</li>
                         <li>Par les administrateurs de l’application, uniquement en cas de nécessité technique ou de support</li>
                     </ul>
                 Aucune donnée n’est vendue ou partagée avec des tiers.
@@ -111,7 +111,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
                 Cette politique de confidentialité peut être mise à jour à tout moment.<br>
 
-                En cas de modification importante, les utilisateurs seront informés.
+                En cas de modification importante, les utilisateurs·ices seront informé·es.
 
                 <h2>11. Contact</h2>
 

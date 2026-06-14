@@ -2,7 +2,7 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 class IsOwner(BasePermission):
     """
-    Autorise l'accès uniquement si l'objet appartient à l'utilisateur connecté.
+    Autorise l'accès uniquement si l'objet appartient à l'utilisateur·ice connecté·e.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -10,7 +10,7 @@ class IsOwner(BasePermission):
     
 class IsRollOwner(BasePermission):
     """
-    Autorise l'accès uniquement si la roll liée appartient à l'utilisateur connecté.
+    Autorise l'accès uniquement si la roll liée appartient à l'utilisateur·ice connecté·e.
     """
     def has_object_permission(self, request, view, obj):
         roll = getattr(obj, "roll", None)

@@ -21,12 +21,12 @@ class UserModelFieldsTest(TestCase):
         self.assertFalse(field.null)
         self.assertFalse(field.blank)
 
-    # test que created_at est défini automatiquement à la création de l'utilisateur
+    # test que created_at est défini automatiquement à la création de l'utilisateur·ice
     def test_created_at_is_auto_now_add(self):
         field = User._meta.get_field("created_at")
         self.assertTrue(field.auto_now_add)
 
-    # test que updated_at est mis à jour à chaque modification de l'utilisateur    
+    # test que updated_at est mis à jour à chaque modification de l'utilisateur·ice
     def test_updated_at_is_auto_now(self):
         field = User._meta.get_field("updated_at")
         self.assertTrue(field.auto_now)
@@ -35,7 +35,7 @@ class UserModelFieldsTest(TestCase):
 class UserModelCreationTest(TestCase):
     # test la création d'instances User
 
-    # test que l'email est bien défini lors de la création d'un utilisateur
+    # test que l'email est bien défini lors de la création d'un·e utilisateur·ice
     def test_create_user_sets_email(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -55,7 +55,7 @@ class UserModelCreationTest(TestCase):
         self.assertNotEqual(user.password, "testpass123")
         self.assertTrue(user.check_password("testpass123"))
 
-    # test que l'utilisateur créé n'est pas un staff par défaut
+    # test que l'utilisateur·ice créé·e n'est pas un staff par défaut
     def test_create_user_is_not_staff_by_default(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -64,7 +64,7 @@ class UserModelCreationTest(TestCase):
         )
         self.assertFalse(user.is_staff)
 
-    # test que l'utilisateur créé n'est pas un superuser par défaut
+    # test que l'utilisateur·ice créé·e n'est pas un superuser par défaut
     def test_create_user_is_not_superuser_by_default(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -73,7 +73,7 @@ class UserModelCreationTest(TestCase):
         )
         self.assertFalse(user.is_superuser)
 
-    # test que l'utilisateur créé est un staff et un superuser
+    # test que l'utilisateur·ice créé·e est un staff et un superuser
     def test_create_superuser_is_staff_and_superuser(self):
         admin = User.objects.create_superuser(
             email="admin@example.com",
@@ -83,7 +83,7 @@ class UserModelCreationTest(TestCase):
         self.assertTrue(admin.is_staff)
         self.assertTrue(admin.is_superuser)
 
-    # test que la création d'un utilisateur avec un email déjà existant lève une erreur d'intégrité
+    # test que la création d'un·e utilisateur·ice avec un email déjà existant lève une erreur d'intégrité
     def test_duplicate_email_raises_error(self):
         from django.db import transaction
         User.objects.create_user(
@@ -98,7 +98,7 @@ class UserModelCreationTest(TestCase):
                     username="testuser2",
                     password="testpass456"
                 )
-    # test que le champ created_at est bien défini à la création de l'utilisateur       
+    # test que le champ created_at est bien défini à la création de l'utilisateur·ice       
     def test_created_at_is_set_on_creation(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -107,12 +107,12 @@ class UserModelCreationTest(TestCase):
         )
         self.assertIsNotNone(user.created_at)
 
-    # test que la date de dernière connexion est null tant que l'utilisateur ne s'est jamais connecté
+    # test que la date de dernière connexion est null tant que l'utilisateur·ice ne s'est jamais connecté·e
     def test_last_login_is_none_by_default(self):
         user = User.objects.create_user(
             email="test@example.com",
             username="testuser",
             password="testpass123"
         )
-        # last_login est null tant que l'utilisateur ne s'est jamais connecté
+        # last_login est null tant que l'utilisateur·ice ne s'est jamais connecté·e
         self.assertIsNone(user.last_login)
