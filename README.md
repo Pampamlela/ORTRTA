@@ -13,17 +13,21 @@ Une application complète de gestion de matériel photographique et de pellicule
 - [Fonctionnalités](#-fonctionnalités)
 - [API](#-api)
 - [Développement](#-développement)
+- [Variables d'environnement](#-variables-d-environnement)
+- [Troubleshooting](#-troubleshooting)
 - [License](#license)
 
 ## À propos
 
-ORTRTA est une plateforme permettant aux photographes de gérer leur équipement photographique (appareils photo, objectifs) et leurs pellicules photo. L'application fournit une interface intuitive pour tracker et organiser votre collection de matériel.
+One Roll To Rule Them All est une plateforme permettant aux photographes de gérer leur équipement photographique (appareils photo, objectifs) et leurs pellicules photo. L'application fournit une interface intuitive pour tracker et organiser sa collection de matériel, depuis l'achat d'une pellicule jusqu'au scan des photos développées.
 
 ## Stack technologique
 
 ### Backend
 - **Django** - Framework web Python
 - **Django REST Framework** - API REST
+- **Django REST Framework SimpleJWT** - Authentification par tokens JWT
+- **drf-spectacular** - Génération automatique de la documentation API (OpenAPI/Swagger)
 - **PostgreSQL** - Base de données
 - **Gunicorn/Asgiref** - Serveur WSGI/ASGI
 
@@ -125,6 +129,7 @@ docker-compose exec backend python manage.py createsuperuser
 # Accédez à l'application
 # Frontend: http://localhost:5173
 # Admin: http://localhost:8000/admin
+# Documentation API (Swagger UI): http://localhost:8000/api/schema/swagger-ui/
 ```
 
 ## Structure du projet
@@ -137,6 +142,9 @@ ORTRTA/
 │   ├── equipment/             # App gestion des appareils et objectifs
 │   ├── rolls/                 # App gestion des pellicules
 │   ├── users/                 # App gestion des utilisateur·ices
+│   ├── logs/                  # Fichiers de logs applicatifs (non versionnés)
+│   ├── schema.yaml             # Export du schéma OpenAPI (YAML)
+│   ├── schema.json             # Export du schéma OpenAPI (JSON)
 │   ├── manage.py
 │   ├── requirements.txt        # Dépendances Python
 │   └── Dockerfile
@@ -169,29 +177,61 @@ ORTRTA/
 - ✅ Créer et tracker des pellicules photo
 - ✅ Assigner un équipement aux pellicules
 - ✅ Gérer le statut des pellicules (en cours, développée, archivée)
-- ✅ Associer des photos via URL
+- ✅ Restrictions de modification/suppression selon le statut (ex : une pellicule scannée ne peut plus être supprimée)
+- ✅ Afficher des stockages photo via URL
 - ✅ Générer des codes QR pour les pellicules
+- ✅ Pagination des résultats
+- ✅ Filtrage, recherche et tri des pellicules
+- ✅ Statistiques globales (répartition par statut, ISO moyen, répartition par type de film)
 
 ### Gestion des utilisateur·ices
 - ✅ Système d'authentification
 - ✅ Profils utilisateur·ices
-- ✅ Permissions personnalisées
+- ✅ Modification du mot de passe
+- ✅ Export des données personnelles (conformité RGPD)
+- ✅ Suppression de compte
+- ✅ Permissions personnalisées (chaque utilisateurice accède uniquement à ses propres données)
+
+### Qualité & suivi technique
+- ✅ Logging applicatif (actions utilisateurices, erreurs, règles métier) avec rotation des fichiers
+- ✅ Documentation API générée automatiquement (OpenAPI / Swagger)
 
 ## API
 
-L'API est une API REST accessible à `/api/` sur le backend.
+L'API est une API REST accessible à `/api/` sur le backend. Elle est protégée par authentification **JWT** (sauf les endpoints d'inscription, de connexion et de documentation).
+
+### Documentation intéractive
+La documentation complète de l'API est générée automatiquement avec **drf-spectacular** et accessible via :
+- **Swagger UI** (interface interactive pour tester les endpoints) : http://localhost:8000/api/schema/swagger-ui/
+- **ReDoc** (documentation en lecture, plus claire pour une présentation) : http://localhost:8000/api/schema/redoc/  (à faire)
+- **Schéma OpenAPI brut** (JSON/YAML, exportable) : http://localhost:8000/api/schema/
+
+Des exports statiques du schéma (schema.yaml et schema.json) sont également disponibles dans le dossier backend/ .
 
 ### Endpoints principaux
+#### Authentification
+- `POST /api/register/` - Créer un compte
+- `POST /api/login/` - Se connecter (retourne les tokens JWT)
+- `POST /api/token/refresh/` - Rafraîchir le token d'accès
 
-- `GET/POST /api/equipment/cameras/` - Gestion des appareils photo
-- `GET/POST /api/equipment/lenses/` - Gestion des objectifs
-- `GET/POST /api/rolls/` - Gestion des pellicules
-- `GET/POST /api/users/` - Gestion des utilisateur·ices
+#### Utilisateur·ices
+- `GET /api/me` - Récupérer son profil
+- `DELETE /api/me` - Supprimer son compte
+- `PUT /api/change-password/` - Changer son mot de passe
+- `GET /api/me/export/` - Exporter ses données personnelles (RGPD)
 
-### Documentation API
+#### Equipement
+- `GET/POST /api/cameras/` - Gestion des appareils photo
+- `GET/POST /api/lenses/` - Gestion des objectifs
+- `GET /api/mounts/` - Liste des montures disponibles
 
-Pour accéder à la documentation interactive de l'API (si disponible) :
-- `http://localhost:8000/api/docs` (via drf-spectacular)
+#### Pellicules & URL
+- `GET/POST /api/rolls/` - Gestion des pellicules (avec pagination, filtres, recherche, tri)
+- `GET /api/rolls/{slug}/qr/` - Générer le QR code d'une pellicule
+- `GET/POST /api/photos` - Gestion des URL de stockage des photos associées aux pellicules
+
+#### Statistiques
+- `GET /api/stats/` - Statistiques globales de l'utilisateur·ice connecté·e
 
 ## Développement
 
@@ -215,6 +255,11 @@ python manage.py test
 4. Accéder à l'admin Django :
 ```
 http://localhost:8000/admin
+```
+5. Régénérer le schéma OpenAPI :
+```
+python manage.py spectacular --file schema.yaml
+python manage.py spectacular --file schema.json --format openapi-json
 ```
 
 ### Frontend
@@ -312,13 +357,15 @@ docker-compose exec backend python manage.py migrate
 # Windows: netstat -ano | findstr :8000
 ```
 
-## Développement
+## License
 
-Pamela Robinet Duverger
+Développement : Pamela Robinet Duverger
 
 ---
 
 **Besoin d'aide ?** Consultez les documentations officielles :
 - [Django Documentation](https://docs.djangoproject.com/)
+- [Django REST Framework Documentation](https://www.django-rest-framework.org/)
+- [drf-spectacular Documentation](https://drf-spectacular.readthedocs.io/)
 - [Vue 3 Documentation](https://vuejs.org/)
 - [Docker Documentation](https://docs.docker.com/)
