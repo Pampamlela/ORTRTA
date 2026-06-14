@@ -10,7 +10,7 @@ User = get_user_model()
 
 class EquipmentAPITestCase(APITestCase):
 
-    # création de deux utilisateurices et obtention du token JWT pour les tests
+    # création de deux utilisateur·ices et obtention du token JWT pour les tests
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
