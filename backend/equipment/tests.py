@@ -48,7 +48,7 @@ class EquipmentAPITestCase(APITestCase):
         self.assertEqual(Camera.objects.count(), 1)
         self.assertEqual(Camera.objects.first().user, self.user)
 
-    # test accès à l'appareil photo d'un autre utilisateur
+    # test accès à l'appareil photo d'un·e autre utilisateur·ice
     def test_cannot_acces_other_user_camera(self):
         camera = Camera.objects.create(
             user=self.other_user,
@@ -59,7 +59,7 @@ class EquipmentAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # test tentative d'attachement d'un appareil photo d'un autre utilisateur à un objectif
+    # test tentative d'attachement d'un appareil photo d'un·e autre utilisateur·ice à un objectif
     def test_cannot_atach_other_user_camera_to_lens(self):
         other_camera = Camera.objects.create(
             user=self.other_user,

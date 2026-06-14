@@ -136,7 +136,7 @@ ORTRTA/
 │   ├── core/                  # App principale
 │   ├── equipment/             # App gestion des appareils et objectifs
 │   ├── rolls/                 # App gestion des pellicules
-│   ├── users/                 # App gestion des utilisateurs
+│   ├── users/                 # App gestion des utilisateur·ices
 │   ├── manage.py
 │   ├── requirements.txt        # Dépendances Python
 │   └── Dockerfile
@@ -172,9 +172,9 @@ ORTRTA/
 - ✅ Associer des photos via URL
 - ✅ Générer des codes QR pour les pellicules
 
-### Gestion des utilisateurs
+### Gestion des utilisateur·ices
 - ✅ Système d'authentification
-- ✅ Profils utilisateurs
+- ✅ Profils utilisateur·ices
 - ✅ Permissions personnalisées
 
 ## API
@@ -186,7 +186,7 @@ L'API est une API REST accessible à `/api/` sur le backend.
 - `GET/POST /api/equipment/cameras/` - Gestion des appareils photo
 - `GET/POST /api/equipment/lenses/` - Gestion des objectifs
 - `GET/POST /api/rolls/` - Gestion des pellicules
-- `GET/POST /api/users/` - Gestion des utilisateurs
+- `GET/POST /api/users/` - Gestion des utilisateur·ices
 
 ### Documentation API
 

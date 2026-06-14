@@ -11,7 +11,7 @@ User = get_user_model()
 
 class UserAPITestCase(APITestCase):
 
-    # création d'un utilisateur et obtention du token JWT pour les tests
+    # création d'un·e utilisateur·ice et obtention du token JWT pour les tests
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
@@ -31,7 +31,7 @@ class UserAPITestCase(APITestCase):
         self.token = response.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token}")
 
-    # test création d'un utilisateur
+    # test création d'un·e utilisateur·ice
     def test_create_user(self):
         data = {
             "username": "newuser",
@@ -46,7 +46,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(User.objects.last().email, "newuser@example.com")
         self.assertEqual(User.objects.last().username, "newuser")   
 
-    # test accès à un utilisateur sans token JWT
+    # test accès à un·e utilisateur·ice sans token JWT
     def test_cannot_access_user_without_token(self):
         self.client.credentials()  # Supprime les credentials pour simuler une requête sans token
 
@@ -54,7 +54,7 @@ class UserAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    # test accès à un utilisateur avec un token JWT
+    # test accès à un·e utilisateur·ice avec un token JWT
     def test_access_user_with_token(self):
         response = self.client.get(f"/api/me/")
 
@@ -62,7 +62,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(response.data["email"], "testuser@example.com") 
         self.assertEqual(response.data["username"], "testuser")
 
-    # test tentative d'accès à un autre utilisateur
+    # test tentative d'accès à un·e autre utilisateur·ice
     def test_cannot_access_other_user(self):
         other_user = User.objects.create_user(
             username="otheruser",
@@ -72,7 +72,7 @@ class UserAPITestCase(APITestCase):
         response = self.client.get(f"/api/me/{other_user.id}/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # test tentative de suppression d'un autre utilisateur
+    # test tentative de suppression d'un·e autre utilisateur·ice    
     def test_cannot_delete_other_user(self):
         other_user = User.objects.create_user(
             username="otheruser",
@@ -89,7 +89,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.filter(id=self.user.id).exists(), False)
 
-    # test export des données de l'utilisateur
+    # test export des données de l'utilisateur·ice connecté·e
     def test_export_user_data(self):
         response = self.client.get(f"/api/me/export/")
 
