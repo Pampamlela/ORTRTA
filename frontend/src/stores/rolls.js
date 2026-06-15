@@ -19,7 +19,7 @@ export const useRollStore = defineStore("rolls", {
         },
 
         async fetchRolls(url = null) {
-            const endpoint = url || "rolls/";
+            const endpoint = url || "rolls/?ordering=-date_start";
             const response = await api.get(endpoint);
             this.rolls = response.data.results;
             this.count = response.data.count;
