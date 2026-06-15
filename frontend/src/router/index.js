@@ -18,6 +18,7 @@ import LensCreateView from "@/views/LensCreateView.vue"
 import LensEditView from "@/views/LensEditView.vue"
 import ProfileView from "@/views/ProfileView.vue"
 import RGPDView from "@/views/RGPDView.vue"
+import FAQView from "@/views/FAQView.vue"
 import NotFoundView from "@/views/NotFoundView.vue"
 
 
@@ -39,6 +40,7 @@ const routes = [
   { path: "/lenses/new", name: "lens-create", component: LensCreateView, meta: { requiresAuth: true } },
   { path: "/lenses/:id", name: "lens-detail", component: LensDetailView, meta: { requiresAuth: true } },
   { path: "/lenses/:id/edit", name: "lens-edit",   component: LensEditView, meta: { requiresAuth: true } },
+  { path: "/faq", name: "faq", component: FAQView },
   { path: "/:pathMatch(.*)*", name: "not-found", component: NotFoundView },
 ]
 
