@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer.vue';
 </script>
 
 <template>
-    <PageContainer title="Politique de confidentialité">
+    <PageContainer>
         <div class="prose max-w-none prose-heading:font-title prose-headings:text-film prose-p:text-film">
             
                 <h1>Politique de confidentialité</h1>

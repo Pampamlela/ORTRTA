@@ -1,4 +1,6 @@
 <script setup>
+import router from '@/router';
+
 </script>
 
 <template>
@@ -13,6 +15,13 @@
             class="text-amber hover:underline"
             >
                 Politique de confidentialité
+            </router-link>
+             - 
+            <router-link
+            to="/faq"
+            class="text-amber hover:underline"
+            >
+                FAQ
             </router-link>
 
         </div>
