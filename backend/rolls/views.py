@@ -90,7 +90,7 @@ class RollViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["status", "camera", "lens", "iso", "format"]
     search_fields = ["film_name", "description"]
-    ordering_fields = ["date_start", "created_at", "updated_at"]
+    ordering_fields = ["date_start", "created_at", "updated_at", "status", "camera__model", "film_name"] #camera__model permet un tri alphabétique sur le modèle de l'appareil photo
     
 
     def perform_create(self, serializer):

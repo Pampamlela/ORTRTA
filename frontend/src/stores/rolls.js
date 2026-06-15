@@ -9,6 +9,7 @@ export const useRollStore = defineStore("rolls", {
         count: 0, // nombre total de rolls (pour la pagination)
         next: null, // URL de la page suivante (pour la pagination)
         previous: null, // URL de la page précédente (pour la pagination)
+        ordering: "-date_start", // ordre par défaut pour la liste des rolls
     }),
 
     actions: {
@@ -19,12 +20,30 @@ export const useRollStore = defineStore("rolls", {
         },
 
         async fetchRolls(url = null) {
-            const endpoint = url || "rolls/?ordering=-date_start";
+            const endpoint = url || "rolls/?ordering=" + this.ordering;
             const response = await api.get(endpoint);
             this.rolls = response.data.results;
             this.count = response.data.count;
             this.next = response.data.next;
             this.previous = response.data.previous;
+        },
+
+        toggleOrdering(field) {
+            let currentField = this.ordering.startsWith("-")
+                ? this.ordering.slice(1)
+                : this.ordering;
+
+            if (currentField === field) {
+                if (this.ordering.startsWith("-")) {
+                    this.ordering = field;
+                } else {
+                    this.ordering = "-" + field;
+                }
+            } else {
+                this.ordering = field;
+            }   
+
+            this.fetchRolls();
         },
 
         async fetchRoll(slug) {
