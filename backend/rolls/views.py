@@ -9,11 +9,12 @@ from .serializers import RollSerializer, UrlPhotoSerializer
 from.permissions import IsOwner, IsRollOwner
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import HttpResponse
+from django.db.models import Case, When, Value
 import qrcode
 from io import BytesIO
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Value
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse, OpenApiExample, OpenApiTypes
 import logging
@@ -85,12 +86,19 @@ class RollViewSet(viewsets.ModelViewSet):
             .filter(user=self.request.user)
             .select_related("camera", "lens", "user") # pour éviter les requêtes supplémentaires lors de la sérialisation
             .prefetch_related("photos") # si bcp de photos, ça peut être lourd, à tester
+            .annotate(status_order=Case(
+                When(status=RollStatus.IN_PROGRESS, then=Value(1)),
+                When(status=RollStatus.FINISHED, then=Value(2)),
+                When(status=RollStatus.DEVELOPED, then=Value(3)),
+                When(status=RollStatus.SCANNED, then=Value(4)),
+                )
+            )
         )
     
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["status", "camera", "lens", "iso", "format"]
     search_fields = ["film_name", "description"]
-    ordering_fields = ["date_start", "created_at", "updated_at"]
+    ordering_fields = ["date_start", "created_at", "updated_at", "status_order", "camera__model", "film_name"] #camera__model permet un tri alphabétique sur le modèle de l'appareil photo
     
 
     def perform_create(self, serializer):

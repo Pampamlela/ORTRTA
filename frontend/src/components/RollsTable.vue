@@ -1,6 +1,27 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useRollStore } from '@/stores/rolls';
 
+const rollStore = useRollStore();
+
+const sortableFields = {
+    film_name: "film_name",
+    camera_name: "camera__model",
+    status_label: "status_order",
+    date_start: "date_start",
+};
+
+const sortIcon = (key) => {
+    const field = sortableFields[key];
+    if (!field) return ""; // pas d'icône pour les champs non triables
+
+    const current = rollStore.ordering.startsWith("-")
+        ? rollStore.ordering.slice(1)
+        : rollStore.ordering;
+
+    if (current !== field) return "↕";
+    return rollStore.ordering.startsWith("-") ? "↓" : "↑";
+}
 const props = defineProps({
     rolls: Array
 });
@@ -51,7 +72,15 @@ const goToRoll = (slug) => {
                     <td
                         class="sticky left-0 z-10 border border-black bg-amber text-film font-ui font-medium px-4 py-3 border-black min-w-[140px]"
                         >
-                        {{ row.label }}
+                        <button
+                            v-if="sortableFields[row.key]"
+                            @click="rollStore.toggleOrdering(sortableFields[row.key])"
+                            class="flex items-center gap-2 hover:underline"
+                        >
+                            {{ row.label }}
+                            <span>{{ sortIcon(row.key) }}</span>
+                        </button>
+                        <span v-else>{{ row.label }}</span>       
                     </td>
 
                     <!--Colonnes rolls-->

@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils.crypto import get_random_string
-# Create your models here.
 
 class RollStatus(models.TextChoices):
     IN_PROGRESS = "IN_PROGRESS", "En cours"
