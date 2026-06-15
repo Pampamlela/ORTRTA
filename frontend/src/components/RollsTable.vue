@@ -7,7 +7,7 @@ const rollStore = useRollStore();
 const sortableFields = {
     film_name: "film_name",
     camera_name: "camera__model",
-    status_label: "status",
+    status_label: "status_order",
     date_start: "date_start",
 };
 
