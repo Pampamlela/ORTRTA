@@ -36,7 +36,7 @@ const routes = [
   { path: "/cameras/new", name: "camera-create", component: CameraCreateView, meta: { requiresAuth: true } },
   { path: "/cameras/:id", name: "camera-detail", component: CameraDetailView, meta: { requiresAuth: true } },
   { path: "/cameras/:id/edit", name: "camera-edit", component: CameraEditView, meta: { requiresAuth: true } },
-  { path: "/lenses", name: "lenses", component: LensesView, meta: { requiresAuth: true } },
+  // { path: "/lenses", name: "lenses", component: LensesView, meta: { requiresAuth: true } },
   { path: "/lenses/new", name: "lens-create", component: LensCreateView, meta: { requiresAuth: true } },
   { path: "/lenses/:id", name: "lens-detail", component: LensDetailView, meta: { requiresAuth: true } },
   { path: "/lenses/:id/edit", name: "lens-edit",   component: LensEditView, meta: { requiresAuth: true } },
