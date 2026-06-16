@@ -26,7 +26,7 @@ const routes = [
   { path: "/login", name: "login", component: LoginView, meta: { guestOnly: true } },
   { path: "/register", name: "register", component: RegisterView },
   { path: "/rgpd", name: "rgpd", component: RGPDView },
-  { path: "/", name: "dashboard", component: DashboardView, meta: { requiresAuth: true } },
+  { path: "/dashboard", name: "dashboard", component: DashboardView, meta: { requiresAuth: true } },
   { path: "/profile", name: "profile", component: ProfileView, meta: { requiresAuth: true } },
   { path: "/rolls", name: "rolls", component: RollsView, meta: { requiresAuth: true } },
   { path: "/rolls/new", name: "roll-create", component: RollCreateView, meta: { requiresAuth: true } },

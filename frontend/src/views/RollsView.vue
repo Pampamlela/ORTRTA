@@ -31,14 +31,14 @@ const logoutUser = () => {
             <div
                 v-for="roll in rollStore.rolls"
                 :key="roll.slug"
-                class="bg-white rouded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition"
+                class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition"
                 @click="goToRoll(roll.slug)"
             >
                 <div class="flex justify-between items-start mb-2">
                     <span class="font-semibold font-body text-film">{{ roll.film_name }}</span>
-                    <span class="text-xs font-ui bg-amber text-film px-2 py-1 rouded-full">{{ roll.status_label }}</span>
+                    <span class="text-xs font-ui bg-amber text-film px-2 py-1 rounded-full">{{ roll.status_label }}</span>
                 </div>
-                <p class="text-sm text-grain font-body">{{  roll.camera_model }}</p>
+                <p class="text-sm text-grain font-body">{{  roll.camera_name }}</p>
                 <p class="text-xs text-grain font-body mt-1">{{ new Date(roll.date_start). toLocaleDateString() }}</p>
             </div> 
         </div> 
