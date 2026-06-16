@@ -55,6 +55,29 @@ class MeView(APIView):
         logger.warning("Utilisateur·ice supprimé·e : %s", username)
         return Response({"message": "Utilisateur·ice supprimé·e."}, status=204)
 
+    @extend_schema(
+        tags=["Utilisateur·ice"],
+        summary="Mettre à jour son profil",
+        description="Permet à l'utilisateur·ice connecté·e de mettre à jour les informations de son profil. Les champs non fournis ne seront pas modifiés.",
+        request=UserSerializer,
+        responses={
+            200: UserSerializer,
+            400: OpenApiResponse(description="Données invalides (champ manquant, email déjà utilisé, etc.)"),
+        }
+    )
+    
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            logger.info("Profil mis à jour pour %s", user.username)
+            return Response(serializer.data)
+        
+        logger.warning("Échec de la mise à jour du profil pour %s : %s", user.username, serializer.errors)
+        return Response(serializer.errors, status=400)
+
 class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
     permission_classes = [AllowAny]
