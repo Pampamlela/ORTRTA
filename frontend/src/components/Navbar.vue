@@ -2,21 +2,34 @@
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { Camera, Aperture, Film } from '@lucide/vue';
 import BaseButton from '@/components/BaseButton.vue';
 
 
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
+};
+
+const closeMenu = () => {
+    isMenuOpen.value = false;
+};
 
 const handleLogout = () => {
     authStore.logout();
+    closeMenu();
     router.push('/login');
 }
 </script>
 
 <template>
     <nav>
+        <!-- Ligne du haut : logo + hamburger (mobile) / logo + liens (desktop) -->
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
             <!-- Logo -->
@@ -25,15 +38,23 @@ const handleLogout = () => {
                     <img 
                         src="@/assets/logo/logo2.png" 
                         alt="One Roll" 
-                        class="h-16 md:h-24 w-auto"
+                        class="h-20 md:h-24 w-auto"
                     />
                     
                 </router-link>
             </template> 
             <div v-else></div>
 
-            <!-- Navigation Links -->
-            <div class="flex flex-col items-end gap-6 text-sm font-ui text-film">
+            <!-- Bouton hamburger -> visible seulement sur mobile -->
+            <button class="md:hidden text-3xl text-film px-2 py-1" @click="toggleMenu">
+                <!-- ☰ -->
+                <!-- <Camera :size="28" />  -->
+                <!-- <Aperture :size="28" /> -->
+                <Film :size="28" />
+            </button>
+
+            <!-- Menu horizontal desktop -> caché sur mobile-->
+            <div class="hidden md:flex flex-col items-end gap-4">
                 <template v-if="authStore.user">
 
                     <!-- ligne 1 : les liens -->
@@ -48,6 +69,10 @@ const handleLogout = () => {
 
                         <router-link to="/profile" class="hover:text-amber" active-class="text-amber font-semibold">
                             Profil   
+                        </router-link>
+
+                        <router-link to="/dashboard" class="hover:text-amber" active-class="text-amber font-semibold">
+                            Tableau de bord
                         </router-link>
 
                         <button
@@ -85,8 +110,57 @@ const handleLogout = () => {
                         </router-link>
                     </div>
                 </template>
-
             </div>
+
+            <!-- Menu déroulant mobile -> caché sur desktop -->
+            <div v-show="isMenuOpen" class="md:hidden flex flex-col items-center gap-4 absolute top-20 right-4 bg-white p-4 rounded shadow-lg z-50">
+                <template v-if="authStore.user">
+                    <router-link to="/rolls" class="hover:text-amber" active-class="text-amber font-semibold" @click="closeMenu">
+                        Films
+                    </router-link>
+
+                    <router-link to="/cameras" class="hover:text-amber" active-class="text-amber font-semibold" @click="closeMenu">
+                        Appareils   
+                    </router-link>
+
+                    <router-link to="/profile" class="hover:text-amber" active-class="text-amber font-semibold" @click="closeMenu">
+                        Profil   
+                    </router-link>
+
+                    <router-link to="/dashboard" class="hover:text-amber" active-class="text-amber font-semibold" @click="closeMenu">
+                        Tableau de bord
+                    </router-link>
+
+                    <button
+                        @click="handleLogout"
+                        class="hover:text-danger"
+                        >
+                            Déconnexion
+                    </button>
+
+                    <BaseButton to="/rolls/new" size="sm" @click="closeMenu">
+                        + Pellicule
+                    </BaseButton>
+
+                    <BaseButton to="/cameras/new" size="sm" @click="closeMenu">
+                        + Appareil
+                    </BaseButton>
+
+                    <BaseButton to="/lenses/new" size="sm" @click="closeMenu">
+                        + Objectif
+                    </BaseButton>
+                </template>
+                <template v-else>
+                    <router-link to="/login" class="hover:text-amber" @click="closeMenu">
+                        Connexion
+                    </router-link>
+
+                    <router-link to="/register" class="hover:text-amber" @click="closeMenu">
+                        Inscription   
+                    </router-link>
+
+                </template>
+            </div> 
         </div>
     </nav>
 </template>
