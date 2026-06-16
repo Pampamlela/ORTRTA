@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';
+import { Camera, Aperture, Film } from '@lucide/vue';
 import BaseButton from '@/components/BaseButton.vue';
 
 
@@ -46,7 +47,10 @@ const handleLogout = () => {
 
             <!-- Bouton hamburger -> visible seulement sur mobile -->
             <button class="md:hidden text-3xl text-film px-2 py-1" @click="toggleMenu">
-                ☰
+                <!-- ☰ -->
+                <!-- <Camera :size="28" />  -->
+                <!-- <Aperture :size="28" /> -->
+                <Film :size="28" />
             </button>
 
             <!-- Menu horizontal desktop -> caché sur mobile-->
