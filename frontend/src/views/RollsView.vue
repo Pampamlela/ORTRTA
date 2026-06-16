@@ -51,10 +51,14 @@ const logoutUser = () => {
         <!-- Pagination -->
          <div class="flex justify-between items-center mt-6">
             <BaseButton
+                class="w-28"
                 :disabled="!rollStore.previous"
                 @click="rollStore.fetchRolls(rollStore.previous)"
             >
-                ← Page précédente
+                <span class="flex flex-col items-center">
+                   <span>←</span> 
+                   <span>Page précédente</span>
+                </span>
             </BaseButton>
 
             <span class="text-sm text-grain">
@@ -62,10 +66,14 @@ const logoutUser = () => {
             </span>
 
             <BaseButton
+                class="w-28"
                 :disabled="!rollStore.next"
                 @click="rollStore.fetchRolls(rollStore.next)"
             >
-                Page suivante →
+                <span class="flex flex-col items-center">
+                    <span>→</span>
+                    <span>Page suivante</span>
+                </span>
             </BaseButton>
          </div>
     </PageContainer>
