@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { useRollStore } from '@/stores/rolls';
 
 const rollStore = useRollStore();
@@ -23,10 +23,11 @@ const sortIcon = (key) => {
     return rollStore.ordering.startsWith("-") ? "↓" : "↑";
 }
 const props = defineProps({
-    rolls: Array
+    rolls: Array,
+    onRowClick: Function,
 });
 
-const router = useRouter();
+// const router = useRouter();
 
 const rows = [
     { key : "film_name", label : "Film" },
@@ -57,9 +58,9 @@ const formatValue = (roll, key) => {
     return roll[key] || "-";
 };
 
-const goToRoll = (slug) => {
-    router.push(`/rolls/${slug}/edit`); //on ne passe plus par la page détail
-};
+// const goToRoll = (slug) => {
+//     router.push(`/rolls/${slug}/edit`); //on ne passe plus par la page détail
+// };
 </script>
 
 <template>
@@ -87,7 +88,7 @@ const goToRoll = (slug) => {
                     <td
                         v-for="roll in rolls"
                         :key="roll.slug"
-                        @click="goToRoll(roll.slug)"
+                        @click="props.onRowClick(roll.slug)"
                         class="border border-black px-4 py-3 min-w-[140px] cursor-pointer hover:bg-gray-50 transition font-body"
                     >
                     <!-- Cas galerie -->
