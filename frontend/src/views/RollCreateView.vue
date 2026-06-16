@@ -63,10 +63,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <PageContainer title="Créer une nouvelle pellicule">
+    <PageContainer title="Nouvelle pellicule">
         <div class="roll-create">
-            <h1>Nouvelle pellicule</h1>
-
+            <!-- <h1>Nouvelle pellicule</h1> -->
             <RollForm
                 :form="form"
                 :submitLabel="'Créer'"

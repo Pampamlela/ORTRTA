@@ -17,7 +17,7 @@ const handleLogout = () => {
 
 <template>
     <nav>
-        <div class="maw-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
             <!-- Logo -->
             <template v-if="route.name !=='profile' && route.name !=='register' && route.name !=='login'">
@@ -25,7 +25,7 @@ const handleLogout = () => {
                     <img 
                         src="@/assets/logo/logo2.png" 
                         alt="One Roll" 
-                        class="h-24 w-auto"
+                        class="h-16 md:h-24 w-auto"
                     />
                     
                 </router-link>
@@ -60,15 +60,15 @@ const handleLogout = () => {
 
                     <!-- ligne 2 : les boutons -->
                     <div class="flex gap-3">
-                        <BaseButton to="/rolls/new">
+                        <BaseButton to="/rolls/new" size="sm">
                             + Pellicule
                         </BaseButton>
 
-                        <BaseButton to="/cameras/new">
+                        <BaseButton to="/cameras/new" size="sm">
                             + Appareil
                         </BaseButton>
 
-                        <BaseButton to="/lenses/new">
+                        <BaseButton to="/lenses/new" size="sm">
                             + Objectif
                         </BaseButton>
                     </div>
