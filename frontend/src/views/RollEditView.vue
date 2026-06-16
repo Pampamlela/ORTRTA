@@ -5,6 +5,7 @@ import { useRollStore } from '@/stores/rolls';
 import RollForm from '@/components/RollForm.vue';
 import api from '@/api/axios';
 import PageContainer from '@/components/PageContainer.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -26,6 +27,13 @@ const fetchQrCode = async (slug) => {
     revokeQrCodeUrl()
     const response = await api.get(`rolls/${slug}/qr/`, { responseType: 'blob' })
     qrCodeUrl.value = URL.createObjectURL(response.data)
+}
+
+const downloadQrCode = () => {
+    const a = document.createElement('a');
+    a.href = qrCodeUrl.value;
+    a.download = `qr-${route.params.slug}.png`;
+    a.click();
 }
 
 onMounted(async () => {
@@ -92,6 +100,10 @@ const handleSubmit = async () => {
                     alt="QR Code de la pellicule"
                 />
                 <p v-else class="text-sm text-grain">Chargement du QR code...</p>
+
+                <BaseButton size="sm" class="mt-3" @click="downloadQrCode">
+                    Télécharger le QR Code
+                </BaseButton>
             </div>
 
             <RollForm

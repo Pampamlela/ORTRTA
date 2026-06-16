@@ -5,6 +5,7 @@ import { useRollStore } from '@/stores/rolls';
 import router from '@/router';
 import api from '@/api/axios';
 import PageContainer from '@/components/PageContainer.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 const route = useRoute()
 const rollStore = useRollStore();
@@ -28,6 +29,13 @@ const fetchQrCode = async (slug) => {
     revokeQrCodeUrl()
     const response = await api.get(`rolls/${slug}/qr/`, { responseType: 'blob' })
     qrCodeUrl.value = URL.createObjectURL(response.data)
+}
+
+const downloadQrCode = () => {
+    const a = document.createElement('a');
+    a.href = qrCodeUrl.value;
+    a.download = `qr-${route.params.slug}.png`;
+    a.click();
 }
 
 onMounted(async() => {
@@ -113,6 +121,9 @@ const deleteRoll = async () => {
                     :src="qrCodeUrl"
                     alt="QR Code pour partager la pellicule"
                 />
+                <BaseButton size="sm" class="mt-3" @click="downloadQrCode">
+                    Télécharger le QR Code
+                </BaseButton>
             </div>
 
             <!-- ACTIONS -->
