@@ -10,14 +10,20 @@ const authStore = useAuthStore();
 const loading = ref(true);
 const password = ref('');
 const confirmPassword = ref('');
+const username = ref('');
+const email = ref('');
 
 const error = ref(null);
 const success = ref(null);
 const submitting = ref(false);
+const profileError = ref(null);
+const profileSuccess = ref(null);
 
 onMounted(async() => {
     try {
         await authStore.fetchUser();
+        username.value = authStore.user?.username || '';
+        email.value = authStore.user?.email || '';
     } catch (e) {
         console.error("Erreur lors de la récupération du profil :", e);
     } finally {
@@ -25,6 +31,20 @@ onMounted(async() => {
     }
 });
 
+const handleUpdateProfile = async () => {
+    profileError.value = null;
+    profileSuccess.value = null;
+    try {
+        const response = await api.patch('me/', {
+            username: username.value,
+            email: email.value,
+        });
+        await authStore.fetchUser(); // Mettre à jour les informations de l'utilisateur dans le store
+        profileSuccess.value = "Profil mis à jour avec succès.";
+    } catch (err) {
+        profileError.value = err.response?.data?.detail || "Une erreur est survenue. Veuillez réessayer.";
+    }
+};
 
 const handleChangePassword = async () => {
     error.value = null;
@@ -156,16 +176,22 @@ const exportData = async () => {
                 <!-- Infos en lecture seule -->
                 <div>
                     <!-- <label class="text-sm text-grain">Surnom</label> -->
-                        <input :value="authStore.user?.username" type="text" disabled
+                        <input v-model="username" type="text" 
                                 class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" />
                 </div>
                 <div>
                     <!-- <label class="text-sm text-grain">Email</label> -->
-                        <input :value="authStore.user?.email" 
-                                type="email" 
-                                disabled 
+                        <input v-model="email" type="email" 
                                 class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
                         />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <p v-if="profileError" class="text-sm text-danger">{{  profileError }}</p>
+                    <p v-if="profileSuccess" class="text-sm text-success">{{  profileSuccess }}</p>
+                    <BaseButton block type="button" @click="handleUpdateProfile">
+                        Mettre à jour le profil
+                    </BaseButton>
                 </div>
 
                 <!-- Formulaire mot de passe + actions -->
