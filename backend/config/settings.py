@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "drf_spectacular",
+    "django_rest_passwordreset",
     "corsheaders",
     "users",
     "equipment",
@@ -230,6 +231,20 @@ LOGGING = {
         },
     },
 }
+
+# Email configuration
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les emails sont affichés dans la console 
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+
+# import ssl
+# EMAIL_SSL_CONTEXT = ssl.create_default_context()
+# EMAIL_SSL_CONTEXT.check_hostname = False
+# EMAIL_SSL_CONTEXT.verify_mode = ssl.CERT_NONE
 
 # en production, il faudra configurer un vrai backend de stockage (ex: AWS S3) et activer les options de sécurité suivantes :
 # SECURE_SSL_REDIRECT = True
