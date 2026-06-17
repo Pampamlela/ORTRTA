@@ -51,7 +51,7 @@ urlpatterns = [
     path('api/schema', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')), #POST /api/password_reset/ → demande de réinitialisation (envoie l'email)
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')), #POST /api/password_reset/ → demande de réinitialisation (envoie l'e-mail)
                                                                                                         #POST /api/password_reset/confirm/ → confirmation avec le token et le nouveau mot de passe
 ]
 

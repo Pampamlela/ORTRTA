@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import api from '@/api/axios';
 import BaseButton from '@/components/BaseButton.vue';
-// import PageContainer from '@/components/PageContainer.vue';
 
 const authStore = useAuthStore();
 
@@ -180,7 +179,7 @@ const exportData = async () => {
                                 class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" />
                 </div>
                 <div>
-                    <!-- <label class="text-sm text-grain">Email</label> -->
+                    <!-- <label class="text-sm text-grain">E-mail</label> -->
                         <input v-model="email" type="email" 
                                 class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
                         />

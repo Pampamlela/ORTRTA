@@ -233,7 +233,7 @@ LOGGING = {
 }
 
 # Email configuration
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les emails sont affichés dans la console 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
