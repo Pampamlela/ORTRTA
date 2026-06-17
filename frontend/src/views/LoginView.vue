@@ -68,6 +68,12 @@ const handleLogin = async () => {
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
                     />
                 </div>
+
+                <div>
+                    <router-link to="/forgot-password" class="text-sm text-grain hover:text-amber">
+                        Mot de passe oublié ?
+                    </router-link>
+                </div>
                 <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 
                 <BaseButton block type="submit">
