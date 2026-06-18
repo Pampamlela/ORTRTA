@@ -65,10 +65,10 @@ const handleSubmit = async () => {
                     />
                 </div>
                 <div>
-                    <!-- <label class="text-sm text-grain">Email</label> -->
+                    <!-- <label class="text-sm text-grain">E-mail</label> -->
                     <input v-model="form.email" 
                             type="email" 
-                            placeholder="Email" 
+                            placeholder="E-mail" 
                             required 
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
                     />

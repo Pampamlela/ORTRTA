@@ -10,12 +10,12 @@ class UserModelFieldsTest(TestCase):
     def test_username_field_is_email(self):
         self.assertEqual(User.USERNAME_FIELD, "email")
 
-    # test que le champ email est unique
+    # test que le champ e-mail est unique
     def test_email_field_is_unique(self):
         field = User._meta.get_field("email")
         self.assertTrue(field.unique)
 
-    # test que le champ email est obligatoire
+    # test que le champ e-mail est obligatoire
     def test_email_field_is_required(self):
         field = User._meta.get_field("email")
         self.assertFalse(field.null)
@@ -35,7 +35,7 @@ class UserModelFieldsTest(TestCase):
 class UserModelCreationTest(TestCase):
     # test la création d'instances User
 
-    # test que l'email est bien défini lors de la création d'un·e utilisateur·ice
+    # test que l'e-mail est bien défini lors de la création d'un·e utilisateur·ice
     def test_create_user_sets_email(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -83,7 +83,7 @@ class UserModelCreationTest(TestCase):
         self.assertTrue(admin.is_staff)
         self.assertTrue(admin.is_superuser)
 
-    # test que la création d'un·e utilisateur·ice avec un email déjà existant lève une erreur d'intégrité
+    # test que la création d'un·e utilisateur·ice avec un e-mail déjà existant lève une erreur d'intégrité
     def test_duplicate_email_raises_error(self):
         from django.db import transaction
         User.objects.create_user(
@@ -94,7 +94,7 @@ class UserModelCreationTest(TestCase):
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 User.objects.create_user(
-                    email="test@example.com", # même email que le premier user
+                    email="test@example.com", # même e-mail que le premier user
                     username="testuser2",
                     password="testpass456"
                 )

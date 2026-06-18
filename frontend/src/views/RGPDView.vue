@@ -21,7 +21,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
                 <h3>Données de compte</h3>
                     <ul>
-                        <li>Adresse email</li>
+                        <li>Adresse e-mail</li>
                         <li>Nom d’utilisateur·ice (username)</li>
                         <li>Mot de passe (stocké de manière sécurisée et chiffrée)</li>
                     </ul>
@@ -117,7 +117,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
                 Pour toute question relative à cette politique ou à vos données personnelles, vous pouvez contacter :<br>
 
-                Email : pampamlela@gmail.com
+                E-mail : pampamlela@gmail.com
 
 
                 <h2>12. Responsable du traitement</h2>

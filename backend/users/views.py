@@ -62,7 +62,7 @@ class MeView(APIView):
         request=UserSerializer,
         responses={
             200: UserSerializer,
-            400: OpenApiResponse(description="Données invalides (champ manquant, email déjà utilisé, etc.)"),
+            400: OpenApiResponse(description="Données invalides (champ manquant, e-mail déjà utilisé, etc.)"),
         }
     )
     
@@ -104,7 +104,7 @@ class SignupView(generics.CreateAPIView):
                     )
                 ]
             ),
-            400: OpenApiResponse(description="Données invalides (champ manquant, email déjà utilisé, etc.)."),
+            400: OpenApiResponse(description="Données invalides (champ manquant, e-mail déjà utilisé, etc.)."),
         }
     )
 

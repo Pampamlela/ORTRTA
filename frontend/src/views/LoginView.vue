@@ -51,9 +51,9 @@ const handleLogin = async () => {
 
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
-                    <!-- <label>Email</label> -->
+                    <!-- <label>E-mail</label> -->
                     <input v-model="form.email" 
-                            placeholder="Email" 
+                            placeholder="E-mail" 
                             required 
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
                     />
@@ -67,6 +67,12 @@ const handleLogin = async () => {
                             required 
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber" 
                     />
+                </div>
+
+                <div>
+                    <router-link to="/forgot-password" class="text-sm text-grain hover:text-amber">
+                        Mot de passe oublié ?
+                    </router-link>
                 </div>
                 <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 

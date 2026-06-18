@@ -33,7 +33,7 @@ const handleLogout = () => {
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
             <!-- Logo -->
-            <template v-if="route.name !=='profile' && route.name !=='register' && route.name !=='login'">
+            <template v-if="route.name !=='profile' && route.name !=='register' && route.name !=='login' && route.name !=='forgot-password' && route.name !=='reset-password'">
                 <router-link to="/rolls" class="flex items-center gap-3">
                     <img 
                         src="@/assets/logo/logo2.png" 

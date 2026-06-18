@@ -20,6 +20,8 @@ import ProfileView from "@/views/ProfileView.vue"
 import RGPDView from "@/views/RGPDView.vue"
 import FAQView from "@/views/FAQView.vue"
 import NotFoundView from "@/views/NotFoundView.vue"
+import ForgotPasswordView from "@/views/ForgotPasswordView.vue"
+import ResetPasswordView from "@/views/ResetPasswordView.vue"
 
 
 const routes = [
@@ -42,6 +44,8 @@ const routes = [
   { path: "/lenses/:id/edit", name: "lens-edit",   component: LensEditView, meta: { requiresAuth: true } },
   { path: "/faq", name: "faq", component: FAQView },
   { path: "/:pathMatch(.*)*", name: "not-found", component: NotFoundView },
+  { path: "/forgot-password", name: "forgot-password", component: ForgotPasswordView },
+  { path: "/reset-password", name: "reset-password", component: ResetPasswordView }
 ]
 
 const router = createRouter({
