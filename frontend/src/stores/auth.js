@@ -38,6 +38,16 @@ export const useAuthStore = defineStore("auth", {
             this.user = response.data
         },
 
+        async forgotPassword(data) {
+            await api.post("password_reset/", data)
+        },
+
+        async resetPassword(data) {
+            console.log('data envoyée :', data);
+            await api.post("password_reset/confirm/", data)
+        },
+
+
         logout() {
             this.user = null
             this.accessToken = null

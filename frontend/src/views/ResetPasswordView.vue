@@ -1,14 +1,16 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import BaseButton from '@/components/BaseButton.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
+const token = route.query.token; // Récupère le token de réinitialisation depuis l'URL
 
 const form = ref({
-    email: '',
     password: '',
     password2: '',
 });
@@ -16,8 +18,15 @@ const form = ref({
 const error = ref(null);
 
 const handleResetPassword = async () => {
+    if (form.value.password !== form.value.password2) {
+        error.value = 'Les mots de passe ne correspondent pas';
+        return;
+    }
     try {
-        await authStore.resetPassword(form.value);
+        await authStore.resetPassword({
+            token: token,
+            password: form.value.password,
+        });
         router.push('/login');
     } catch {
         error.value = 'Erreur lors de la réinitialisation du mot de passe';
@@ -48,16 +57,9 @@ const handleResetPassword = async () => {
         <!-- Colonne droite : contenu -->
         <div>
             <h1 class="font-title text-2xl md:text-3xl mb-6 text-film">Réinitialiser le mot de passe</h1>
-            <h2 class="font-title text-sm md:text-xl mb-6 text-grain">Entrez votre adresse e-mail et votre nouveau mot de passe.</h2>
+            <h2 class="font-title text-sm md:text-xl mb-6 text-grain">Entrez votre nouveau mot de passe et confirmez-le.</h2>
 
             <form @submit.prevent="handleResetPassword" class="space-y-4">
-                <div>
-                    <input v-model="form.email"
-                            placeholder="E-mail"
-                            required
-                            class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
-                    />
-                </div>
                 <div>
                     <input v-model="form.password"
                             type="password"
@@ -74,6 +76,7 @@ const handleResetPassword = async () => {
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
                     />
                 </div>
+                <p>Token lu : {{ route.query.token }}</p>
                 <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 
                 <BaseButton block type="submit">

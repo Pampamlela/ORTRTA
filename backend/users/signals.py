@@ -1,10 +1,11 @@
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django_rest_passwordreset.signals import reset_password_token_created
+from urllib.parse import quote
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
-    reset_url = f"http://localhost:5173/reset-password?token={reset_password_token.key}"
+    reset_url = f"http://localhost:5173/reset-password?token={quote(reset_password_token.key)}"
 
     send_mail(
         subject="Réinitialisation de votre mot de passe - One Roll To Rule Them All",
