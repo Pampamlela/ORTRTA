@@ -17,6 +17,7 @@ class Camera(models.Model):
         related_name='cameras'
     )
 
+    is_deleted = models.BooleanField(default=False)
     has_fixed_lens = models.BooleanField(default=False)
     fixed_lens_model = models.CharField(max_length=100, blank=True)
     description = models.TextField(blank=True)
