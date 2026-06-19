@@ -29,7 +29,7 @@ a {
 }
 
 .text-grain {
-  color: #7A746E;
+  color: #4F4D4A; /*#7A746E;*/
 }
 
 .bg-amber {
@@ -37,7 +37,7 @@ a {
 }
 
 .text-amber {
-  color: #D7A44B;
+  color: #654815 /*#D7A44B*/;
 }
 
 .bg-danger {
