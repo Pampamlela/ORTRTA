@@ -16,6 +16,7 @@ const props = defineProps({
     form: Object,
     submitLabel: String,
     onSubmit: Function,
+    onDelete: Function,
     error: String
 })
 
@@ -90,9 +91,6 @@ const addPhoto = () => {
 const removePhoto = (index) => {
     form.photos.splice(index, 1);
 }
-    
-
-
 </script>
 
 <template>
@@ -302,7 +300,7 @@ const removePhoto = (index) => {
                 class="flex-1 py-3 rounded-xl bg-danger text-white">
                 Supprimer
             </button> -->
-            <BaseButton block variant="danger">
+            <BaseButton v-if="props.onDelete" block variant="danger" type="button" @click="props.onDelete">
                 Supprimer
             </BaseButton>
         </div>

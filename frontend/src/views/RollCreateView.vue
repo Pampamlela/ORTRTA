@@ -6,11 +6,13 @@ import { useCameraStore } from '@/stores/cameras';
 import { useLensStore } from '@/stores/lenses';
 import RollForm from '@/components/RollForm.vue';
 import PageContainer from '@/components/PageContainer.vue';
+import { useToastStore } from '@/stores/toast';
 
 const router = useRouter();
 const rollStore = useRollStore();
 const cameraStore = useCameraStore();
 const lensStore = useLensStore();
+const toastStore = useToastStore();
 
 onMounted(() => {
     cameraStore.fetchCameras();
@@ -53,11 +55,15 @@ const handleSubmit = async () => {
     try {
         const normalizedData = normalizeFormData(form.value);
         await rollStore.createRoll(normalizedData)
+        toastStore.addToast('Pellicule créée avec succès !');
 
         router.push("/rolls");
     } catch (err) {
         console.log(err.response.data)
-        error.value = "Erreur lors de la création de la pellicule";
+        toastStore.addToast(
+            err.response?.data?.detail || "Erreur lors de la création de la pellicule.",
+            'error'
+        );
     }
 }
 </script>

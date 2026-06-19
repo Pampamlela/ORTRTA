@@ -19,6 +19,7 @@ const props = defineProps({
     form: Object,
     submitLabel: String,
     onSubmit: Function,
+    onDelete: Function,
     error: String,
     type: String // "camera" ou "lens"
 })
@@ -92,33 +93,6 @@ const props = defineProps({
                 </div>
             </div>
         </div>
-                
-                <!-- <div v-if="type === 'camera' && !form.has_fixed_lens">
-                    <label>Objectifs compatibles</label>
-                    <select v-model="form.lenses_ids" multiple>
-                        <option 
-                            v-for="lens in lensStore.lenses" 
-                            :key="lens.id" 
-                            :value="lens.id"
-                        >
-                            {{ lens.model }}
-                        </option>
-                    </select>
-
-                    <label>Monture</label>
-                    <select v-model="form.mount">
-                        <option disabled value="">Sélectionnez une monture</option>
-                        <option 
-                            v-for="mount in mountStore.mounts" 
-                            :key="mount.id" 
-                            :value="mount.id"
-                        >
-                            {{ mount.name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-        </div> -->
 
         <!-- spécifique aux objectifs --->
         <div v-if="type === 'lens'" class="space-y-4">
@@ -174,6 +148,10 @@ const props = defineProps({
         
         <BaseButton block type="submit">
             {{ submitLabel }}
+        </BaseButton>
+
+        <BaseButton v-if="props.onDelete" block variant="danger" type="button" @click="props.onDelete">
+            Supprimer
         </BaseButton>
     </form>
 

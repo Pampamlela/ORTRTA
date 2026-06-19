@@ -3,8 +3,11 @@ import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import api from '@/api/axios';
 import BaseButton from '@/components/BaseButton.vue';
+import { useToastStore } from '@/stores/toast';
+
 
 const authStore = useAuthStore();
+const toastStore = useToastStore();
 
 const loading = ref(true);
 const password = ref('');
@@ -39,9 +42,14 @@ const handleUpdateProfile = async () => {
             email: email.value,
         });
         await authStore.fetchUser(); // Mettre à jour les informations de l'utilisateur dans le store
-        profileSuccess.value = "Profil mis à jour avec succès.";
+        toastStore.addToast('Profil mis à jour avec succès !');
+        // profileSuccess.value = "Profil mis à jour avec succès.";
     } catch (err) {
-        profileError.value = err.response?.data?.detail || "Une erreur est survenue. Veuillez réessayer.";
+        // profileError.value = err.response?.data?.detail || "Une erreur est survenue. Veuillez réessayer.";
+        toastStore.addToast(
+            err.response?.data?.detail || "Une erreur est survenue. Veuillez réessayer.",
+            'error'
+        );
     }
 };
 
@@ -66,6 +74,7 @@ const handleChangePassword = async () => {
         await api.put('change-password/', {
             password: password.value,
         });
+        toastStore.addToast('Mot de passe changé avec succès !');
 
         success.value = "Mot de passe changé avec succès.";
         password.value = '';
@@ -79,6 +88,10 @@ const handleChangePassword = async () => {
             error.value = err.response.data.password.join(' ');
         } else {
             error.value = "Une erreur est survenue. Veuillez réessayer.";
+            toastStore.addToast(
+                err.response?.data?.detail || "Une erreur est survenue. Veuillez réessayer.",
+                'error'
+            );
         }
     } finally {
         submitting.value = false;
