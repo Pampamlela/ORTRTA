@@ -46,7 +46,7 @@ const handleLogout = () => {
             <div v-else></div>
 
             <!-- Bouton hamburger -> visible seulement sur mobile -->
-            <button class="md:hidden text-3xl text-film px-2 py-1" @click="toggleMenu">
+            <button class="md:hidden text-3xl text-film px-2 py-1" @click="toggleMenu" name="menu-button" aria-label="Menu">
                 <!-- ☰ -->
                 <!-- <Camera :size="28" />  -->
                 <!-- <Aperture :size="28" /> -->
