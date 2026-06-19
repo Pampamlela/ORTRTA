@@ -6,12 +6,14 @@ import RollForm from '@/components/RollForm.vue';
 import api from '@/api/axios';
 import PageContainer from '@/components/PageContainer.vue';
 import BaseButton from '@/components/BaseButton.vue';
+import { useToastStore } from '@/stores/toast';
 
 const router = useRouter();
 const route = useRoute();
 const rollStore = useRollStore();
 const qrCodeUrl = ref(null);
 const showQR = ref(false);
+const toastStore = useToastStore();
 
 const form = ref(null);
 const error = ref(null);
@@ -71,11 +73,28 @@ const handleSubmit = async () => {
     try {
         const normalizedData = normalizeFormData(form.value);
         await rollStore.updateRoll(route.params.slug, normalizedData);
+        toastStore.addToast('Pellicule mise à jour avec succès !');
 
         router.push('/rolls/'); // on ne retourne plus à la page détail après modification route.params.slug
     } catch (err) {
         console.error('Update error:', err.response?.data || err);
-        error.value = err.response?.data?.detail || "Erreur lors de la mise à jour de la pellicule."
+        toastStore.addToast(
+            err.response?.data?.detail || "Erreur lors de la mise à jour de la pellicule.",
+            'error'
+        );
+    }
+}
+
+const handleDelete = async () => {
+    if (!confirm('Supprimer cette pellicule ? Cette action est irréversible.')) {
+        return;
+    }
+    try {
+        await rollStore.deleteRoll(route.params.slug);
+        toastStore.addToast('Pellicule supprimée.');
+        router.push('/rolls/');
+    } catch {
+        toastStore.addToast('Erreur lors de la suppression de la pellicule.', 'error');
     }
 }
 </script>
@@ -111,6 +130,7 @@ const handleSubmit = async () => {
                 :form="form"
                 submitLabel="Modifier"
                 :onSubmit="handleSubmit"
+                :onDelete="handleDelete"
                 :error="error"
             />
         </div>

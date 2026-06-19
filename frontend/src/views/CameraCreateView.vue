@@ -4,9 +4,11 @@ import { useRouter } from 'vue-router';
 import { useCameraStore } from '@/stores/cameras';
 import EquipmentForm from '@/components/EquipmentForm.vue';
 import PageContainer from '@/components/PageContainer.vue';
+import { useToastStore } from '@/stores/toast';
 
 const router = useRouter();
 const cameraStore = useCameraStore();
+const toastStore = useToastStore();
 
 const form = ref({
     model: "",
@@ -21,10 +23,14 @@ const error = ref(null);
 const handleSubmit = async () => {
     try {
         await cameraStore.createCamera(form.value)
-
+        toastStore.addToast('Appareil photo créé avec succès !');
+        
         router.push("/cameras");
     } catch (err) {
-        error.value = "Erreur lors de la création de l'appareil photo.";
+        toastStore.addToast(
+            err.response?.data?.detail || "Erreur lors de la création de l'appareil photo.",
+            'error'
+        );
     }
 }
 </script>
