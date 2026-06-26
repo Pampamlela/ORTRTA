@@ -12,14 +12,14 @@ import router from '@/router';
 
             <router-link
             to="/rgpd"
-            class="text-amber hover:underline"
+            class="text-amber underline"
             >
                 Politique de confidentialité
             </router-link>
              - 
             <router-link
             to="/faq"
-            class="text-amber hover:underline"
+            class="text-amber underline"
             >
                 FAQ
             </router-link>
