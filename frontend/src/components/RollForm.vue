@@ -81,6 +81,13 @@ watch(() => form.camera, () => {
     }   
 })
 
+const cameraIsDeleted = computed(() => {
+    if (!props.form.camera) {
+        return false;
+    }
+    return !cameraStore.cameras.find(cam => cam.id === props.form.camera);
+})
+
 const addPhoto = () => {
     form.photos.push({ 
         url: "",
@@ -164,9 +171,17 @@ const removePhoto = (index) => {
         <div>
             <label class="text-sm text-grain">Appareil photo</label>
             <select v-model="form.camera" 
-                    class="w-full p-3 rounded-lg bg-white border border-gray-200"
-                    required>
+                    class="w-full p-3 rounded-lg bg-white border border-gray-200">
                 <option disabled value="">Sélectionnez un appareil photo</option>
+
+                <!-- Option spéciale si l'appareil actuel est supprimé -->
+                <option 
+                    v-if="cameraIsDeleted" 
+                    :value="form.camera" 
+                    disabled
+                >
+                    {{ form.camera_name }} (supprimé)
+                </option>
 
                 <option 
                     v-for="cam in cameraStore.cameras" 

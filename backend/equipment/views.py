@@ -51,7 +51,7 @@ class CameraViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        return Camera.objects.filter(user=self.request.user)
+        return Camera.objects.filter(user=self.request.user, is_deleted=False)
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -61,6 +61,11 @@ class CameraViewSet(viewsets.ModelViewSet):
         camera = self.get_object()
         serializer.save()
         logger.info("Mise à jour de la caméra '%s' par %s - ID : %s", camera.model, self.request.user, camera.id)
+
+    def perform_destroy(self, instance):
+        instance.is_deleted = True
+        instance.save()
+        logger.info("Caméra '%s' marquée comme supprimée par %s - ID : %s", instance.model, self.request.user, instance.id)
 
 @extend_schema_view(
     list=extend_schema(

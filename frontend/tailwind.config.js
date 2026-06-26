@@ -8,7 +8,7 @@ export default {
             colors: {
                 film: "#3A2C1E",
                 paper: "#F3EEE6",
-                grain: "#7A746E",
+                grain: "#4A4A4A",  // #7A746E
                 amber: "#D7A44B",
                 dark: "#161413",
                 danger: "#8B2E2E",
