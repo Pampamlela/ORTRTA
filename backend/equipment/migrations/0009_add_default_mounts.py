@@ -2,12 +2,36 @@
 
 from django.db import migrations
 
+def forwards(apps, schema_editor):
+    Mount = apps.get_model('equipment', 'Mount')
+    mounts = [
+        # 35mm / petit format
+        "Canon EF",
+        "Canon EF-S",
+        "Canon RF",
+        "Nikon F",
+        "Nikon Z",
+        "Sony E",
+        "Sony A",
+        "Pentax K",
+        "Leica M",
+        "M42",
+        # Moyen format
+        "Hasselblad V",
+        "Mamiya 645",
+        "Pentax 645",
+        # Sans monture
+        "Sans monture",
+    ]
+    for name in mounts:
+        Mount.objects.get_or_create(name=name)
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('equipment', '0008_camera_is_deleted'),
     ]
 
     operations = [
+        migrations.RunPython(forwards, migrations.RunPython.noop)
     ]
+    
