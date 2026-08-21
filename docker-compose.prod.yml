@@ -1,0 +1,46 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ortrta_backend
+    env_file:
+      - .env
+    depends_on:
+      - db
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ortrta
+      POSTGRES_USER: ortrta_user
+      POSTGRES_PASSWORD: ortrta_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  frontend:
+    build: ./frontend
+    container_name: ortrta_frontend
+    depends_on:
+      - backend
+    # command: nginx -g 'daemon off;'
+
+  cron:
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: ortrta
+      POSTGRES_USER: ortrta_user
+      POSTGRES_PASSWORD: ortrta_password
+    command: cron -f
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  db_data:
