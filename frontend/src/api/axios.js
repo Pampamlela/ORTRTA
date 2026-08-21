@@ -7,7 +7,7 @@ export const apiError = ref(null)
 
 // on attache automatiquement le token d'authentification à chaque requête sortante, si il existe dans le localStorage.
 const api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/"
+    baseURL: import.meta.env.VITE_API_URL
 })
 
 api.interceptors.request.use(config => {
