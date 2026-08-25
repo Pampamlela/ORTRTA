@@ -30,6 +30,7 @@ jobs:
           DB_NAME: ortrta
           DB_USER: ortrta_user
           DB_PASSWORD: ortrta_password
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 
         steps:
