@@ -23,14 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p*fbfy!h6el_@sb7f(5cf=!(2m6n7&%k!78-02l1j(bssmji-3'
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY manquante dans les variables d'environnement")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")  # Liste des hôtes autorisés, séparés par des virgules
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]  # Supprime les espaces et les entrées vides
 
-FRONTEND_URL = "http://localhost:5173"  # URL du frontend pour les QR codes
+FRONTEND_URL = os.getenv("FRONTEND_URL")  #"http://localhost:5173"  # URL du frontend pour les QR codes
 
 # Application definition
 
@@ -64,10 +67,12 @@ MIDDLEWARE = [
     
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vue dev server
-    "http://127.0.0.1:5173",  # Vue dev server (127.0.0.1)
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",  # Vue dev server
+#     "http://127.0.0.1:5173",  # Vue dev server (127.0.0.1)
+# ]
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")  # Liste des origines autorisées pour CORS, séparées par des virgules
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGINS if origin.strip()]  # Supprime les espaces et les entrées vides
 
 ROOT_URLCONF = 'config.urls'
 
@@ -149,6 +154,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"  # répertoire où collectstatic met les fichiers statiques pour la production
 
 
 AUTH_USER_MODEL = "users.User"
@@ -233,7 +239,11 @@ LOGGING = {
 }
 
 # Email configuration
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console 
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # en production, on utilise un vrai serveur SMTP
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

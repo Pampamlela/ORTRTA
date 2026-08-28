@@ -615,22 +615,22 @@ curl -X POST http://localhost:8000/api/login/ \
 
 # Réponse :
 # {
-#   "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-#   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+#   "access": "eyJ0eXAiOiJKV1QiLCJhbGc.EXEMPLE.token",
+#   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc.EXEMPLE.token"
 # }
 ```
 
 2. **Utiliser le token d'accès** :
 ```bash
 curl http://localhost:8000/api/me/ \
-  -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc..."
+  -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc.EXEMPLE.token"
 ```
 
 3. **Rafraîchir le token** (le token d'accès expire après ~5 min) :
 ```bash
 curl -X POST http://localhost:8000/api/token/refresh/ \
   -H "Content-Type: application/json" \
-  -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGc..."}'
+  -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGc.EXEMPLE.token"}'
 ```
 
 ### Permissions & Contrôle d'accès
