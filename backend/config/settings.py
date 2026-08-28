@@ -31,6 +31,7 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")  # Liste des hôtes autorisés, séparés par des virgules
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]  # Supprime les espaces et les entrées vides
 
 FRONTEND_URL = os.getenv("FRONTEND_URL")  #"http://localhost:5173"  # URL du frontend pour les QR codes
 
@@ -71,6 +72,7 @@ MIDDLEWARE = [
 #     "http://127.0.0.1:5173",  # Vue dev server (127.0.0.1)
 # ]
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")  # Liste des origines autorisées pour CORS, séparées par des virgules
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGINS if origin.strip()]  # Supprime les espaces et les entrées vides
 
 ROOT_URLCONF = 'config.urls'
 
