@@ -1,6 +1,8 @@
 services:
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      target: prod
     container_name: ortrta_backend
     env_file:
       - .env
@@ -28,6 +30,7 @@ services:
   cron:
     build:
       context: ./backend
+      target: prod
     env_file:
       - .env
     environment:
