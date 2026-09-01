@@ -30,7 +30,7 @@ services:
   cron:
     build:
       context: ./backend
-      target: prod
+      target: cron
     env_file:
       - .env
     environment:
