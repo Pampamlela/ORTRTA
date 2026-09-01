@@ -13,6 +13,8 @@ services:
   db:
     image: postgres:15
     restart: always
+    env_file:
+      - .env
     environment:
       POSTGRES_DB: ortrta
       POSTGRES_USER: ortrta_user
