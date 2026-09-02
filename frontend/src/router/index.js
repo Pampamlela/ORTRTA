@@ -25,6 +25,7 @@ import ResetPasswordView from "@/views/ResetPasswordView.vue"
 
 
 const routes = [
+  { path: "/", redirect: "/login" },
   { path: "/login", name: "login", component: LoginView, meta: { guestOnly: true } },
   { path: "/register", name: "register", component: RegisterView },
   { path: "/rgpd", name: "rgpd", component: RGPDView },
