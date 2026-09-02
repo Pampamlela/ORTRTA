@@ -76,7 +76,6 @@ const handleResetPassword = async () => {
                             class="w-full p-3 rounded-lg bg-white border border-gray-200 focus:ring_amber"
                     />
                 </div>
-                <p>Token lu : {{ route.query.token }}</p>
                 <p v-if="error" class="text-sm text-danger">{{ error }}</p>
 
                 <BaseButton block type="submit">
@@ -86,3 +85,8 @@ const handleResetPassword = async () => {
         </div>
     </div>
 </template>
+
+
+<!-- "pourquoi ne pas avoir utilisé computed(() => route.query.token) ?". 
+ "parce que dans ce cas précis le token est capturé une fois au montage et n'a pas besoin d'être réactif, 
+ contrairement à un usage template où Vue le relit à chaque rendu." -->
