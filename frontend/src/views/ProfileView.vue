@@ -148,8 +148,6 @@ const exportData = async () => {
         link.click();
         window.URL.revokeObjectURL(url);
 
-        // Gérer la réponse, par exemple en sauvegardant les données dans un fichier
-        console.log("Données exportées :", response.data);
     } catch (err) {
         console.error("Erreur lors de l'export des données :", err);
     }
