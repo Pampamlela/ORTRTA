@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_rest_passwordreset",
     "corsheaders",
+    "anymail",
     "users",
     "equipment",
     "rolls",
@@ -242,19 +243,14 @@ LOGGING = {
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console
 else:
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # en production, on utilise un vrai serveur SMTP
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # pour le développement, les e-mails sont affichés dans la console 
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+    EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"  # en production, on utilise le backend Anymail pour envoyer les e-mails via Resend
 
-# import ssl
-# EMAIL_SSL_CONTEXT = ssl.create_default_context()
-# EMAIL_SSL_CONTEXT.check_hostname = False
-# EMAIL_SSL_CONTEXT.verify_mode = ssl.CERT_NONE
+ANYMAIL = {
+    "RESEND_API_KEY": os.getenv("RESEND_API_KEY"), 
+}
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "onboarding@resend.dev")
+
 
 # en production, il faudra configurer un vrai backend de stockage (ex: AWS S3) et activer les options de sécurité suivantes :
 # SECURE_SSL_REDIRECT = True
