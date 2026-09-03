@@ -24,7 +24,7 @@ import PageContainer from '@/components/PageContainer.vue';
                 <p>Connectez-vous à votre compte, après avoir ajouté du matériel, cliquez sur "Ajouter une pellicule" dans le menu principal. Remplissez les informations requises et cliquez sur "Enregistrer".</p>
 
                 <h2>Un problème ?</h2>
-                <p>Si vous rencontrez un problème ou avez des questions, n'hésitez pas à nous contacter en envoyant un e-mail à support@onerolltorulethemall.com.</p>
+                <p>Si vous rencontrez un problème ou avez des questions, n'hésitez pas à nous contacter en envoyant un e-mail à pampamlela@gmail.com.</p>
             </section>
         </div>
     </PageContainer>
