@@ -14,6 +14,7 @@ Avant de commencer, s'assurer d'avoir :
 - [ ] Le nom de domaine acheté et accessible dans son espace de gestion DNS (ex. OVH)
 - [ ] La liste des variables nécessaires au fichier `.env` de production (voir section 4)
 - [ ] Git installé en local, avec accès en lecture au dépôt GitHub du projet
+- [ ] Un compte [Resend](https://resend.com) créé, avec une clé API générée (voir section 3.1)
 
 ---
 
@@ -26,12 +27,19 @@ Avant de commencer, s'assurer d'avoir :
 - OS : Ubuntu 24.04 LTS
 - Une paire de clés SSH dédiée au projet est ajoutée à la création de l'instance.
 
+> **Port SMTP sortant bloqué par défaut.** Scaleway (comme la plupart des
+> hébergeurs cloud bon marché) bloque le trafic SMTP sortant (port 587/25)
+> sur ce type d'instance, pour lutter contre le spam. L'envoi d'e-mails
+> transactionnels (réinitialisation de mot de passe) passe donc par
+> **Resend**, via une API HTTPS (port 443, jamais bloqué) — voir section 3.1
+> et 4.1.
+
 ### 2.2 Connexion et installation de Docker
 
 Depuis le PC local (Windows / PowerShell) :
 
 ```powershell
-ssh -i $env:USERPROFILE\.ssh\id_ed25519_scaleway root@163.172.14.39
+ssh -i $env:USERPROFILE\.ssh\id_ed25519_scaleway root@<IP>
 ```
 
 Toutes les commandes qui suivent, dans le reste de ce document,
@@ -61,6 +69,8 @@ cd ORTRTA
 
 ## 3. Configuration DNS
 
+### 3.1 Enregistrements de base (routage du site)
+
 Dans la zone DNS du domaine (ex. manager OVH) :
 
 | Type  | Sous-domaine | Cible                          |
@@ -82,6 +92,38 @@ dig www.oneroll.fr
 → Les deux commandes doivent renvoyer l'IP du VPS dans la section `ANSWER`.
 La propagation peut prendre de quelques minutes à plusieurs heures.
 
+### 3.2 Enregistrements Resend (envoi d'e-mails)
+
+Depuis le dashboard Resend, section **Domains → Add Domain**, ajouter
+`oneroll.fr` puis reporter les enregistrements fournis dans la zone DNS OVH :
+
+| Type | Nom (exemple)         | Contenu (fourni par Resend)     | Rôle                          |
+|------|------------------------|----------------------------------|-------------------------------|
+| TXT  | `resend._domainkey`    | `p=MIGfMA0G...` (sans le `p=` initial dans le champ « Clé publique » du formulaire DKIM d'OVH) | Authentification DKIM |
+| CNAME | `rsend`                | `rsend-euX.forge.rmta.net`      | SPF / gestion des bounces     |
+| CNAME | `send`                 | `send.forX.rmta.net`            | SPF / gestion des bounces     |
+
+> Sur le formulaire DKIM d'OVH, ne pas coller le préfixe `p=` fourni par
+> Resend — seul ce qui suit va dans le champ « Clé publique (base64) ».
+> Type de clé : **RSA**. Mode test : **Désactivé** (le domaine sert de la
+> vraie production, pas d'un test).
+>
+> Pour le SPF, les deux lignes `rsend` et `send` sont des **CNAME**, pas des
+> enregistrements de type "SPF" à IP — ne pas utiliser l'assistant SPF
+> générique d'OVH pour ces deux-là.
+
+Vérifier la propagation du DKIM depuis le serveur :
+
+```bash
+dig TXT resend._domainkey.oneroll.fr
+```
+
+→ Doit renvoyer la clé publique fournie par Resend dans la section `ANSWER`.
+
+Le domaine passe généralement en statut **"Verified"** sur le dashboard
+Resend dans les 15 minutes suivant l'ajout des enregistrements (parfois plus
+selon la propagation DNS OVH).
+
 ---
 
 ## 4. Configuration des fichiers de production
@@ -94,6 +136,11 @@ La propagation peut prendre de quelques minutes à plusieurs heures.
 nano .env
 chmod 600 .env
 ```
+
+> ⚠️ Ce fichier est créé et édité **directement sur le VPS**, jamais en
+> local puis copié — il n'est pas versionné dans Git (`.gitignore`), donc un
+> `git pull` ne le mettra jamais à jour. Toute variable ajoutée doit être
+> vérifiée sur place avec `grep NOM_VARIABLE .env`.
 
 Variables à renseigner (valeurs réelles, jamais de placeholder laissé tel quel) :
 
@@ -113,10 +160,18 @@ DB_PASSWORD=<mot de passe fort>
 DB_HOST=db
 DB_PORT=5432
 
-# Email
-EMAIL_HOST_USER=<adresse email d'envoi>
-EMAIL_HOST_PASSWORD=<mot de passe applicatif>
+# Email (Resend — voir section 3.2 pour la vérification du domaine)
+RESEND_API_KEY=<clé API générée sur le dashboard Resend>
+DEFAULT_FROM_EMAIL=noreply@oneroll.fr
 ```
+
+> L'envoi d'e-mails ne passe plus par un serveur SMTP classique
+> (`EMAIL_HOST_USER` / `EMAIL_HOST_PASSWORD`, abandonné) mais par l'API
+> HTTPS de Resend via `django-anymail`, pour contourner le blocage du port
+> SMTP sortant sur Scaleway (voir encart section 2.1). Tant que
+> `DEFAULT_FROM_EMAIL` n'est pas définie, Django utilise la valeur par
+> défaut `onboarding@resend.dev` — un domaine de test Resend, à ne pas
+> laisser en prod.
 
 ### 4.2 Cohérence avec `docker-compose.prod.yml`
 
@@ -163,6 +218,13 @@ docker compose -f docker-compose.prod.yml logs caddy
 docker compose -f docker-compose.prod.yml logs cron
 ```
 
+> **Après toute modification du `.env`**, les conteneurs doivent être
+> reconstruits/redémarrés pour prendre en compte les nouvelles valeurs — les
+> variables d'environnement sont injectées au démarrage du conteneur, pas
+> lues en continu. `docker compose -f docker-compose.prod.yml up -d --build`
+> suffit (pas besoin de préciser un service en particulier, sauf pour
+> accélérer le redéploiement, ex. `... up -d --build backend`).
+
 ---
 
 ## 6. Initialisation de la base de données
@@ -203,9 +265,46 @@ curl -I https://oneroll.fr/login
 
 → Chaque commande doit renvoyer `HTTP/2 200`.
 
-### 7.3 Checklist finale
+### 7.3 Vérification de l'envoi d'e-mails (Resend)
+
+D'abord, confirmer que la configuration est bien chargée dans le conteneur :
+
+```bash
+docker compose -f docker-compose.prod.yml exec backend python manage.py shell
+```
+
+```python
+from django.conf import settings
+print(settings.EMAIL_BACKEND)   # doit afficher "anymail.backends.resend.EmailBackend"
+print(settings.ANYMAIL)         # doit afficher la vraie clé RESEND_API_KEY, pas None
+print(settings.DEFAULT_FROM_EMAIL)  # doit afficher noreply@oneroll.fr, pas onboarding@resend.dev
+```
+
+> **Ne pas tester l'envoi via `ResetPasswordToken.objects.create(...)`
+> dans le shell.** Le signal `reset_password_token_created` n'est déclenché
+> que dans la méthode `post()` de la vue HTTP de `django-rest-passwordreset`
+> — créer le token directement via l'ORM contourne cette vue et ne déclenche
+> jamais l'envoi du mail, donnant un faux sentiment que "rien n'est cassé"
+> alors que rien n'a été testé.
+
+Le seul test fiable est de passer par le vrai flow HTTP :
+
+1. Aller sur `https://oneroll.fr/forgot-password`
+2. Soumettre une adresse e-mail réelle et accessible
+3. Vérifier sur le [dashboard Resend](https://resend.com/emails) (section
+   Logs / Emails) qu'un envoi apparaît, avec le statut `Delivered`
+4. Vérifier dans la boîte mail reçue que :
+   - le lien pointe vers `https://oneroll.fr/reset-password?token=...`
+     (pas `localhost:5173`)
+   - l'expéditeur est `noreply@oneroll.fr` (pas `onboarding@resend.dev`)
+5. Cliquer sur le lien, réinitialiser le mot de passe, et confirmer que la
+   connexion fonctionne avec le nouveau mot de passe
+
+### 7.4 Checklist finale
 
 - [ ] `dig oneroll.fr` et `dig www.oneroll.fr` renvoient l'IP du VPS
+- [ ] `dig TXT resend._domainkey.oneroll.fr` renvoie la clé DKIM Resend
+- [ ] Domaine `oneroll.fr` en statut "Verified" sur le dashboard Resend
 - [ ] Tous les conteneurs sont `Up` (`docker compose ps`)
 - [ ] Certificat HTTPS obtenu pour les deux domaines
 - [ ] `curl -I` renvoie `200` sur `/` et sur au moins une route protégée
@@ -214,3 +313,8 @@ curl -I https://oneroll.fr/login
 - [ ] La connexion fonctionne (`/login`) et redirige vers l'application
 - [ ] Un appareil photo et une pellicule peuvent être créés depuis l'interface
 - [ ] Le superuser peut accéder à `/admin`
+- [ ] `RESEND_API_KEY` et `DEFAULT_FROM_EMAIL` confirmées dans le `.env` du
+      VPS avec `grep` (pas seulement supposées ajoutées)
+- [ ] Un e-mail de réinitialisation de mot de passe envoyé depuis
+      `/forgot-password` arrive bien, avec le bon lien et le bon expéditeur
+      (voir section 7.3 — test via le vrai formulaire, pas via le shell)
