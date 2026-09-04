@@ -292,6 +292,8 @@ Des exports statiques du schéma (schema.yaml et schema.json) sont également di
 - `DELETE /api/me` - Supprimer son compte
 - `PUT /api/change-password/` - Changer son mot de passe
 - `GET /api/me/export/` - Exporter ses données personnelles (RGPD)
+- `POST /api/password_reset/` - Demander un lien de réinitialisation de mot de passe par e-mail (via Resend)
+- `POST /api/password_reset/confirm/` - Réinitialiser le mot de passe avec le token reçu par e-mail
 
 #### Equipement
 - `GET/POST /api/cameras/` - Gestion des appareils photo
@@ -558,6 +560,9 @@ POSTGRES_USER          # Utilisateur PostgreSQL
 POSTGRES_PASSWORD      # Mot de passe PostgreSQL
 POSTGRES_HOST          # Host PostgreSQL (db en Docker)
 POSTGRES_PORT          # Port PostgreSQL
+FRONTEND_URL           # URL du frontend, utilisée dans le lien de réinitialisation de mot de passe
+RESEND_API_KEY         # Clé API Resend (envoi d'e-mails en production)
+DEFAULT_FROM_EMAIL     # Adresse d'expédition des e-mails transactionnels
 ```
 
 ## Variables d'environnement
@@ -579,14 +584,16 @@ POSTGRES_PORT=5432                    # Port PostgreSQL
 
 # === Frontend ===
 VITE_API_URL=http://localhost:8000/api # URL de l'API pour la frontend
+FRONTEND_URL=http://localhost:5173     # URL du frontend, utilisée dans le lien de réinitialisation de mot de passe
 
-# === Optionnel : Email (pour notifications) ===
-# EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-# EMAIL_HOST=smtp.gmail.com
-# EMAIL_PORT=587
-# EMAIL_USE_TLS=True
-# EMAIL_HOST_USER=your-email@gmail.com
-# EMAIL_HOST_PASSWORD=your-app-password
+# === Email (réinitialisation de mot de passe) ===
+# En développement (DEBUG=True), les e-mails sont affichés dans la console,
+# ces variables ne sont donc pas nécessaires en local.
+# En production, l'envoi passe par l'API HTTPS de Resend (via django-anymail),
+# et non par SMTP classique — voir DEPLOYMENT.md section 3.2 et 4.1 pour le
+# contexte (le port SMTP sortant est bloqué par défaut sur certains VPS).
+RESEND_API_KEY=your-resend-api-key     # Clé API générée sur https://resend.com
+DEFAULT_FROM_EMAIL=noreply@example.com # Adresse d'expédition (domaine vérifié sur Resend)
 ```
 
 ### Pour générer une SECRET_KEY sécurisée :
