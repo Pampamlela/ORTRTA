@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import BaseButton from '@/components/BaseButton.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+const redirect = route.query.redirect
 
 const form = ref({
     email: '',
@@ -17,7 +19,7 @@ const handleLogin = async () => {
 
     try {
         await authStore.login(form.value)
-        router.push('/rolls')
+        router.push(redirect && redirect.startsWith('/') ? redirect : '/rolls')
     } catch {
         error.value = 'Identifiants invalides'
     }

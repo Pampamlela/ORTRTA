@@ -131,7 +131,7 @@ class RollViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type="image/png")
         img.save(response,"PNG")
 
-        logger.debug("QrCode généré pour le pellicule : %s", roll.slug)
+        logger.debug("QrCode généré pour la pellicule : %s", roll.slug)
         return response
     
     def perform_update(self, serializer):
@@ -144,18 +144,18 @@ class RollViewSet(viewsets.ModelViewSet):
 
             # si un champ interdit est modifié
             if not incoming_fields.issubset(allowed_fields):
-                logger.warning("Modification interdite sur le pellicule scannée : %s - Champs modifiés : %s", roll.slug, incoming_fields)
+                logger.warning("Modification interdite sur la pellicule scannée : %s - Champs modifiés : %s", roll.slug, incoming_fields)
                 raise ValidationError(
                     "Cette pellicule est scannée."
                     "Seul les champs 'date_scan' et 'description' peuvent être modifiés."
                 )
     
         serializer.save()
-        logger.info("Mise à jour du pellicule '%s' par %s - ID : %s", roll.slug, self.request.user, roll.id)
+        logger.info("Mise à jour de la pellicule '%s' par %s - ID : %s", roll.slug, self.request.user, roll.id)
 
     def perform_destroy(self, instance):
         if instance.status == RollStatus.SCANNED:
-            logger.warning("Suppression interdite sur le pellicule scannée : %s - Utilisateur : %s", instance.slug, self.request.user)
+            logger.warning("Suppression interdite sur la pellicule scannée : %s - Utilisateur : %s", instance.slug, self.request.user)
             raise ValidationError("Cette pellicule est scannée et ne peut plus être supprimée.") 
         logger.warning("Pellicule supprimée : %s - Utilisateur : %s", instance.slug, self.request.user)
         instance.delete()
