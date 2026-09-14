@@ -10,4 +10,5 @@ class User(AbstractUser):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    last_login = models.DateTimeField(null=True, blank=True)
+    last_login = models.DateTimeField(null=True, blank=True) #redondant avec le champ last_login de AbstractUser, 
+                                                            #je l'ai gardé pour rendre le champ explicite dans mon modèle
